@@ -3,130 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal CS - Aqiqah Express</title>
+    <title>Aqiqah Admin - CS Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: { extend: { colors: { aeGreen: '#1a4331', aeOrange: '#f28c28' } } }
+            theme: { 
+                extend: { 
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { 
+                        aeGreen: '#114232', 
+                        aeGreenLight: '#E8F5E9',
+                        aeOrange: '#F39F5A', 
+                        aeBg: '#F8F9FA'
+                    } 
+                } 
+            }
         }
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .sidebar-transition { transition: width 0.3s ease-in-out; }
+        .hide-text { display: none; }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
+<body class="bg-aeBg text-gray-800 font-sans antialiased overflow-hidden flex h-screen dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
 
-    <div id="login-page" class="min-h-screen flex items-center justify-center">
+    <div id="login-page" class="absolute inset-0 z-50 flex items-center justify-center bg-aeBg dark:bg-gray-900">
         <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-md border-t-4 border-aeGreen">
             <div class="text-center mb-6">
-                <h1 class="text-3xl font-bold text-aeGreen dark:text-aeOrange"><i class="fas fa-leaf"></i> Aqiqah Express</h1>
-                <p class="text-sm mt-2 text-gray-500">Portal Analisis Performa CS</p>
+                <div class="w-16 h-16 bg-aeGreen text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-md">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Aqiqah Admin</h1>
+                <p class="text-sm mt-1 text-gray-500 dark:text-gray-400">Portal Analisis Performa CS</p>
             </div>
             
             <form id="loginForm">
                 <div class="mb-4">
                     <label class="block text-sm font-semibold mb-2">Pilih Akun / ID CS</label>
-                    <select id="login-id" class="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen">
-                        <option value="">-- Memuat Data CS... --</option>
+                    <select id="login-id" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen">
+                        <option value="">-- Memuat Data... --</option>
                     </select>
                 </div>
                 <div class="mb-6 relative">
                     <label class="block text-sm font-semibold mb-2">PIN Rahasia</label>
-                    <input type="password" id="login-pin" class="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Masukkan 6 digit PIN">
+                    <input type="password" id="login-pin" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Masukkan PIN">
                     <button type="button" id="togglePin" class="absolute right-3 top-9 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
                 </div>
-                <button type="submit" id="btnLogin" class="w-full bg-aeGreen hover:bg-[#123023] text-white font-bold py-3 rounded-lg transition duration-300">
+                <button type="submit" id="btnLogin" class="w-full bg-aeGreen hover:bg-[#0a2e22] text-white font-bold py-3 rounded-lg shadow-md transition duration-300">
                     Masuk
                 </button>
             </form>
         </div>
     </div>
 
-    <div id="app-container" class="hidden h-screen flex flex-col md:flex-row overflow-hidden">
+    <div id="app-container" class="hidden flex-1 flex h-screen w-full">
         
-        <nav id="sidebar" class="bg-aeGreen text-white w-full md:w-64 flex-shrink-0 transition-all duration-300 md:h-full flex flex-col justify-between">
-            <div>
-                <div class="flex items-center justify-between p-4 border-b border-[#2a5c44]">
-                    <div class="font-bold text-xl flex items-center gap-2 logo-text">
-                        <i class="fas fa-leaf text-aeOrange"></i> <span id="appTitle">AE Portal</span>
+        <aside id="desktopSidebar" class="bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 hidden md:flex flex-col w-64 sidebar-transition relative z-20">
+            <div class="h-20 flex items-center px-6 border-b border-gray-100 dark:border-gray-700">
+                <div class="flex items-center gap-3">
+                    <div class="bg-aeGreen text-white p-2 rounded-lg flex-shrink-0"><i class="fas fa-leaf text-xl"></i></div>
+                    <div class="sidebar-text overflow-hidden whitespace-nowrap">
+                        <h1 class="text-xl font-bold text-aeGreen dark:text-aeOrange leading-tight">Aqiqah Admin</h1>
                     </div>
-                    <button id="toggleSidebar" class="text-white hover:text-aeOrange text-xl"><i class="fas fa-bars"></i></button>
                 </div>
-                
-                <ul class="flex flex-col py-4 px-2 space-y-2 hidden md:block" id="menuList">
-                    <li><a href="#" class="block p-3 rounded hover:bg-[#2a5c44] transition"><i class="fas fa-home w-6"></i> <span class="menu-label">Dashboard</span></a></li>
-                    <li id="menu-laporan"><a href="#" class="block p-3 rounded hover:bg-[#2a5c44] transition"><i class="fas fa-file-invoice w-6"></i> <span class="menu-label">Lapor & Scan</span></a></li>
-                    <li id="menu-approval" class="hidden"><a href="#" class="block p-3 rounded hover:bg-[#2a5c44] transition"><i class="fas fa-check-double w-6"></i> <span class="menu-label">Approval SPV</span></a></li>
-                </ul>
             </div>
+
+            <div class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+                <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex items-center gap-3 px-4 py-3 bg-aeGreen text-white rounded-xl shadow-sm hover:bg-[#0a2e22] transition">
+                    <i class="fas fa-border-all w-5 text-center"></i>
+                    <span class="sidebar-text font-medium text-sm">Dashboard</span>
+                </a>
+                <a href="#" onclick="switchTab('input')" id="nav-input" class="nav-btn flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                    <i class="fas fa-plus-circle w-5 text-center"></i>
+                    <span class="sidebar-text font-medium text-sm">Input Penjualan</span>
+                </a>
+                <a href="#" id="nav-admin" class="hidden nav-btn flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                    <i class="fas fa-shield-alt w-5 text-center"></i>
+                    <span class="sidebar-text font-medium text-sm">Approval Admin</span>
+                </a>
+            </div>
+
+            <div class="p-4 border-t border-gray-100 dark:border-gray-700 space-y-2">
+                <button id="btnThemeToggle" class="w-full flex items-center gap-3 px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition text-sm">
+                    <i class="fas fa-moon w-5 text-center"></i> <span class="sidebar-text font-medium">Ganti Tema</span>
+                </button>
+                <button onclick="location.reload()" class="w-full flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition text-sm">
+                    <i class="fas fa-sign-out-alt w-5 text-center"></i> <span class="sidebar-text font-medium">Keluar</span>
+                </button>
+            </div>
+        </aside>
+
+        <div class="flex-1 flex flex-col min-w-0">
             
-            <div class="p-4 border-t border-[#2a5c44] hidden md:block" id="menuBottom">
-                <button id="toggleTheme" class="w-full text-left p-2 hover:bg-[#2a5c44] rounded mb-2"><i class="fas fa-moon w-6"></i> <span class="menu-label">Tema Gelap</span></button>
-                <button id="btnLogout" class="w-full text-left p-2 hover:bg-red-600 rounded text-red-200"><i class="fas fa-sign-out-alt w-6"></i> <span class="menu-label">Keluar</span></button>
-            </div>
-        </nav>
+            <header class="h-20 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-4 md:px-8 z-10">
+                <div class="flex items-center gap-4 flex-1">
+                    <button id="mobileMenuBtn" class="md:hidden text-gray-600 dark:text-gray-300 hover:text-aeGreen text-2xl"><i class="fas fa-bars"></i></button>
+                    <button id="desktopToggleBtn" class="hidden md:block text-gray-400 hover:text-aeGreen text-xl"><i class="fas fa-bars"></i></button>
+                    <div class="hidden md:flex items-center bg-gray-100 dark:bg-gray-700 rounded-full px-4 py-2 w-96 focus-within:ring-2 focus-within:ring-aeGreen/20">
+                        <i class="fas fa-search text-gray-400"></i>
+                        <input type="text" placeholder="Cari data sales..." class="bg-transparent border-none outline-none ml-3 w-full text-sm text-gray-700 dark:text-gray-200">
+                    </div>
+                </div>
+                <div class="flex items-center gap-5">
+                    <div class="flex items-center gap-3">
+                        <div class="hidden md:block text-right">
+                            <p id="userNameDisplay" class="text-sm font-bold text-gray-800 dark:text-white leading-none">User</p>
+                            <p id="userRoleDisplay" class="text-[10px] text-gray-500 uppercase tracking-wide">CS Sales</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-aeGreen text-white flex items-center justify-center font-bold border-2 border-white shadow-sm"><i class="fas fa-user"></i></div>
+                    </div>
+                </div>
+            </header>
 
-        <main class="flex-1 overflow-y-auto p-6 md:p-8">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold">Halo, <span id="userNameDisplay" class="text-aeGreen dark:text-aeOrange">User</span>! 👋</h2>
+            <div id="mobileDropdown" class="absolute top-20 left-0 w-full bg-white dark:bg-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700 hidden flex-col md:hidden z-30">
+                <a href="#" onclick="switchTab('dashboard')" class="px-6 py-4 border-b dark:border-gray-700 font-medium flex items-center gap-3"><i class="fas fa-border-all w-5"></i> Dashboard</a>
+                <a href="#" onclick="switchTab('input')" class="px-6 py-4 border-b dark:border-gray-700 font-medium flex items-center gap-3"><i class="fas fa-plus-circle w-5"></i> Input Penjualan</a>
+                <a href="#" onclick="location.reload()" class="px-6 py-4 text-red-600 font-medium flex items-center gap-3"><i class="fas fa-sign-out-alt w-5"></i> Keluar</a>
             </div>
 
-            <div id="module-scanner" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow">
-                <h3 class="text-xl font-bold mb-4 border-b pb-2"><i class="fas fa-file-pdf"></i> Laporan Harian & Scan PDF</h3>
+            <main class="flex-1 overflow-y-auto p-4 md:p-8 relative">
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <div>
-                        <label class="block text-sm mb-1">Tanggal Laporan</label>
-                        <input type="date" id="inputTgl" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600">
+                <div id="view-dashboard" class="block">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold">Ringkasan Performa</h2>
+                        <p class="text-sm text-gray-500">Pantau performa dan kontribusi Anda bulan ini.</p>
                     </div>
-                    <div>
-                        <label class="block text-sm mb-1">Total Nomor Dilayani (Lead)</label>
-                        <input type="number" id="inputLead" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" placeholder="Misal: 15">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                            <h3 class="text-xs font-semibold text-gray-500 uppercase">Status Anda</h3>
+                            <p class="text-2xl font-bold text-aeGreen mt-2">AKTIF</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-10 text-center hover:bg-gray-50 dark:hover:bg-gray-700 transition cursor-pointer relative">
-                    <input type="file" id="pdfUpload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="application/pdf" multiple>
-                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
-                    <p class="font-semibold">Klik atau Drag & Drop PDF Invoice di sini</p>
-                    <p class="text-sm text-gray-500 mt-1">Bisa upload beberapa PDF sekaligus</p>
-                </div>
+                <div id="view-input" class="hidden">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold">Input Penjualan & Laporan Lead</h2>
+                    </div>
 
-                <div class="mt-8 overflow-x-auto hidden" id="previewContainer">
-                    <h4 class="font-bold mb-2">Pratinjau Hasil Scan (<span id="totalScanCount">0</span> Invoice Terbaca)</h4>
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-gray-100 dark:bg-gray-700">
-                                <th class="p-2 border">No Invoice</th>
-                                <th class="p-2 border">Customer</th>
-                                <th class="p-2 border">Area</th>
-                                <th class="p-2 border">Qty</th>
-                                <th class="p-2 border">Revenue (DP+Lunas)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="previewTableBody"></tbody>
-                    </table>
-                    <button id="btnKirimLaporan" class="mt-4 bg-aeOrange hover:bg-orange-600 text-white font-bold py-2 px-6 rounded shadow">
-                        Kirim Laporan ke SPV
-                    </button>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                                <label class="block text-sm font-bold mb-2">Tanggal Laporan</label>
+                                <input type="date" id="inputTgl" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 mb-4">
+                                
+                                <label class="block text-sm font-bold mb-2">Total Nomor Dilayani (Lead)</label>
+                                <input type="number" id="inputLead" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" placeholder="Misal: 15">
+                            </div>
+
+                            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center text-center cursor-pointer relative">
+                                <input type="file" id="pdfUpload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="application/pdf" multiple>
+                                <div class="w-16 h-16 bg-green-100 text-aeGreen rounded-full flex items-center justify-center text-2xl mb-4"><i class="fas fa-file-pdf"></i></div>
+                                <h3 class="text-lg font-bold mb-1">Upload PDF Invoice</h3>
+                                <p class="text-sm text-gray-500">Pilih atau Drag & Drop file PDF ke sini.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col">
+                            <h3 class="text-lg font-bold mb-4 border-b pb-2">Preview Scan (<span id="totalScanCount">0</span> Invoice)</h3>
+                            
+                            <div class="flex-1 overflow-y-auto max-h-[400px]">
+                                <table class="w-full text-left text-sm">
+                                    <thead>
+                                        <tr class="bg-gray-50 dark:bg-gray-700">
+                                            <th class="p-2 border-b">Nama & Cabang</th>
+                                            <th class="p-2 border-b text-right">Revenue</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="previewTableBody">
+                                        </tbody>
+                                </table>
+                            </div>
+
+                            <button id="btnKirimLaporan" class="w-full mt-4 bg-aeGreen text-white font-bold py-3 rounded-lg shadow hover:bg-[#0a2e22] transition hidden">
+                                Kirim Laporan ke SPV
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            
-        </main>
+            </main>
+        </div>
     </div>
 
     <script>
-        // MASUKKAN URL GOOGLE APPS SCRIPT DI SINI!
+        // 1. MASUKKAN URL GOOGLE APPS SCRIPT DI SINI!
         const API_URL = "https://script.google.com/macros/s/AKfycbzj-KXl-P2I9zs_jRomVUGLZRwG9PagcfU7H2vei3fWsk5K7SD7ktfxJZUW9-nKOUe9gA/exec"; 
+        
         let currentUser = null;
         let scannedInvoices = [];
 
-        // 1. Inisialisasi PDF.js
+        // Inisialisasi PDF.js Worker
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        // 2. Fetch Daftar CS untuk Dropdown Login saat Halaman Dimuat
+        // 2. Fetch Daftar CS saat Halaman Dimuat
         window.onload = async () => {
-            document.getElementById('inputTgl').valueAsDate = new Date(); // Set default tanggal hari ini
+            document.getElementById('inputTgl').valueAsDate = new Date();
             try {
                 let res = await fetch(API_URL + "?action=getCSList");
                 let json = await res.json();
@@ -162,19 +237,22 @@
                 
                 if(json.status === "success"){
                     currentUser = json.user;
+                    // Sembunyikan Login, Tampilkan App
                     document.getElementById('login-page').classList.add('hidden');
                     document.getElementById('app-container').classList.remove('hidden');
-                    document.getElementById('userNameDisplay').innerText = currentUser.nama;
                     
-                    // Routing Menu Berdasarkan Role
+                    // Update UI Profil
+                    document.getElementById('userNameDisplay').innerText = currentUser.nama;
+                    document.getElementById('userRoleDisplay').innerText = currentUser.role;
+                    
                     if(currentUser.role === 'SPV') {
-                        document.getElementById('menu-approval').classList.remove('hidden');
+                        document.getElementById('nav-admin').classList.remove('hidden');
                     }
                 } else {
                     alert(json.message);
                 }
             } catch (err) {
-                alert("Koneksi gagal. Pastikan URL GAS benar.");
+                alert("Koneksi gagal. Pastikan URL GAS benar!");
             }
             btn.innerHTML = 'Masuk';
         });
@@ -182,8 +260,8 @@
         // 4. Logika REGEX Scanner PDF
         document.getElementById('pdfUpload').addEventListener('change', async function(e) {
             const files = e.target.files;
-            document.getElementById('previewContainer').classList.remove('hidden');
             let tbody = document.getElementById('previewTableBody');
+            let btnKirim = document.getElementById('btnKirimLaporan');
             
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
@@ -194,7 +272,6 @@
                     let pdf = await pdfjsLib.getDocument(typedarray).promise;
                     let textContent = "";
                     
-                    // Ekstrak Teks dari semua halaman
                     for (let j = 1; j <= pdf.numPages; j++) {
                         let page = await pdf.getPage(j);
                         let text = await page.getTextContent();
@@ -202,67 +279,51 @@
                         textContent += pageString + " ";
                     }
 
-                    console.log("Raw PDF Text:", textContent); // Untuk Debugging
-
-                    // ATURAN REGEX SESUAI KESEPAKATAN
-                    let invoiceMatch = textContent.match(/INV\/[A-Z0-9\/-]+/);
-                    let noInvoice = invoiceMatch ? invoiceMatch[0] : "Gagal Terbaca";
-
-                    // Ekstrak Cabang (Misal: "01 - Dapur Ciputat")
-                    let cabangMatch = textContent.match(/Dapur\s+([A-Za-z\s]+)/i);
-                    let cabang = cabangMatch ? cabangMatch[1].trim() : "Pusat";
-
-                    // Ekstrak Tanggal Pengiriman
-                    let tglMatch = textContent.match(/Tanggal Pengiriman\s*([A-Za-z]+,\s*\d+\s*[A-Za-z]+\s*\d{4})/i);
-                    let tglAcara = tglMatch ? tglMatch[1] : "";
-
-                    // Ekstrak Nama (Diasumsikan baris setelah NAMA PEMESAN)
-                    let namaMatch = textContent.match(/NAMA PEMESAN AQIQAH :\s*([A-Za-z\s]+)/i);
-                    let nama = namaMatch ? namaMatch[1].trim() : "-";
-
-                    // Ekstrak Qty
-                    let qtyMatch = textContent.match(/QTY\s*(\d+)/i);
-                    let qty = qtyMatch ? parseInt(qtyMatch[1]) : 1;
-
-                    // Ekstrak Revenue (DP + Tertagih = 5188100 sesuai aturan)
-                    // Logika: Mencari angka setelah kata DP dan Jumlah Tertagih
-                    let dpMatch = textContent.match(/DP\s*Rp\.?\s*([\d,.]+)/i);
-                    let lunasMatch = textContent.match(/Jumlah Tertagih\s*Rp\.?\s*([\d,.]+)/i);
+                    // Regex Ekstraksi (Sesuai Aturan yang Disepakati)
+                    let noInvoice = (textContent.match(/INV\/[A-Z0-9\/-]+/) || ["-"])[0];
+                    let cabang = (textContent.match(/Dapur\s+([A-Za-z\s]+)/i) || ["", "Pusat"])[1].trim();
+                    let tglAcara = (textContent.match(/Tanggal Pengiriman\s*([A-Za-z]+,\s*\d+\s*[A-Za-z]+\s*\d{4})/i) || ["", "-"])[1];
+                    let nama = (textContent.match(/NAMA PEMESAN AQIQAH :\s*([A-Za-z\s]+)/i) || ["", "-"])[1].trim();
+                    let qty = parseInt((textContent.match(/QTY\s*(\d+)/i) || ["", "1"])[1]);
                     
-                    let dp = dpMatch ? parseInt(dpMatch[1].replace(/[,.]/g, '')) : 0;
-                    let tertagih = lunasMatch ? parseInt(lunasMatch[1].replace(/[,.]/g, '')) : 0;
+                    // Hitung Revenue (DP + Tertagih)
+                    let dp = parseInt((textContent.match(/DP\s*Rp\.?\s*([\d,.]+)/i) || ["", "0"])[1].replace(/[,.]/g, ''));
+                    let tertagih = parseInt((textContent.match(/Jumlah Tertagih\s*Rp\.?\s*([\d,.]+)/i) || ["", "0"])[1].replace(/[,.]/g, ''));
                     let totalRevenue = dp + tertagih;
 
-                    // Push ke array
+                    // Simpan ke Array
                     scannedInvoices.push({
                         no_invoice: noInvoice, cabang: cabang, 
                         nama_cust: nama, qty: qty, revenue: totalRevenue, tgl_acara: tglAcara
                     });
 
-                    // Update UI Tabel
+                    // Munculkan di Tabel UI
                     tbody.innerHTML += `
-                        <tr class="border-b dark:border-gray-600">
-                            <td class="p-2">${noInvoice}</td>
-                            <td class="p-2">${nama}</td>
-                            <td class="p-2">${cabang}</td>
-                            <td class="p-2 font-bold">${qty}</td>
-                            <td class="p-2 text-aeGreen dark:text-green-400 font-bold">Rp ${totalRevenue.toLocaleString('id-ID')}</td>
+                        <tr class="border-b dark:border-gray-700">
+                            <td class="p-2 py-3">
+                                <p class="font-bold text-gray-800 dark:text-gray-200">${nama}</p>
+                                <p class="text-[10px] text-gray-500">${noInvoice} | Cab. ${cabang}</p>
+                            </td>
+                            <td class="p-2 py-3 text-right font-bold text-aeGreen dark:text-green-400">
+                                Rp ${totalRevenue.toLocaleString('id-ID')}
+                            </td>
                         </tr>
                     `;
+                    
                     document.getElementById('totalScanCount').innerText = scannedInvoices.length;
+                    btnKirim.classList.remove('hidden'); // Munculkan tombol kirim
                 };
                 reader.readAsArrayBuffer(file);
             }
         });
 
-        // 5. Logika Kirim Laporan ke GAS
+        // 5. Submit ke GAS
         document.getElementById('btnKirimLaporan').addEventListener('click', async () => {
             let totalLead = document.getElementById('inputLead').value;
             let tgl = document.getElementById('inputTgl').value;
             
-            if(!totalLead) return alert("Harap isi Total Nomor Dilayani (Lead)!");
-            if(scannedInvoices.length === 0) return alert("Belum ada PDF yang di-scan!");
-
+            if(!totalLead) return alert("Harap isi Total Lead!");
+            
             let btn = document.getElementById('btnKirimLaporan');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
             btn.disabled = true;
@@ -279,11 +340,12 @@
                 let json = await res.json();
                 alert(json.message);
                 
-                // Reset Form
+                // Reset form setelah berhasil
                 scannedInvoices = [];
                 document.getElementById('previewTableBody').innerHTML = '';
-                document.getElementById('previewContainer').classList.add('hidden');
+                document.getElementById('totalScanCount').innerText = '0';
                 document.getElementById('inputLead').value = '';
+                btn.classList.add('hidden');
             } catch (err) {
                 alert("Gagal mengirim data.");
             }
@@ -291,28 +353,57 @@
             btn.disabled = false;
         });
 
-        // 6. UI Toggle Sidebar & Dark Mode
-        document.getElementById('toggleSidebar').addEventListener('click', () => {
-            let sidebar = document.getElementById('sidebar');
-            let labels = document.querySelectorAll('.menu-label');
-            let logoText = document.querySelector('.logo-text span');
-            let isMobile = window.innerWidth < 768;
+        // ==========================================
+        // FUNGSI UI BANTUAN (TOGGLE & RESPONSIVE)
+        // ==========================================
+        
+        // 1. Toggle Sidebar Desktop
+        document.getElementById('desktopToggleBtn').addEventListener('click', () => {
+            const sidebar = document.getElementById('desktopSidebar');
+            const sidebarTexts = document.querySelectorAll('.sidebar-text');
+            const navBtns = document.querySelectorAll('.nav-btn');
 
-            if (isMobile) {
-                document.getElementById('menuList').classList.toggle('hidden');
-                document.getElementById('menuBottom').classList.toggle('hidden');
+            if (sidebar.classList.contains('w-64')) {
+                sidebar.classList.replace('w-64', 'w-20');
+                sidebarTexts.forEach(el => el.classList.add('hide-text'));
+                navBtns.forEach(btn => btn.classList.add('justify-center', 'px-0'));
             } else {
-                sidebar.classList.toggle('w-64');
-                sidebar.classList.toggle('w-20');
-                labels.forEach(l => l.classList.toggle('hidden'));
-                if(logoText) logoText.classList.toggle('hidden');
+                sidebar.classList.replace('w-20', 'w-64');
+                setTimeout(() => { sidebarTexts.forEach(el => el.classList.remove('hide-text')); }, 150);
+                navBtns.forEach(btn => btn.classList.remove('justify-center', 'px-0'));
             }
         });
 
-        document.getElementById('toggleTheme').addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
+        // 2. Mobile Dropdown
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileDropdown').classList.toggle('hidden');
+            document.getElementById('mobileDropdown').classList.toggle('flex');
         });
-        
+
+        // 3. Ganti Tab Menu
+        function switchTab(tabId) {
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-input').classList.add('hidden');
+            
+            document.getElementById('view-' + tabId).classList.remove('hidden');
+            document.getElementById('view-' + tabId).classList.add('block');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-aeGreen', 'text-white', 'shadow-sm');
+                btn.classList.add('text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
+            });
+
+            const activeBtn = document.getElementById('nav-' + tabId);
+            if(activeBtn) {
+                activeBtn.classList.remove('text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
+                activeBtn.classList.add('bg-aeGreen', 'text-white', 'shadow-sm');
+            }
+
+            document.getElementById('mobileDropdown').classList.add('hidden');
+            document.getElementById('mobileDropdown').classList.remove('flex');
+        }
+
+        // 4. Toggle Mata PIN Login
         document.getElementById('togglePin').addEventListener('click', function() {
             let pinInput = document.getElementById('login-pin');
             if (pinInput.type === "password") {
@@ -322,6 +413,11 @@
                 pinInput.type = "password";
                 this.innerHTML = '<i class="fas fa-eye"></i>';
             }
+        });
+
+        // 5. Dark Mode Toggle
+        document.getElementById('btnThemeToggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
         });
     </script>
 </body>
