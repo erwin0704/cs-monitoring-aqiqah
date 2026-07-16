@@ -4,13 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aqiqah Admin - CS Portal</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script>
         tailwind.config = {
@@ -19,373 +15,482 @@
                 extend: { 
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: { 
-                        aeGreen: '#114232', // Hijau Tua Logo
-                        aeGreenLight: '#E8F5E9',
-                        aeOrange: '#F39F5A', // Oranye Logo
+                        aeGreen: '#114232', 
+                        aeOrange: '#F39F5A', 
                         aeBg: '#F8F9FA'
                     } 
                 } 
             }
         }
     </script>
-    <style>
-        /* Transisi halus untuk sidebar */
-        .sidebar-transition { transition: width 0.3s ease-in-out; }
-        .hide-text { display: none; }
-    </style>
 </head>
-<body class="bg-aeBg text-gray-800 font-sans antialiased overflow-hidden flex h-screen">
+<body class="bg-aeBg text-gray-800 font-sans antialiased overflow-hidden flex h-screen dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
 
-    <!-- ==================== SIDEBAR (DESKTOP) ==================== -->
-    <aside id="desktopSidebar" class="bg-white border-r border-gray-200 hidden md:flex flex-col w-64 sidebar-transition relative z-20">
-        <!-- Logo Area -->
-        <div class="h-20 flex items-center px-6 border-b border-gray-100">
-            <div class="flex items-center gap-3">
-                <div class="bg-aeGreen text-white p-2 rounded-lg flex-shrink-0">
-                    <i class="fas fa-leaf text-xl"></i>
+    <div id="login-page" class="absolute inset-0 z-50 flex items-center justify-center bg-aeBg dark:bg-gray-900">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-md border-t-4 border-aeGreen">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-aeGreen text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-md">
+                    <i class="fas fa-leaf"></i>
                 </div>
-                <div class="sidebar-text overflow-hidden whitespace-nowrap">
-                    <h1 class="text-xl font-bold text-aeGreen leading-tight">Aqiqah Admin</h1>
-                    <p class="text-xs text-gray-500">CS Portal</p>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Aqiqah Admin</h1>
+                <p class="text-sm mt-1 text-gray-500 dark:text-gray-400">Portal Analisis Performa CS</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold mb-2">Pilih Akun / ID CS</label>
+                    <select id="login-id" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" required>
+                        <option value="">-- Memuat Data dari Database... --</option>
+                    </select>
+                </div>
+                <div class="mb-6 relative">
+                    <label class="block text-sm font-semibold mb-2">PIN Rahasia</label>
+                    <input type="password" id="login-pin" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Masukkan PIN" required>
+                    <button type="button" id="togglePin" class="absolute right-3 top-9 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                </div>
+                <button type="submit" id="btnLogin" class="w-full bg-aeGreen hover:bg-[#0a2e22] text-white font-bold py-3 rounded-lg shadow-md transition duration-300">
+                    Masuk ke Sistem
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="app-container" class="hidden flex-1 flex h-screen w-full">
+        
+        <aside id="desktopSidebar" class="bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 hidden md:flex flex-col w-64 transition-all duration-300 relative z-20">
+            <div class="h-20 flex items-center px-6 border-b border-gray-100 dark:border-gray-700">
+                <div class="flex items-center gap-3">
+                    <div class="bg-aeGreen text-white p-2 rounded-lg flex-shrink-0"><i class="fas fa-leaf text-xl"></i></div>
+                    <div class="menu-label overflow-hidden whitespace-nowrap">
+                        <h1 class="text-xl font-bold text-aeGreen dark:text-aeOrange leading-tight">Aqiqah Admin</h1>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Menu Navigation -->
-        <div class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
-            <!-- Active Menu Example -->
-            <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex items-center gap-3 px-4 py-3 bg-aeGreen text-white rounded-xl shadow-sm hover:bg-[#0a2e22] transition">
-                <i class="fas fa-border-all w-5 text-center"></i>
-                <span class="sidebar-text font-medium text-sm">Dashboard</span>
-            </a>
-            <a href="#" onclick="switchTab('input')" id="nav-input" class="nav-btn flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl hover:bg-gray-100 transition">
-                <i class="fas fa-plus-circle w-5 text-center"></i>
-                <span class="sidebar-text font-medium text-sm">Input Penjualan</span>
-            </a>
-            <a href="#" class="nav-btn flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl hover:bg-gray-100 transition">
-                <i class="fas fa-history w-5 text-center"></i>
-                <span class="sidebar-text font-medium text-sm">Riwayat</span>
-            </a>
-            <a href="#" class="nav-btn flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl hover:bg-gray-100 transition">
-                <i class="fas fa-user w-5 text-center"></i>
-                <span class="sidebar-text font-medium text-sm">Profil</span>
-            </a>
-            <a href="#" class="nav-btn flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl hover:bg-gray-100 transition">
-                <i class="fas fa-shield-alt w-5 text-center"></i>
-                <span class="sidebar-text font-medium text-sm">Admin</span>
-            </a>
-        </div>
-
-        <!-- Bottom Actions -->
-        <div class="p-4 border-t border-gray-100 space-y-2">
-            <button class="w-full flex items-center justify-center gap-2 bg-aeOrange hover:bg-orange-500 text-white py-3 rounded-xl font-medium text-sm shadow-sm transition">
-                <i class="fas fa-headset"></i> <span class="sidebar-text">Bantu Pelanggan</span>
-            </button>
-            <a href="#" class="flex items-center gap-3 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-xl transition text-sm">
-                <i class="far fa-question-circle w-5 text-center"></i> <span class="sidebar-text font-medium">Bantuan</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 rounded-xl transition text-sm">
-                <i class="fas fa-sign-out-alt w-5 text-center"></i> <span class="sidebar-text font-medium">Keluar</span>
-            </a>
-        </div>
-    </aside>
-
-    <!-- ==================== MAIN CONTENT WRAPPER ==================== -->
-    <div class="flex-1 flex flex-col min-w-0">
-        
-        <!-- TOP NAVBAR -->
-        <header class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-8 z-10">
-            <!-- Left: Toggle & Search -->
-            <div class="flex items-center gap-4 flex-1">
-                <!-- Mobile Hamburger -->
-                <button id="mobileMenuBtn" class="md:hidden text-gray-600 hover:text-aeGreen text-2xl">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <!-- Desktop Toggle -->
-                <button id="desktopToggleBtn" class="hidden md:block text-gray-400 hover:text-aeGreen text-xl">
-                    <i class="fas fa-bars"></i>
+            <div class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-4 py-3 bg-aeGreen text-white rounded-xl shadow-sm transition">
+                    <i class="fas fa-border-all w-5 text-center"></i>
+                    <span class="menu-label font-medium text-sm">Dashboard</span>
                 </button>
                 
-                <!-- Search Bar -->
-                <div class="hidden md:flex items-center bg-gray-100 rounded-full px-4 py-2 w-96 focus-within:ring-2 focus-within:ring-aeGreen/20">
-                    <i class="fas fa-search text-gray-400"></i>
-                    <input type="text" placeholder="Cari data sales..." class="bg-transparent border-none outline-none ml-3 w-full text-sm text-gray-700">
-                </div>
+                <button onclick="switchTab('input')" id="nav-input" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition">
+                    <i class="fas fa-plus-circle w-5 text-center"></i>
+                    <span class="menu-label font-medium text-sm">Scan Penjualan</span>
+                </button>
+                
+                <button onclick="switchTab('admin')" id="nav-admin" class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition">
+                    <i class="fas fa-shield-alt w-5 text-center"></i>
+                    <span class="menu-label font-medium text-sm">Approval Admin</span>
+                </button>
             </div>
 
-            <!-- Right: Profile & Actions -->
-            <div class="flex items-center gap-5">
-                <button class="text-gray-400 hover:text-gray-600 relative">
-                    <i class="far fa-bell text-xl"></i>
-                    <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+            <div class="p-4 border-t border-gray-100 dark:border-gray-700 space-y-2">
+                <button id="btnThemeToggle" class="w-full flex items-center gap-3 px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition text-sm">
+                    <i class="fas fa-moon w-5 text-center"></i> <span class="menu-label font-medium">Ganti Tema</span>
                 </button>
-                <button class="text-gray-400 hover:text-gray-600" id="btnThemeToggle">
-                    <i class="fas fa-moon text-xl"></i>
+                <button onclick="location.reload()" class="w-full flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition text-sm">
+                    <i class="fas fa-sign-out-alt w-5 text-center"></i> <span class="menu-label font-medium">Keluar</span>
                 </button>
-                <div class="h-8 w-px bg-gray-200"></div>
-                <div class="flex items-center gap-3 cursor-pointer">
-                    <div class="hidden md:block text-right">
-                        <p class="text-sm font-bold text-gray-800 leading-none">Ema</p>
-                        <p class="text-[10px] text-gray-500 uppercase tracking-wide">Senior CS Sales</p>
-                    </div>
-                    <img src="https://ui-avatars.com/api/?name=Ema&background=114232&color=fff" class="w-10 h-10 rounded-full border-2 border-white shadow-sm" alt="Profile">
-                </div>
             </div>
-        </header>
+        </aside>
 
-        <!-- MOBILE DROPDOWN MENU (Absolute) -->
-        <div id="mobileDropdown" class="absolute top-20 left-0 w-full bg-white shadow-lg border-b border-gray-200 hidden flex-col md:hidden z-30">
-            <a href="#" onclick="switchTab('dashboard')" class="px-6 py-4 border-b text-gray-700 hover:bg-gray-50 font-medium flex items-center gap-3"><i class="fas fa-border-all w-5"></i> Dashboard</a>
-            <a href="#" onclick="switchTab('input')" class="px-6 py-4 border-b text-gray-700 hover:bg-gray-50 font-medium flex items-center gap-3"><i class="fas fa-plus-circle w-5"></i> Input Penjualan</a>
-            <a href="#" class="px-6 py-4 border-b text-gray-700 hover:bg-gray-50 font-medium flex items-center gap-3"><i class="fas fa-history w-5"></i> Riwayat</a>
-            <a href="#" class="px-6 py-4 border-b text-red-600 hover:bg-red-50 font-medium flex items-center gap-3"><i class="fas fa-sign-out-alt w-5"></i> Keluar</a>
-        </div>
-
-        <!-- ==================== MAIN VIEW ==================== -->
-        <main class="flex-1 overflow-y-auto p-4 md:p-8 relative">
+        <div class="flex-1 flex flex-col min-w-0">
             
-            <!-- SECTION 1: DASHBOARD -->
-            <div id="view-dashboard" class="block">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                    <div>
-                        <div class="text-xs text-gray-500 mb-1">Dashboard > <span class="text-aeGreen font-semibold">Performa</span></div>
-                        <h2 class="text-2xl font-bold text-gray-800">Ringkasan Performa - Bulan Berjalan</h2>
-                    </div>
-                    <div class="flex gap-2">
-                        <button class="px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"><i class="far fa-calendar mr-2"></i> Juli 2026</button>
-                    </div>
+            <header class="h-20 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-4 md:px-8 z-10">
+                <div class="flex items-center gap-4 flex-1">
+                    <button id="mobileMenuBtn" class="md:hidden text-gray-600 dark:text-gray-300 hover:text-aeGreen text-2xl"><i class="fas fa-bars"></i></button>
+                    <button id="desktopToggleBtn" class="hidden md:block text-gray-400 hover:text-aeGreen text-xl"><i class="fas fa-bars"></i></button>
                 </div>
+                
+                <div class="flex items-center gap-3">
+                    <div class="text-right">
+                        <p id="userNameDisplay" class="text-sm font-bold text-gray-800 dark:text-white leading-none">Memuat...</p>
+                        <p id="userRoleDisplay" class="text-[10px] text-gray-500 uppercase tracking-wide">ROLE</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-aeGreen text-white flex items-center justify-center font-bold border-2 border-white shadow-sm"><i class="fas fa-user"></i></div>
+                </div>
+            </header>
 
-                <!-- 4 Top Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                    <!-- Card 1 -->
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 relative overflow-hidden">
-                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Revenue</h3>
-                        <p class="text-2xl font-bold text-gray-800 mb-1">Rp 245.850.000</p>
-                        <p class="text-xs text-green-600 font-medium"><i class="fas fa-arrow-up"></i> +12.5% dari bln lalu</p>
-                        <i class="fas fa-wallet absolute -bottom-4 -right-2 text-6xl text-gray-50 opacity-50"></i>
-                    </div>
-                    <!-- Card 2 -->
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Capaian Target</h3>
-                        <div class="flex justify-between items-end mb-2">
-                            <p class="text-2xl font-bold text-gray-800">82%</p>
-                            <p class="text-xs text-gray-500">Target: 100%</p>
+            <div id="mobileDropdown" class="absolute top-20 left-0 w-full bg-white dark:bg-gray-800 shadow-xl border-b border-gray-200 dark:border-gray-700 hidden flex-col md:hidden z-30">
+                <button onclick="switchTab('dashboard')" class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3 hover:bg-gray-50"><i class="fas fa-border-all w-5"></i> Dashboard</button>
+                <button onclick="switchTab('input')" class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3 hover:bg-gray-50"><i class="fas fa-plus-circle w-5"></i> Scan Penjualan</button>
+                <button onclick="switchTab('admin')" id="nav-admin-mobile" class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3 hover:bg-gray-50"><i class="fas fa-shield-alt w-5"></i> Approval Admin</button>
+                <button onclick="location.reload()" class="w-full text-left px-6 py-4 text-red-600 font-medium flex items-center gap-3 hover:bg-red-50"><i class="fas fa-sign-out-alt w-5"></i> Keluar</button>
+            </div>
+
+            <main class="flex-1 overflow-y-auto p-4 md:p-8 relative">
+                
+                <div id="view-dashboard" class="block">
+                    <div class="mb-6 flex justify-between items-end">
+                        <div>
+                            <h2 class="text-2xl font-bold">Ringkasan Performa</h2>
+                            <p class="text-sm text-gray-500">Pantau performa dan kontribusi Anda bulan ini.</p>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-1.5 mb-2">
-                            <div class="bg-aeOrange h-1.5 rounded-full" style="width: 82%"></div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Laporan (Bulan Ini)</h3>
+                            <p class="text-3xl font-bold text-gray-800 dark:text-white" id="dashTotalLead">0</p>
+                            <p class="text-xs text-gray-500 mt-1">Data sinkronisasi dari Google Sheets</p>
                         </div>
-                        <p class="text-[10px] text-gray-500">Sedikit lagi mencapai target!</p>
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Status Akun</h3>
+                            <p class="text-3xl font-bold text-aeGreen mt-1"><i class="fas fa-check-circle"></i> AKTIF</p>
+                        </div>
                     </div>
-                    <!-- Card 3 -->
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Jumlah Transaksi</h3>
-                        <p class="text-2xl font-bold text-gray-800 mb-1">148</p>
-                        <p class="text-xs text-green-600 font-medium"><i class="far fa-check-circle"></i> Target: 120 (Tercapai)</p>
                     </div>
-                    <!-- Card 4 -->
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Avg. Customer Rating</h3>
-                        <div class="flex items-center gap-2 mb-2">
-                            <p class="text-2xl font-bold text-gray-800">4.9</p>
-                            <div class="text-aeOrange text-sm">
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+
+                <div id="view-input" class="hidden">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold">Laporan & Scan Invoice Baru</h2>
+                        <p class="text-sm text-gray-500">Silakan unggah invoice PDF untuk diekstrak secara otomatis.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                                <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">Tanggal Laporan (Otomatis Hari Ini)</label>
+                                <input type="date" id="inputTgl" class="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 mb-4 focus:ring-2 focus:ring-aeGreen outline-none">
+                                
+                                <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">Total Nomor Dilayani (Lead)</label>
+                                <input type="number" id="inputLead" class="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-aeGreen outline-none" placeholder="Masukkan angka (Misal: 15)">
+                            </div>
+
+                            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl border-2 border-dashed border-aeGreen dark:border-gray-600 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition relative min-h-[200px]">
+                                <input type="file" id="pdfUpload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="application/pdf" multiple>
+                                <div class="w-16 h-16 bg-green-100 text-aeGreen rounded-full flex items-center justify-center text-3xl mb-4 shadow-sm"><i class="fas fa-file-upload"></i></div>
+                                <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-1">Upload PDF Invoice</h3>
+                                <p class="text-sm text-gray-500">Pilih atau Drag & Drop file PDF ke area ini.</p>
                             </div>
                         </div>
-                        <p class="text-[10px] text-gray-500">Berdasarkan 92 ulasan</p>
+
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col min-h-[400px]">
+                            <h3 class="text-lg font-bold mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">Preview Ekstraksi (<span id="totalScanCount" class="text-aeOrange">0</span> Invoice Terbaca)</h3>
+                            
+                            <div class="flex-1 overflow-y-auto" id="previewArea">
+                                <table class="w-full text-left text-sm">
+                                    <thead>
+                                        <tr class="bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                                            <th class="p-3 border-b dark:border-gray-600">Nama Customer & Referensi</th>
+                                            <th class="p-3 border-b dark:border-gray-600 text-right">Total Tagihan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="previewTableBody">
+                                        <tr>
+                                            <td colspan="2" class="text-center py-8 text-gray-400 italic">Belum ada file PDF yang di-scan.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <button id="btnKirimLaporan" class="w-full mt-6 bg-aeGreen text-white font-bold py-3 rounded-lg shadow-md hover:bg-[#0a2e22] transition hidden flex items-center justify-center gap-2">
+                                <i class="fas fa-paper-plane"></i> Kirim Laporan ke Database
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Main Content Grid -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Leaderboard Table -->
-                    <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="p-5 border-b border-gray-100 flex justify-between items-center">
-                            <h3 class="font-bold text-gray-800 text-lg">Peringkat CS Sales</h3>
-                            <a href="#" class="text-sm text-gray-500 hover:text-aeGreen">Lihat Semua</a>
+                <div id="view-admin" class="hidden">
+                    <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                        <div>
+                            <h2 class="text-2xl font-bold">Approval Laporan CS</h2>
+                            <p class="text-sm text-gray-500">Tinjau antrean data yang dikirim oleh tim Sales.</p>
+                        </div>
+                        <button class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium py-2 px-4 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                            <i class="fas fa-sync-alt mr-2 text-aeGreen"></i> Segarkan Data
+                        </button>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                        <div class="p-5 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 flex justify-between items-center">
+                            <h3 class="font-bold text-gray-800 dark:text-gray-200"><i class="fas fa-clock mr-2 text-orange-500"></i> Antrean Pending</h3>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
-                                <thead class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wider">
+                                <thead class="bg-white dark:bg-gray-800 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
                                     <tr>
-                                        <th class="px-5 py-3 font-medium">Posisi</th>
-                                        <th class="px-5 py-3 font-medium">Nama CS</th>
-                                        <th class="px-5 py-3 font-medium text-right">Revenue</th>
-                                        <th class="px-5 py-3 font-medium text-center">Status</th>
+                                        <th class="px-5 py-4 font-medium">Tanggal</th>
+                                        <th class="px-5 py-4 font-medium">Nama CS</th>
+                                        <th class="px-5 py-4 font-medium">Nomor Dilayani</th>
+                                        <th class="px-5 py-4 font-medium">Status</th>
+                                        <th class="px-5 py-4 font-medium text-center">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-gray-100">
-                                    <tr class="bg-aeGreenLight/30">
-                                        <td class="px-5 py-4"><div class="w-8 h-8 rounded-full bg-aeGreen text-white flex items-center justify-center font-bold text-sm">1</div></td>
-                                        <td class="px-5 py-4">
-                                            <div class="flex items-center gap-3">
-                                                <img src="https://ui-avatars.com/api/?name=Ema&background=114232&color=fff" class="w-8 h-8 rounded-full" alt="User">
-                                                <div>
-                                                    <p class="font-bold text-gray-800 text-sm">Ema (Anda) <span class="ml-2 px-2 py-0.5 bg-green-100 text-green-700 text-[10px] rounded-full font-semibold">Top Performer</span></p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-5 py-4 text-right font-bold text-gray-800">Rp 245.850.000</td>
-                                        <td class="px-5 py-4 text-center"><span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">HIJAU</span></td>
-                                    </tr>
+                                <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                                     <tr>
-                                        <td class="px-5 py-4"><div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold text-sm">2</div></td>
-                                        <td class="px-5 py-4">
-                                            <div class="flex items-center gap-3">
-                                                <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">VC</div>
-                                                <p class="font-bold text-gray-800 text-sm">Vice</p>
-                                            </div>
-                                        </td>
-                                        <td class="px-5 py-4 text-right font-bold text-gray-800">Rp 210.400.000</td>
-                                        <td class="px-5 py-4 text-center"><span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded-full">KUNING</span></td>
+                                        <td colspan="5" class="px-5 py-8 text-center text-gray-500">Fitur penarikan tabel dari Spreadsheet sedang disiapkan...</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
-                    <!-- Right Panels -->
-                    <div class="space-y-6">
-                        <!-- Performa vs Tim -->
-                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-                            <h3 class="font-bold text-gray-800 text-sm uppercase tracking-wide mb-4">Performa vs Rata-rata Tim</h3>
-                            <div class="mb-4">
-                                <div class="flex justify-between text-sm mb-1">
-                                    <span class="text-gray-600">Efisiensi Closing</span>
-                                    <span class="font-bold">92% <i class="fas fa-caret-up text-green-500"></i></span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2 relative">
-                                    <div class="bg-gray-400 h-2 rounded-full absolute top-0 left-0" style="width: 75%"></div> <!-- Tim -->
-                                    <div class="bg-aeGreen h-2 rounded-full absolute top-0 left-0 z-10" style="width: 92%"></div> <!-- Anda -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECTION 2: INPUT PENJUALAN (SCANNER) -->
-            <div id="view-input" class="hidden">
-                <div class="mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">Input Penjualan Baru</h2>
-                    <p class="text-sm text-gray-500">Silakan unggah invoice PDF untuk ekstraksi otomatis.</p>
                 </div>
 
-                <div class="flex gap-4 mb-6">
-                    <button class="bg-white border-2 border-aeGreen text-aeGreen font-bold py-2 px-6 rounded-lg shadow-sm flex items-center gap-2"><i class="fas fa-file-pdf"></i> Scan Invoice PDF</button>
-                    <button class="bg-gray-100 text-gray-600 py-2 px-6 rounded-lg font-medium hover:bg-gray-200 transition flex items-center gap-2"><i class="fas fa-keyboard"></i> Input Manual</button>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Drop Zone -->
-                    <div class="bg-white p-8 rounded-xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition cursor-pointer relative min-h-[400px]">
-                        <input type="file" id="pdfUpload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="application/pdf">
-                        <div class="w-16 h-16 bg-green-100 text-aeGreen rounded-full flex items-center justify-center text-2xl mb-4">
-                            <i class="fas fa-file-upload"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Drop PDF Here</h3>
-                        <p class="text-sm text-gray-500 mb-6 max-w-xs">Unggah file invoice PDF untuk ekstraksi data otomatis menggunakan AI.</p>
-                        <button class="bg-aeGreen text-white px-6 py-2 rounded-lg font-medium shadow-sm hover:bg-[#0a2e22]">Pilih File</button>
-                    </div>
-
-                    <!-- Preview -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-lg font-bold text-gray-800">Preview Ekstraksi</h3>
-                            <span class="bg-orange-100 text-aeOrange text-[10px] font-bold px-2 py-1 rounded">AUTO DETECT</span>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">No. Referensi</label>
-                                <div class="p-3 bg-gray-50 border border-gray-200 rounded font-medium text-sm text-gray-800">-</div>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Dapur Produksi</label>
-                                <div class="p-3 bg-gray-50 border border-gray-200 rounded font-medium text-sm text-gray-800">-</div>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Nama Customer</label>
-                            <div class="p-3 bg-gray-50 border border-gray-200 rounded font-medium text-sm text-gray-800">-</div>
-                        </div>
-                        <div class="mb-8">
-                            <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Tanggal Acara & QTY</label>
-                            <div class="p-3 bg-gray-50 border border-gray-200 rounded font-medium text-sm text-gray-800">-</div>
-                        </div>
-
-                        <div class="flex items-end justify-between pt-4 border-t border-gray-100">
-                            <div>
-                                <p class="text-xs font-bold text-gray-500 uppercase mb-1">Total Pembayaran</p>
-                                <p class="text-3xl font-bold text-aeGreen">Rp 0</p>
-                            </div>
-                            <button class="bg-aeGreen text-white px-6 py-3 rounded-lg font-bold shadow-md hover:bg-[#0a2e22] transition flex items-center gap-2">
-                                <i class="fas fa-check-circle"></i> Konfirmasi & Ajukan
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </main>
+            </main>
+        </div>
     </div>
 
     <script>
-        // Logika Desktop Sidebar Toggle
-        const desktopToggleBtn = document.getElementById('desktopToggleBtn');
-        const sidebar = document.getElementById('desktopSidebar');
-        const sidebarTexts = document.querySelectorAll('.sidebar-text');
-        const navBtns = document.querySelectorAll('.nav-btn');
+        // --- 1. URL GOOGLE APPS SCRIPT ASLI MILIKMU ---
+        const API_URL = "https://script.google.com/macros/s/AKfycbzj-KXl-P2I9zs_jRomVUGLZRwG9PagcfU7H2vei3fWsk5K7SD7ktfxJZUW9-nKOUe9gA/exec"; 
+        
+        let currentUser = null;
+        let scannedInvoices = [];
 
-        desktopToggleBtn.addEventListener('click', () => {
-            if (sidebar.classList.contains('w-64')) {
-                sidebar.classList.replace('w-64', 'w-20');
-                sidebarTexts.forEach(el => el.classList.add('hide-text'));
-                navBtns.forEach(btn => btn.classList.add('justify-center', 'px-0'));
-            } else {
-                sidebar.classList.replace('w-20', 'w-64');
-                setTimeout(() => {
-                    sidebarTexts.forEach(el => el.classList.remove('hide-text'));
-                }, 150); // Delay text appearance slightly for smooth expansion
-                navBtns.forEach(btn => btn.classList.remove('justify-center', 'px-0'));
+        // Inisialisasi PDF.js Worker untuk Scanner
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+        // --- 2. JALANKAN SAAT HALAMAN DIBUKA ---
+        window.onload = async () => {
+            // Set input tanggal ke hari ini secara otomatis
+            document.getElementById('inputTgl').valueAsDate = new Date();
+            
+            // Tarik data CS dari Google Sheets untuk mengisi Dropdown Login
+            try {
+                let res = await fetch(API_URL + "?action=getCSList");
+                let json = await res.json();
+                let select = document.getElementById('login-id');
+                
+                if(json.status === "success"){
+                    select.innerHTML = '<option value="">-- Silakan Pilih Akun Anda --</option>';
+                    json.data.forEach(cs => {
+                        select.innerHTML += `<option value="${cs.id}">${cs.id} - ${cs.nama}</option>`;
+                    });
+                } else {
+                    select.innerHTML = '<option value="">Gagal membaca data Spreadsheet</option>';
+                }
+            } catch(e) {
+                console.log("Error Fetching Data:", e);
+                document.getElementById('login-id').innerHTML = '<option value="">Gagal terkoneksi ke Server</option>';
             }
+        };
+
+        // --- 3. FUNGSI LOGIKA LOGIN ---
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnLogin');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memvalidasi PIN...';
+            btn.disabled = true;
+            
+            let id = document.getElementById('login-id').value;
+            let pin = document.getElementById('login-pin').value;
+            
+            // Format wajib Google Apps Script untuk menghindari masalah CORS Header
+            let formData = new URLSearchParams();
+            formData.append('action', 'login');
+            formData.append('id_cs', id);
+            formData.append('pin', pin);
+
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                
+                if(json.status === "success"){
+                    currentUser = json.user;
+                    
+                    // Hilangkan Layar Login, Tampilkan Layar Aplikasi
+                    document.getElementById('login-page').classList.add('hidden');
+                    document.getElementById('app-container').classList.remove('hidden');
+                    
+                    // Tulis Nama dan Role di Pojok Kanan Atas
+                    document.getElementById('userNameDisplay').innerText = currentUser.nama;
+                    document.getElementById('userRoleDisplay').innerText = currentUser.role;
+                    
+                    // Jika yang login adalah SPV/Admin, maka munculkan Menu "Approval Admin"
+                    if(currentUser.role === 'SPV') {
+                        document.getElementById('nav-admin').classList.remove('hidden');
+                        document.getElementById('nav-admin-mobile').classList.remove('hidden');
+                    }
+                } else {
+                    alert("Gagal: " + json.message);
+                }
+            } catch (err) {
+                alert("Koneksi gagal. Pastikan link Apps Script sudah di-Deploy dengan akses 'Anyone'.");
+            }
+            btn.innerHTML = 'Masuk ke Sistem';
+            btn.disabled = false;
         });
 
-        // Logika Mobile Dropdown
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileDropdown = document.getElementById('mobileDropdown');
-
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileDropdown.classList.toggle('hidden');
-            mobileDropdown.classList.toggle('flex');
-        });
-
-        // Logika Switch Tab (Navigasi Sederhana)
+        // --- 4. FUNGSI NAVIGASI TAB (Routing) ---
         function switchTab(tabId) {
-            // Sembunyikan semua view
+            // A. Sembunyikan semua konten kanvas terlebih dahulu
             document.getElementById('view-dashboard').classList.add('hidden');
             document.getElementById('view-input').classList.add('hidden');
+            document.getElementById('view-admin').classList.add('hidden');
             
-            // Tampilkan view yang dipilih
-            document.getElementById('view-' + tabId).classList.remove('hidden');
-            document.getElementById('view-' + tabId).classList.add('block');
+            // B. Tampilkan konten yang sesuai dengan tombol yang diklik
+            const targetView = document.getElementById('view-' + tabId);
+            if(targetView) targetView.classList.remove('hidden');
 
-            // Update style tombol aktif di sidebar desktop
-            navBtns.forEach(btn => {
+            // C. Matikan semua warna hijau di tombol menu sidebar (Reset)
+            document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('bg-aeGreen', 'text-white', 'shadow-sm');
-                btn.classList.add('text-gray-600', 'hover:bg-gray-100');
+                btn.classList.add('text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
             });
 
+            // D. Berikan warna hijau (Aktif) hanya pada tombol yang diklik
             const activeBtn = document.getElementById('nav-' + tabId);
             if(activeBtn) {
-                activeBtn.classList.remove('text-gray-600', 'hover:bg-gray-100');
+                activeBtn.classList.remove('text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
                 activeBtn.classList.add('bg-aeGreen', 'text-white', 'shadow-sm');
             }
 
-            // Tutup mobile dropdown jika terbuka
-            mobileDropdown.classList.add('hidden');
-            mobileDropdown.classList.remove('flex');
+            // E. Otomatis tutup menu dropdown jika sedang dibuka di layar HP
+            document.getElementById('mobileDropdown').classList.add('hidden');
         }
+
+        // --- 5. FUNGSI UI TOGGLE TAMBAHAN ---
+        // Toggle Sidebar Desktop
+        document.getElementById('desktopToggleBtn').addEventListener('click', () => {
+            const sidebar = document.getElementById('desktopSidebar');
+            const menuLabels = document.querySelectorAll('.menu-label');
+
+            if (sidebar.classList.contains('w-64')) {
+                sidebar.classList.replace('w-64', 'w-20');
+                menuLabels.forEach(el => el.classList.add('hidden')); // Sembunyikan teks
+            } else {
+                sidebar.classList.replace('w-20', 'w-64');
+                setTimeout(() => { menuLabels.forEach(el => el.classList.remove('hidden')); }, 150); // Munculkan teks
+            }
+        });
+
+        // Toggle Hamburger Mobile Menu
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileDropdown').classList.toggle('hidden');
+        });
+
+        // Toggle Mata PIN Login
+        document.getElementById('togglePin').addEventListener('click', function() {
+            let pinInput = document.getElementById('login-pin');
+            if (pinInput.type === "password") {
+                pinInput.type = "text";
+                this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+            } else {
+                pinInput.type = "password";
+                this.innerHTML = '<i class="fas fa-eye"></i>';
+            }
+        });
+
+        // Toggle Tema Gelap
+        document.getElementById('btnThemeToggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // --- 6. LOGIKA SCANNER & REGEX PDF ---
+        document.getElementById('pdfUpload').addEventListener('change', async function(e) {
+            const files = e.target.files;
+            let tbody = document.getElementById('previewTableBody');
+            let btnKirim = document.getElementById('btnKirimLaporan');
+            
+            // Hapus pesan "Belum ada file PDF" jika ini adalah upload pertama
+            if(scannedInvoices.length === 0) tbody.innerHTML = '';
+            
+            for (let i = 0; i < files.length; i++) {
+                let file = files[i];
+                let reader = new FileReader();
+                
+                reader.onload = async function() {
+                    let typedarray = new Uint8Array(this.result);
+                    let pdf = await pdfjsLib.getDocument(typedarray).promise;
+                    let textContent = "";
+                    
+                    // Baca semua halaman dalam 1 PDF
+                    for (let j = 1; j <= pdf.numPages; j++) {
+                        let page = await pdf.getPage(j);
+                        let text = await page.getTextContent();
+                        let pageString = text.items.map(item => item.str).join(" ");
+                        textContent += pageString + " ";
+                    }
+
+                    // Terapkan Rumus Regex yang sudah disepakati
+                    let noInvoice = (textContent.match(/INV\/[A-Z0-9\/-]+/) || ["-"])[0];
+                    let cabang = (textContent.match(/Dapur\s+([A-Za-z\s]+)/i) || ["", "Pusat"])[1].trim();
+                    let tglAcara = (textContent.match(/Tanggal Pengiriman\s*([A-Za-z]+,\s*\d+\s*[A-Za-z]+\s*\d{4})/i) || ["", "-"])[1];
+                    let nama = (textContent.match(/NAMA PEMESAN AQIQAH :\s*([A-Za-z\s]+)/i) || ["", "Tidak Terbaca"])[1].trim();
+                    let qty = parseInt((textContent.match(/QTY\s*(\d+)/i) || ["", "1"])[1]);
+                    
+                    // Hitung total uang DP + Sisa Pelunasan
+                    let dp = parseInt((textContent.match(/DP\s*Rp\.?\s*([\d,.]+)/i) || ["", "0"])[1].replace(/[,.]/g, ''));
+                    let tertagih = parseInt((textContent.match(/Jumlah Tertagih\s*Rp\.?\s*([\d,.]+)/i) || ["", "0"])[1].replace(/[,.]/g, ''));
+                    let totalRevenue = dp + tertagih;
+
+                    // Simpan data ke memori aplikasi
+                    scannedInvoices.push({
+                        no_invoice: noInvoice, cabang: cabang, 
+                        nama_cust: nama, qty: qty, revenue: totalRevenue, tgl_acara: tglAcara
+                    });
+
+                    // Tambahkan data tersebut ke Tabel Visual di Layar
+                    tbody.innerHTML += `
+                        <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750">
+                            <td class="p-3">
+                                <p class="font-bold text-gray-800 dark:text-gray-200">${nama}</p>
+                                <p class="text-[10px] text-gray-500 mt-1">
+                                    <span class="bg-gray-200 dark:bg-gray-600 px-1.5 py-0.5 rounded text-gray-700 dark:text-gray-300 mr-1">${noInvoice}</span>
+                                    Cabang: ${cabang}
+                                </p>
+                            </td>
+                            <td class="p-3 text-right">
+                                <p class="font-bold text-aeGreen dark:text-green-400">Rp ${totalRevenue.toLocaleString('id-ID')}</p>
+                                <p class="text-[10px] text-gray-500 mt-1">QTY: ${qty} Ekor</p>
+                            </td>
+                        </tr>
+                    `;
+                    
+                    // Update counter dan tampilkan tombol Kirim
+                    document.getElementById('totalScanCount').innerText = scannedInvoices.length;
+                    btnKirim.classList.remove('hidden'); 
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        });
+
+        // --- 7. FUNGSI KIRIM DATA KE GOOGLE SHEETS ---
+        document.getElementById('btnKirimLaporan').addEventListener('click', async () => {
+            let totalLead = document.getElementById('inputLead').value;
+            let tgl = document.getElementById('inputTgl').value;
+            
+            // Validasi wajib isi
+            if(!totalLead || totalLead <= 0) {
+                alert("Harap isi Total Nomor Dilayani (Lead) terlebih dahulu dengan benar!");
+                return;
+            }
+            
+            // Ubah tombol jadi loading
+            let btn = document.getElementById('btnKirimLaporan');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan ke Database...';
+            btn.disabled = true;
+
+            // Bungkus data untuk dikirim ke Backend GAS
+            let formData = new URLSearchParams();
+            formData.append('action', 'submitLaporan');
+            formData.append('id_cs', currentUser.id);
+            formData.append('tanggal', tgl);
+            formData.append('total_lead', totalLead);
+            formData.append('invoices', JSON.stringify(scannedInvoices));
+
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                
+                alert("Berhasil: " + json.message); // Notifikasi sukses
+                
+                // Kosongkan form kembali seperti semula (Reset)
+                scannedInvoices = [];
+                document.getElementById('previewTableBody').innerHTML = '<tr><td colspan="2" class="text-center py-8 text-gray-400 italic">Belum ada file PDF yang di-scan.</td></tr>';
+                document.getElementById('totalScanCount').innerText = '0';
+                document.getElementById('inputLead').value = '';
+                btn.classList.add('hidden');
+            } catch (err) {
+                alert("Gagal mengirim data. Periksa koneksi internet Anda.");
+            }
+            
+            // Kembalikan tombol seperti semula
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Laporan ke Database';
+            btn.disabled = false;
+        });
+
     </script>
 </body>
 </html>
