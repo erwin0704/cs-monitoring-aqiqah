@@ -31,18 +31,70 @@
             <form id="loginForm">
                 <div class="mb-4">
                     <label class="block text-sm font-semibold mb-2">Pilih Akun / ID CS</label>
-                    <select id="login-id" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" required>
+                    <select id="login-id" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" required onchange="checkPinStatus(this.value)">
                         <option value="">-- Memuat Data... --</option>
                     </select>
                 </div>
-                <div class="mb-6 relative">
+                
+                <!-- Mode Login Biasa -->
+                <div id="login-normal-mode" class="mb-6 relative">
                     <label class="block text-sm font-semibold mb-2">PIN Rahasia</label>
-                    <input type="password" id="login-pin" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Masukkan PIN" required>
-                    <button type="button" id="togglePin" class="absolute right-3 top-9 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                    <input type="password" id="login-pin" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Masukkan PIN">
+                    <button type="button" class="toggle-pin absolute right-3 top-9 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
                 </div>
+
+                <!-- Mode Setup PIN -->
+                <div id="login-setup-mode" class="hidden space-y-4 mb-6">
+                    <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg text-xs text-yellow-800 dark:text-yellow-200 border border-yellow-200 dark:border-yellow-800 mb-2">
+                        <i class="fas fa-info-circle mr-1"></i> Akun belum memiliki PIN. Masukkan Kode Akses dari SPV untuk membuat PIN baru.
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Kode Akses</label>
+                        <input type="text" id="setup-kode" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Contoh: A3F9XQ" autocomplete="off">
+                    </div>
+                    <div class="relative">
+                        <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Buat PIN Baru (6 Digit)</label>
+                        <input type="password" id="setup-pin" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Buat PIN" maxlength="6" pattern="\d{6}">
+                        <button type="button" class="toggle-pin absolute right-3 top-9 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                    </div>
+                    <div class="relative">
+                        <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Konfirmasi PIN Baru</label>
+                        <input type="password" id="setup-pin2" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Ulangi PIN" maxlength="6" pattern="\d{6}">
+                        <button type="button" class="toggle-pin absolute right-3 top-9 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                    </div>
+                </div>
+
                 <button type="submit" id="btnLogin" class="w-full bg-aeGreen hover:bg-[#0a2e22] text-white font-bold py-3 rounded-lg shadow-md transition duration-300">
                     Masuk ke Sistem
                 </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal Ganti PIN -->
+    <div id="modalChangePin" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-sm shadow-2xl">
+            <h3 class="text-lg font-bold mb-4">Ganti PIN</h3>
+            <form id="changePinForm" onsubmit="submitChangePin(event)">
+                <div class="relative mb-4">
+                    <label class="block text-xs font-semibold mb-1 text-gray-500">PIN Lama</label>
+                    <input type="password" id="chg-pin-lama" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none" required maxlength="6" pattern="\d{6}">
+                    <button type="button" class="toggle-pin absolute right-2 top-6 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                </div>
+                <div class="relative mb-4">
+                    <label class="block text-xs font-semibold mb-1 text-gray-500">PIN Baru</label>
+                    <input type="password" id="chg-pin-baru" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none" required maxlength="6" pattern="\d{6}">
+                    <button type="button" class="toggle-pin absolute right-2 top-6 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                </div>
+                <div class="relative mb-6">
+                    <label class="block text-xs font-semibold mb-1 text-gray-500">Konfirmasi PIN Baru</label>
+                    <input type="password" id="chg-pin-baru2" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none" required maxlength="6" pattern="\d{6}">
+                    <button type="button" class="toggle-pin absolute right-2 top-6 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeChangePinModal()" class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
+                    <button type="submit" id="btnSubmitChangePin" class="px-4 py-2 text-sm bg-aeGreen text-white rounded-lg hover:bg-[#0a2e22]">Simpan</button>
+                </div>
             </form>
         </div>
     </div>
@@ -72,12 +124,17 @@
                     <button id="mobileMenuBtn" class="md:hidden text-gray-600 dark:text-gray-300 hover:text-aeGreen text-2xl"><i class="fas fa-bars"></i></button>
                     <button id="desktopToggleBtn" class="hidden md:block text-gray-400 hover:text-aeGreen text-xl"><i class="fas fa-bars"></i></button>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="text-right">
+                <div class="flex items-center gap-3 relative group">
+                    <div class="text-right hidden sm:block">
                         <p id="userNameDisplay" class="text-sm font-bold text-gray-800 dark:text-white leading-none">Memuat...</p>
                         <p id="userRoleDisplay" class="text-[10px] text-gray-500 uppercase tracking-wide">ROLE</p>
                     </div>
-                    <div class="w-10 h-10 rounded-full bg-aeGreen text-white flex items-center justify-center font-bold border-2 border-white shadow-sm"><i class="fas fa-user"></i></div>
+                    <button class="w-10 h-10 rounded-full bg-aeGreen text-white flex items-center justify-center font-bold border-2 border-white shadow-sm hover:ring-2 focus:outline-none cursor-pointer relative z-10"><i class="fas fa-user"></i></button>
+                    <!-- Dropdown Avatar -->
+                    <div class="absolute right-0 top-10 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 hidden flex-col z-50 group-hover:flex overflow-hidden">
+                        <button onclick="openChangePinModal()" class="w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700"><i class="fas fa-key mr-2"></i> Ganti PIN</button>
+                        <button onclick="logoutSystem()" class="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"><i class="fas fa-sign-out-alt mr-2"></i> Keluar</button>
+                    </div>
                 </div>
             </header>
 
@@ -228,55 +285,96 @@
         // 1. CEK LOGIN SAAT HALAMAN DIMUAT (Local Storage)
         window.onload = async () => {
             document.getElementById('inputTgl').valueAsDate = new Date();
-            let savedUser = localStorage.getItem('csPortalUser');
-            let loginTime = localStorage.getItem('csPortalLoginTime');
+            await fetchUsers(); // Harus await agar data users siap untuk checkPinStatus
             
-            // Cek kedaluwarsa 24 jam (86400000 ms)
-            if (savedUser && loginTime && (Date.now() - parseInt(loginTime)) < 86400000) {
-                currentUser = JSON.parse(savedUser);
-                masukKeSistem();
-            } else {
-                localStorage.removeItem('csPortalUser');
-                localStorage.removeItem('csPortalLoginTime');
-                document.getElementById('login-page').classList.remove('hidden');
-                try {
-                    let res = await fetch(API_URL + "?action=getCSList");
-                    let json = await res.json();
-                    let select = document.getElementById('login-id');
-                    if(json.status === "success"){
-                        select.innerHTML = '<option value="">-- Silakan Pilih Akun --</option>';
-                        json.data.forEach(cs => select.innerHTML += `<option value="${cs.id}">${cs.id} - ${cs.nama}</option>`);
-                    }
-                } catch(e) { console.log(e); }
+            let savedSession = localStorage.getItem('aeSession');
+            if (savedSession) {
+                let session = JSON.parse(savedSession);
+                if (new Date().getTime() - session.time < 86400000) {
+                    currentUser = session.user;
+                    initApp();
+                    return;
+                }
             }
+            document.getElementById('login-page').classList.remove('hidden');
         };
 
-        // 2. FUNGSI SUBMIT LOGIN
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        // 2. FUNGSI SUBMIT LOGIN / SETUP PIN
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnLogin');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memvalidasi...';
+            const idCs = document.getElementById('login-id').value;
+            let user = allUsers.find(u => u.id === idCs);
+            
+            if (!user) return;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Proses...';
             btn.disabled = true;
             
             let formData = new URLSearchParams();
-            formData.append('action', 'login');
-            formData.append('id_cs', document.getElementById('login-id').value);
-            formData.append('pin', document.getElementById('login-pin').value);
+            formData.append('id_cs', idCs);
 
-            try {
-                let res = await fetch(API_URL, { method: 'POST', body: formData });
-                let json = await res.json();
-                if(json.status === "success"){
-                    currentUser = json.user;
-                    localStorage.setItem('csPortalUser', JSON.stringify(currentUser));
-                    localStorage.setItem('csPortalLoginTime', Date.now().toString());
-                    masukKeSistem();
-                } else { showToast(json.message, "error"); }
-            } catch (err) { showToast("Koneksi gagal saat login.", "error"); }
-            btn.innerHTML = 'Masuk ke Sistem'; btn.disabled = false;
+            if (user.has_pin) {
+                // LOGIN NORMAL
+                formData.append('action', 'login');
+                formData.append('pin', document.getElementById('login-pin').value);
+                try {
+                    let res = await fetch(API_URL, { method: 'POST', body: formData });
+                    let json = await res.json();
+                    if (json.status === "success") {
+                        currentUser = json.user;
+                        localStorage.setItem('aeSession', JSON.stringify({ user: currentUser, time: new Date().getTime() }));
+                        initApp();
+                    } else {
+                        showToast(json.message, "error");
+                    }
+                } catch (err) { showToast("Koneksi gagal saat login.", "error"); }
+            } else {
+                // SETUP PIN BARU
+                let kode = document.getElementById('setup-kode').value;
+                let pin1 = document.getElementById('setup-pin').value;
+                let pin2 = document.getElementById('setup-pin2').value;
+                
+                if (pin1 !== pin2) {
+                    showToast("Konfirmasi PIN tidak cocok!", "error");
+                    btn.innerHTML = 'Buat PIN & Masuk'; btn.disabled = false;
+                    return;
+                }
+                
+                formData.append('action', 'setupPin');
+                formData.append('kode_akses', kode);
+                formData.append('pin_baru', pin1);
+                
+                try {
+                    let res = await fetch(API_URL, { method: 'POST', body: formData });
+                    let json = await res.json();
+                    if (json.status === "success") {
+                        showToast("Berhasil membuat PIN. Sedang masuk...", "success");
+                        // Login otomatis
+                        formData.set('action', 'login');
+                        formData.set('pin', pin1);
+                        let resLogin = await fetch(API_URL, { method: 'POST', body: formData });
+                        let jsonLogin = await resLogin.json();
+                        if (jsonLogin.status === "success") {
+                            currentUser = jsonLogin.user;
+                            localStorage.setItem('aeSession', JSON.stringify({ user: currentUser, time: new Date().getTime() }));
+                            fetchUsers(); // Refresh daftar background
+                            initApp();
+                        }
+                    } else {
+                        showToast(json.message, "error");
+                    }
+                } catch (err) { showToast("Koneksi gagal saat setup PIN.", "error"); }
+            }
+            
+            if(!currentUser) {
+                btn.innerHTML = user.has_pin ? 'Masuk ke Sistem' : 'Buat PIN & Masuk';
+                btn.disabled = false;
+            }
         });
 
-        function masukKeSistem() {
+        // 3. INISIALISASI APLIKASI
+        function initApp() {
             document.getElementById('login-page').classList.add('hidden');
             document.getElementById('app-container').classList.remove('hidden');
             document.getElementById('userNameDisplay').innerText = currentUser.nama;
@@ -284,13 +382,15 @@
             if(currentUser.role === 'SPV') {
                 document.getElementById('nav-admin').classList.remove('hidden');
                 document.getElementById('nav-admin-mobile').classList.remove('hidden');
+            } else {
+                document.getElementById('nav-admin').classList.add('hidden');
+                document.getElementById('nav-admin-mobile').classList.add('hidden');
             }
             loadDashboardData();
         }
 
         function logoutSystem() {
-            localStorage.removeItem('csPortalUser');
-            localStorage.removeItem('csPortalLoginTime');
+            localStorage.removeItem('aeSession');
             location.reload();
         }
 
@@ -601,12 +701,58 @@
             else { sidebar.classList.replace('w-20', 'w-64'); setTimeout(() => { menuLabels.forEach(el => el.classList.remove('hidden')); }, 150); }
         });
         document.getElementById('mobileMenuBtn').addEventListener('click', () => document.getElementById('mobileDropdown').classList.toggle('hidden'));
-        document.getElementById('togglePin').addEventListener('click', function() {
-            let pinInput = document.getElementById('login-pin');
-            pinInput.type = pinInput.type === "password" ? "text" : "password";
-            this.innerHTML = pinInput.type === "password" ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        
+        document.querySelectorAll('.toggle-pin').forEach(btn => {
+            btn.addEventListener('click', function() {
+                let pinInput = this.previousElementSibling;
+                pinInput.type = pinInput.type === "password" ? "text" : "password";
+                this.innerHTML = pinInput.type === "password" ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
         });
+        
         document.getElementById('btnThemeToggle').addEventListener('click', () => document.documentElement.classList.toggle('dark'));
+
+        // API CHANGE PIN
+        function openChangePinModal() {
+            document.getElementById('modalChangePin').classList.remove('hidden');
+        }
+        function closeChangePinModal() {
+            document.getElementById('modalChangePin').classList.add('hidden');
+            document.getElementById('changePinForm').reset();
+        }
+        async function submitChangePin(e) {
+            e.preventDefault();
+            let pinLama = document.getElementById('chg-pin-lama').value;
+            let pinBaru = document.getElementById('chg-pin-baru').value;
+            let pinBaru2 = document.getElementById('chg-pin-baru2').value;
+            
+            if(pinBaru !== pinBaru2) {
+                showToast("Konfirmasi PIN baru tidak cocok!", "error"); return;
+            }
+            
+            let btn = document.getElementById('btnSubmitChangePin');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
+            
+            let formData = new URLSearchParams();
+            formData.append('action', 'changePin');
+            formData.append('id_cs', currentUser.id);
+            formData.append('pin_lama', pinLama);
+            formData.append('pin_baru', pinBaru);
+            
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                if(json.status === "success") {
+                    showToast(json.message, "success");
+                    closeChangePinModal();
+                } else {
+                    showToast(json.message, "error");
+                }
+            } catch(err) {
+                showToast("Koneksi gagal saat ganti PIN", "error");
+            }
+            btn.innerHTML = 'Simpan'; btn.disabled = false;
+        }
 
     </script>
 </body>
