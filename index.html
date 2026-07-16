@@ -37,10 +37,19 @@
                 </div>
                 
                 <!-- Mode Login Biasa -->
-                <div id="login-normal-mode" class="mb-6 relative">
+                <div id="login-normal-mode" class="mb-2 relative">
                     <label class="block text-sm font-semibold mb-2">PIN Rahasia</label>
                     <input type="password" id="login-pin" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Masukkan PIN">
                     <button type="button" class="toggle-pin absolute right-3 top-9 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                </div>
+                <!-- Error PIN -->
+                <div id="login-pin-error" class="hidden mb-3 flex items-center gap-2 p-2.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-xs text-red-600 dark:text-red-300">
+                    <i class="fas fa-exclamation-circle flex-shrink-0"></i>
+                    <span id="login-pin-error-msg">PIN salah. Silakan coba lagi.</span>
+                </div>
+                <!-- Link Lupa PIN -->
+                <div id="login-forgot-wrapper" class="hidden text-right mb-4">
+                    <button type="button" onclick="openResetPinModal()" class="text-xs text-aeGreen hover:underline font-medium"><i class="fas fa-key mr-1"></i>Lupa PIN? Reset via SPV</button>
                 </div>
 
                 <!-- Mode Setup PIN -->
@@ -94,6 +103,59 @@
                 <div class="flex justify-end gap-2">
                     <button type="button" onclick="closeChangePinModal()" class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
                     <button type="submit" id="btnSubmitChangePin" class="px-4 py-2 text-sm bg-aeGreen text-white rounded-lg hover:bg-[#0a2e22]">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Reset PIN (Lupa PIN) -->
+    <div id="modalResetPin" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-sm shadow-2xl">
+            <div class="flex items-center gap-3 mb-1">
+                <div class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-key text-orange-500"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-gray-800 dark:text-white">Reset PIN</h3>
+                    <p class="text-[11px] text-gray-500">Hubungi SPV untuk mendapatkan Kode Akses baru</p>
+                </div>
+            </div>
+            <div class="my-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-xs text-blue-700 dark:text-blue-200 border border-blue-100 dark:border-blue-800">
+                <p class="font-semibold mb-1"><i class="fas fa-info-circle mr-1"></i>Cara mendapatkan Kode Akses:</p>
+                <ol class="list-decimal ml-4 space-y-0.5">
+                    <li>Hubungi Admin / SPV Anda</li>
+                    <li>Berikan ID CS Anda kepada SPV</li>
+                    <li>SPV akan men-generate Kode Akses baru untuk Anda</li>
+                    <li>Masukkan Kode Akses di bawah ini untuk membuat PIN baru</li>
+                </ol>
+            </div>
+            <form id="resetPinForm" onsubmit="submitResetPin(event)">
+                <div class="mb-3">
+                    <label class="block text-xs font-semibold mb-1 text-gray-500">ID Akun</label>
+                    <input type="text" id="reset-id-display" class="w-full p-2 border rounded bg-gray-100 dark:bg-gray-700 dark:border-gray-600 text-sm text-gray-500 cursor-not-allowed" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="block text-xs font-semibold mb-1 text-gray-500">Kode Akses dari SPV</label>
+                    <input type="text" id="reset-kode" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm" placeholder="Masukkan Kode Akses" required autocomplete="off">
+                </div>
+                <div class="relative mb-3">
+                    <label class="block text-xs font-semibold mb-1 text-gray-500">PIN Baru (6 Digit)</label>
+                    <input type="password" id="reset-pin" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm" placeholder="Buat PIN baru" maxlength="6" required>
+                    <button type="button" class="toggle-pin absolute right-2 top-6 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                </div>
+                <div class="relative mb-5">
+                    <label class="block text-xs font-semibold mb-1 text-gray-500">Konfirmasi PIN Baru</label>
+                    <input type="password" id="reset-pin2" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm" placeholder="Ulangi PIN" maxlength="6" required>
+                    <button type="button" class="toggle-pin absolute right-2 top-6 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                </div>
+                <!-- Error Reset PIN -->
+                <div id="reset-pin-error" class="hidden mb-3 flex items-center gap-2 p-2.5 bg-red-50 dark:bg-red-900/20 border border-red-200 rounded-lg text-xs text-red-600">
+                    <i class="fas fa-exclamation-circle flex-shrink-0"></i>
+                    <span id="reset-pin-error-msg">Kode Akses salah atau tidak berlaku.</span>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeResetPinModal()" class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
+                    <button type="submit" id="btnSubmitResetPin" class="px-4 py-2 text-sm bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold"><i class="fas fa-unlock-alt mr-1"></i>Reset PIN</button>
                 </div>
             </form>
         </div>
