@@ -375,11 +375,14 @@
             document.getElementById('setup-pin').required = false;
             document.getElementById('setup-pin2').required = false;
 
+            let forgotWrapper = document.getElementById('login-forgot-wrapper');
+
             if (user && user.has_pin) {
                 modeNormal.classList.remove('hidden');
                 modeSetup.classList.add('hidden');
                 document.getElementById('login-pin').required = true;
                 btn.innerText = "Masuk ke Sistem";
+                forgotWrapper.classList.remove('hidden');
             } else if (user && !user.has_pin) {
                 modeNormal.classList.add('hidden');
                 modeSetup.classList.remove('hidden');
@@ -387,10 +390,12 @@
                 document.getElementById('setup-pin').required = true;
                 document.getElementById('setup-pin2').required = true;
                 btn.innerText = "Buat PIN & Masuk";
+                forgotWrapper.classList.add('hidden');
             } else {
                 modeNormal.classList.remove('hidden');
                 modeSetup.classList.add('hidden');
                 btn.innerText = "Masuk ke Sistem";
+                forgotWrapper.classList.add('hidden');
             }
         }
 
@@ -864,6 +869,76 @@
                 showToast("Koneksi gagal saat ganti PIN", "error");
             }
             btn.innerHTML = 'Simpan'; btn.disabled = false;
+        }
+
+        // API RESET PIN (Lupa PIN)
+        function openResetPinModal() {
+            const idCs = document.getElementById('login-id').value;
+            if (!idCs) { showToast("Pilih akun terlebih dahulu.", "error"); return; }
+            const user = allUsers.find(u => u.id === idCs);
+            const modal = document.getElementById('modalResetPin');
+            modal.dataset.idCs = idCs;
+            document.getElementById('reset-id-display').value = user ? `${user.id} - ${user.nama}` : idCs;
+            document.getElementById('reset-pin-error').classList.add('hidden');
+            modal.classList.remove('hidden');
+        }
+
+        function closeResetPinModal() {
+            document.getElementById('modalResetPin').classList.add('hidden');
+            document.getElementById('resetPinForm').reset();
+            document.getElementById('reset-pin-error').classList.add('hidden');
+        }
+
+        async function submitResetPin(e) {
+            e.preventDefault();
+            const modal = document.getElementById('modalResetPin');
+            const idCs = modal.dataset.idCs;
+            const kodeAkses = document.getElementById('reset-kode').value.trim();
+            const pin1 = document.getElementById('reset-pin').value;
+            const pin2 = document.getElementById('reset-pin2').value;
+            const errorBox = document.getElementById('reset-pin-error');
+            const errorMsg = document.getElementById('reset-pin-error-msg');
+            errorBox.classList.add('hidden');
+
+            if (pin1 !== pin2) {
+                errorMsg.innerText = "Konfirmasi PIN baru tidak cocok!";
+                errorBox.classList.remove('hidden');
+                return;
+            }
+            if (!/^\d{6}$/.test(pin1)) {
+                errorMsg.innerText = "PIN harus 6 digit angka.";
+                errorBox.classList.remove('hidden');
+                return;
+            }
+
+            const btn = document.getElementById('btnSubmitResetPin');
+            const btnOriginal = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
+
+            let formData = new URLSearchParams();
+            formData.append('action', 'resetPin');
+            formData.append('id_cs', idCs);
+            formData.append('kode_akses', kodeAkses);
+            formData.append('pin_baru', pin1);
+
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                if (json.status === "success") {
+                    showToast(json.message, "success");
+                    closeResetPinModal();
+                    await fetchUsers();
+                    document.getElementById('login-id').value = idCs;
+                    checkPinStatus(idCs);
+                } else {
+                    errorMsg.innerText = json.message;
+                    errorBox.classList.remove('hidden');
+                }
+            } catch (err) {
+                errorMsg.innerText = "Koneksi gagal saat reset PIN.";
+                errorBox.classList.remove('hidden');
+            }
+            btn.innerHTML = btnOriginal; btn.disabled = false;
         }
 
         // DROPDOWN AVATAR TOGGLE
