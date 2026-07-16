@@ -264,6 +264,7 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbzj-KXl-P2I9zs_jRomVUGLZRwG9PagcfU7H2vei3fWsk5K7SD7ktfxJZUW9-nKOUe9gA/exec"; 
         let currentUser = null;
         let scannedInvoices = [];
+        let allUsers = [];
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
         // Fungsi Menampilkan Toast
@@ -280,6 +281,55 @@
                 toast.classList.add('translate-y-10', 'opacity-0');
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
+        }
+
+        // FUNGSI FETCH USERS & CEK STATUS PIN
+        async function fetchUsers() {
+            try {
+                let res = await fetch(API_URL + "?action=getCSList");
+                let json = await res.json();
+                if (json.status === "success") {
+                    allUsers = json.data;
+                    let select = document.getElementById('login-id');
+                    select.innerHTML = '<option value="">-- Pilih Akun --</option>';
+                    json.data.forEach(user => {
+                        let isSpv = user.role === 'SPV' ? ' (Admin)' : '';
+                        select.innerHTML += `<option value="${user.id}">${user.id} - ${user.nama}${isSpv}</option>`;
+                    });
+                }
+            } catch (err) {
+                document.getElementById('login-id').innerHTML = '<option value="">Error memuat data</option>';
+            }
+        }
+
+        function checkPinStatus(id) {
+            let user = allUsers.find(u => u.id === id);
+            let modeNormal = document.getElementById('login-normal-mode');
+            let modeSetup = document.getElementById('login-setup-mode');
+            let btn = document.getElementById('btnLogin');
+            
+            document.getElementById('login-pin').required = false;
+            document.getElementById('setup-kode').required = false;
+            document.getElementById('setup-pin').required = false;
+            document.getElementById('setup-pin2').required = false;
+
+            if (user && user.has_pin) {
+                modeNormal.classList.remove('hidden');
+                modeSetup.classList.add('hidden');
+                document.getElementById('login-pin').required = true;
+                btn.innerText = "Masuk ke Sistem";
+            } else if (user && !user.has_pin) {
+                modeNormal.classList.add('hidden');
+                modeSetup.classList.remove('hidden');
+                document.getElementById('setup-kode').required = true;
+                document.getElementById('setup-pin').required = true;
+                document.getElementById('setup-pin2').required = true;
+                btn.innerText = "Buat PIN & Masuk";
+            } else {
+                modeNormal.classList.remove('hidden');
+                modeSetup.classList.add('hidden');
+                btn.innerText = "Masuk ke Sistem";
+            }
         }
 
         // 1. CEK LOGIN SAAT HALAMAN DIMUAT (Local Storage)
