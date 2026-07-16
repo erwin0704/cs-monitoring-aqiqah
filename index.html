@@ -20,6 +20,14 @@
     <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
 
+    <!-- Global Loading Overlay -->
+    <div id="globalLoadingOverlay" class="fixed inset-0 bg-black/40 z-[100] hidden flex items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl px-8 py-6 flex flex-col items-center gap-3">
+            <i class="fas fa-spinner fa-spin text-3xl text-aeGreen"></i>
+            <p id="globalLoadingText" class="text-sm font-medium text-gray-700 dark:text-gray-200">Memuat...</p>
+        </div>
+    </div>
+
     <div id="login-page" class="absolute inset-0 z-50 flex items-center justify-center bg-aeBg dark:bg-gray-900 hidden">
         <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-md border-t-4 border-aeGreen">
             <div class="text-center mb-6">
@@ -37,10 +45,12 @@
                 </div>
                 
                 <!-- Mode Login Biasa -->
-                <div id="login-normal-mode" class="mb-2 relative">
+                <div id="login-normal-mode" class="mb-2">
                     <label class="block text-sm font-semibold mb-2">PIN Rahasia</label>
-                    <input type="password" id="login-pin" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Masukkan PIN">
-                    <button type="button" class="toggle-pin absolute right-3 top-9 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                    <div class="relative">
+                        <input type="password" id="login-pin" class="w-full p-3 pr-10 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Masukkan PIN">
+                        <button type="button" class="toggle-pin absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                    </div>
                 </div>
                 <!-- Error PIN -->
                 <div id="login-pin-error" class="hidden mb-3 flex items-center gap-2 p-2.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-xs text-red-600 dark:text-red-300">
@@ -61,15 +71,19 @@
                         <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Kode Akses</label>
                         <input type="text" id="setup-kode" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Contoh: A3F9XQ" autocomplete="off">
                     </div>
-                    <div class="relative">
+                    <div>
                         <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Buat PIN Baru (6 Digit)</label>
-                        <input type="password" id="setup-pin" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Buat PIN" maxlength="6" pattern="\d{6}">
-                        <button type="button" class="toggle-pin absolute right-3 top-9 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                        <div class="relative">
+                            <input type="password" id="setup-pin" class="w-full p-3 pr-10 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Buat PIN" maxlength="6" pattern="\d{6}">
+                            <button type="button" class="toggle-pin absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                        </div>
                     </div>
-                    <div class="relative">
+                    <div>
                         <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Konfirmasi PIN Baru</label>
-                        <input type="password" id="setup-pin2" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Ulangi PIN" maxlength="6" pattern="\d{6}">
-                        <button type="button" class="toggle-pin absolute right-3 top-9 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                        <div class="relative">
+                            <input type="password" id="setup-pin2" class="w-full p-3 pr-10 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Ulangi PIN" maxlength="6" pattern="\d{6}">
+                            <button type="button" class="toggle-pin absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                        </div>
                     </div>
                 </div>
 
@@ -85,20 +99,26 @@
         <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-sm shadow-2xl">
             <h3 class="text-lg font-bold mb-4">Ganti PIN</h3>
             <form id="changePinForm" onsubmit="submitChangePin(event)">
-                <div class="relative mb-4">
+                <div class="mb-4">
                     <label class="block text-xs font-semibold mb-1 text-gray-500">PIN Lama</label>
-                    <input type="password" id="chg-pin-lama" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none" required maxlength="6" pattern="\d{6}">
-                    <button type="button" class="toggle-pin absolute right-2 top-6 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                    <div class="relative">
+                        <input type="password" id="chg-pin-lama" class="w-full p-2 pr-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none" required maxlength="6" pattern="\d{6}">
+                        <button type="button" class="toggle-pin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                    </div>
                 </div>
-                <div class="relative mb-4">
+                <div class="mb-4">
                     <label class="block text-xs font-semibold mb-1 text-gray-500">PIN Baru</label>
-                    <input type="password" id="chg-pin-baru" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none" required maxlength="6" pattern="\d{6}">
-                    <button type="button" class="toggle-pin absolute right-2 top-6 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                    <div class="relative">
+                        <input type="password" id="chg-pin-baru" class="w-full p-2 pr-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none" required maxlength="6" pattern="\d{6}">
+                        <button type="button" class="toggle-pin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                    </div>
                 </div>
-                <div class="relative mb-6">
+                <div class="mb-6">
                     <label class="block text-xs font-semibold mb-1 text-gray-500">Konfirmasi PIN Baru</label>
-                    <input type="password" id="chg-pin-baru2" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none" required maxlength="6" pattern="\d{6}">
-                    <button type="button" class="toggle-pin absolute right-2 top-6 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                    <div class="relative">
+                        <input type="password" id="chg-pin-baru2" class="w-full p-2 pr-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none" required maxlength="6" pattern="\d{6}">
+                        <button type="button" class="toggle-pin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                    </div>
                 </div>
                 <div class="flex justify-end gap-2">
                     <button type="button" onclick="closeChangePinModal()" class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
@@ -141,15 +161,19 @@
                         <i id="reset-kode-icon" class="fas absolute right-2.5 top-1/2 -translate-y-1/2 text-xs hidden"></i>
                     </div>
                 </div>
-                <div class="relative mb-3">
+                <div class="mb-3">
                     <label class="block text-xs font-semibold mb-1 text-gray-500">PIN Baru (6 Digit)</label>
-                    <input type="password" id="reset-pin" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm" placeholder="Buat PIN baru" maxlength="6" required>
-                    <button type="button" class="toggle-pin absolute right-2 top-6 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                    <div class="relative">
+                        <input type="password" id="reset-pin" class="w-full p-2 pr-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm" placeholder="Buat PIN baru" maxlength="6" required>
+                        <button type="button" class="toggle-pin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                    </div>
                 </div>
-                <div class="relative mb-5">
+                <div class="mb-5">
                     <label class="block text-xs font-semibold mb-1 text-gray-500">Konfirmasi PIN Baru</label>
-                    <input type="password" id="reset-pin2" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm" placeholder="Ulangi PIN" maxlength="6" required>
-                    <button type="button" class="toggle-pin absolute right-2 top-6 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                    <div class="relative">
+                        <input type="password" id="reset-pin2" class="w-full p-2 pr-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm" placeholder="Ulangi PIN" maxlength="6" required>
+                        <button type="button" class="toggle-pin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                    </div>
                 </div>
                 <!-- Error Reset PIN -->
                 <div id="reset-pin-error" class="hidden mb-3 flex items-center gap-2 p-2.5 bg-red-50 dark:bg-red-900/20 border border-red-200 rounded-lg text-xs text-red-600">
@@ -339,7 +363,8 @@
                             </select>
                             <select id="ref-add-cabang" class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
                                 <option value="Pusat">Pusat</option>
-                                <option value="Jabar & Jatim">Jabar & Jatim</option>
+                                <option value="Jabar">Jabar</option>
+                                <option value="Jatim">Jatim</option>
                                 <option value="Jogja">Jogja</option>
                             </select>
                             <button id="btnAddUser" onclick="submitAddUser()" class="md:col-span-5 bg-aeGreen text-white font-bold py-2.5 rounded-lg shadow-sm hover:bg-[#0a2e22] transition text-sm"><i class="fas fa-user-plus mr-1"></i> Tambah ID Baru</button>
@@ -457,8 +482,23 @@
             }, 3000);
         }
 
+        // FUNGSI OVERLAY LOADING GLOBAL (pakai counter agar aman kalau ada beberapa proses bersamaan)
+        let loadingCounter = 0;
+        function showLoading(text = 'Memuat...') {
+            loadingCounter++;
+            document.getElementById('globalLoadingText').innerText = text;
+            document.getElementById('globalLoadingOverlay').classList.remove('hidden');
+        }
+        function hideLoading() {
+            loadingCounter = Math.max(0, loadingCounter - 1);
+            if (loadingCounter === 0) {
+                document.getElementById('globalLoadingOverlay').classList.add('hidden');
+            }
+        }
+
         // FUNGSI FETCH USERS & CEK STATUS PIN
         async function fetchUsers() {
+            showLoading('Memuat data akun...');
             try {
                 let res = await fetch(API_URL + "?action=getCSList");
                 let json = await res.json();
@@ -474,6 +514,7 @@
             } catch (err) {
                 document.getElementById('login-id').innerHTML = '<option value="">Error memuat data</option>';
             }
+            hideLoading();
         }
 
         function checkPinStatus(id) {
@@ -486,6 +527,7 @@
             document.getElementById('setup-kode').required = false;
             document.getElementById('setup-pin').required = false;
             document.getElementById('setup-pin2').required = false;
+            document.getElementById('login-pin-error').classList.add('hidden');
 
             let forgotWrapper = document.getElementById('login-forgot-wrapper');
 
@@ -536,10 +578,11 @@
             let user = allUsers.find(u => u.id === idCs);
             
             if (!user) return;
-            
+
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Proses...';
             btn.disabled = true;
-            
+            showLoading(user.has_pin ? 'Memproses login...' : 'Membuat PIN baru...');
+
             let formData = new URLSearchParams();
             formData.append('id_cs', idCs);
 
@@ -556,6 +599,8 @@
                         initApp();
                     } else {
                         showToast(json.message, "error");
+                        document.getElementById('login-pin-error-msg').innerText = json.message;
+                        document.getElementById('login-pin-error').classList.remove('hidden');
                     }
                 } catch (err) { showToast("Koneksi gagal saat login.", "error"); }
             } else {
@@ -599,11 +644,13 @@
             if(!currentUser) {
                 btn.innerHTML = user.has_pin ? 'Masuk ke Sistem' : 'Buat PIN & Masuk';
                 btn.disabled = false;
+                hideLoading();
             }
         });
 
         // 3. INISIALISASI APLIKASI
         function initApp() {
+            hideLoading();
             document.getElementById('login-page').classList.add('hidden');
             document.getElementById('app-container').classList.remove('hidden');
             document.getElementById('userNameDisplay').innerText = currentUser.nama;
@@ -776,6 +823,7 @@
             
             let btn = document.getElementById('btnKirimLaporan');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true;
+            showLoading('Mengupload laporan...');
 
             let formData = new URLSearchParams();
             formData.append('action', 'submitLaporan');
@@ -798,13 +846,14 @@
                 }
             } catch (err) { showToast("Koneksi gagal saat mengirim data.", "error"); }
             btn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Laporan'; btn.disabled = false;
+            hideLoading();
         });
 
         // 6. API FETCH: DASHBOARD DATA
         async function loadDashboardData() {
             const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
             document.getElementById('dashBulan').innerText = `${bulan[new Date().getMonth()]} ${new Date().getFullYear()}`;
-            
+            showLoading('Memuat dashboard...');
             try {
                 let res = await fetch(`${API_URL}?action=getDashboard&id_cs=${currentUser.id}&role=${currentUser.role}`);
                 let json = await res.json();
@@ -872,12 +921,14 @@
                     showToast(json.message, "error");
                 }
             } catch (err) { showToast("Koneksi gagal saat memuat dashboard.", "error"); }
+            hideLoading();
         }
 
         // 7. API FETCH: ADMIN APPROVAL TABLE
         async function loadPendingApprovals() {
             let tbody = document.getElementById('approvalTableBody');
             tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
+            showLoading('Memuat antrean approval...');
             try {
                 let res = await fetch(API_URL + "?action=getPendingApprovals");
                 let json = await res.json();
@@ -900,10 +951,11 @@
                         `;
                     });
                 }
-            } catch (err) { 
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-red-500 py-8">Koneksi Error</td></tr>'; 
+            } catch (err) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
                 showToast("Gagal memuat antrean pending.", "error");
             }
+            hideLoading();
         }
 
         // 8. FUNGSI TOMBOL APPROVE / REJECT
@@ -914,7 +966,7 @@
             formData.append('no_invoice', noInvoice);
             formData.append('timestamp', rawTimestamp);
             formData.append('status_baru', statusBaru);
-            
+            showLoading('Memproses approval...');
             try {
                 let res = await fetch(API_URL, { method: 'POST', body: formData });
                 let json = await res.json();
@@ -926,6 +978,7 @@
                     showToast(json.message, "error");
                 }
             } catch(e) { showToast("Gagal mengirim persetujuan.", "error"); }
+            hideLoading();
         }
 
         // UI Helpers
@@ -947,6 +1000,10 @@
         
         document.getElementById('btnThemeToggle').addEventListener('click', () => document.documentElement.classList.toggle('dark'));
 
+        document.getElementById('login-pin').addEventListener('input', () => {
+            document.getElementById('login-pin-error').classList.add('hidden');
+        });
+
         // API CHANGE PIN
         function openChangePinModal() {
             document.getElementById('modalChangePin').classList.remove('hidden');
@@ -967,7 +1024,8 @@
             
             let btn = document.getElementById('btnSubmitChangePin');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
-            
+            showLoading('Mengganti PIN...');
+
             let formData = new URLSearchParams();
             formData.append('action', 'changePin');
             formData.append('id_cs', currentUser.id);
@@ -987,6 +1045,7 @@
                 showToast("Koneksi gagal saat ganti PIN", "error");
             }
             btn.innerHTML = 'Simpan'; btn.disabled = false;
+            hideLoading();
         }
 
         // API RESET PIN (Lupa PIN)
@@ -1072,6 +1131,7 @@
             const btn = document.getElementById('btnSubmitResetPin');
             const btnOriginal = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
+            showLoading('Mereset PIN...');
 
             let formData = new URLSearchParams();
             formData.append('action', 'resetPin');
@@ -1098,6 +1158,7 @@
                 errorBox.classList.remove('hidden');
             }
             btn.innerHTML = btnOriginal; btn.disabled = false;
+            hideLoading();
         }
 
         // ===================================================
@@ -1119,6 +1180,7 @@
         async function loadUserManageTable() {
             let tbody = document.getElementById('userManageTableBody');
             tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
+            showLoading('Memuat data user...');
             try {
                 let res = await fetch(API_URL + "?action=getUserListAdmin");
                 let json = await res.json();
@@ -1154,6 +1216,7 @@
                 tbody.innerHTML = '<tr><td colspan="6" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
                 showToast("Gagal memuat data user.", "error");
             }
+            hideLoading();
         }
 
         async function submitAddUser() {
@@ -1168,6 +1231,7 @@
             const btn = document.getElementById('btnAddUser');
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            showLoading('Menambah ID baru...');
 
             let formData = new URLSearchParams();
             formData.append('action', 'addUser');
@@ -1194,6 +1258,7 @@
             } catch (err) { showToast("Koneksi gagal saat menambah ID.", "error"); }
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-user-plus mr-1"></i> Tambah ID Baru';
+            hideLoading();
         }
 
         async function generateKodeAksesForUser(id, nama, noHp) {
@@ -1201,6 +1266,7 @@
             let formData = new URLSearchParams();
             formData.append('action', 'generateKodeAksesForUser');
             formData.append('id_cs', id);
+            showLoading('Membuat Kode Akses...');
             try {
                 let res = await fetch(API_URL, { method: 'POST', body: formData });
                 let json = await res.json();
@@ -1211,6 +1277,7 @@
                     showToast(json.message, "error");
                 }
             } catch (err) { showToast("Koneksi gagal saat generate Kode Akses.", "error"); }
+            hideLoading();
         }
 
         async function toggleUserStatus(id, statusBaru) {
@@ -1219,6 +1286,7 @@
             formData.append('action', 'toggleUserStatus');
             formData.append('id_cs', id);
             formData.append('status_baru', statusBaru);
+            showLoading('Mengubah status akun...');
             try {
                 let res = await fetch(API_URL, { method: 'POST', body: formData });
                 let json = await res.json();
@@ -1230,6 +1298,7 @@
                     showToast(json.message, "error");
                 }
             } catch (err) { showToast("Koneksi gagal saat ubah status.", "error"); }
+            hideLoading();
         }
 
         // ---- Modal Hasil Kode Akses ----
@@ -1267,6 +1336,7 @@
             if (!bulan) return;
             let tbody = document.getElementById('targetTableBody');
             tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
+            showLoading('Memuat data target...');
             try {
                 let res = await fetch(`${API_URL}?action=getTargetList&bulan_tahun=${bulan}`);
                 let json = await res.json();
@@ -1290,6 +1360,7 @@
                 tbody.innerHTML = '<tr><td colspan="5" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
                 showToast("Gagal memuat data target.", "error");
             }
+            hideLoading();
         }
 
         async function saveTargetRow(btn, idCs) {
@@ -1302,6 +1373,7 @@
             const btnOriginal = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            showLoading('Menyimpan target...');
 
             let formData = new URLSearchParams();
             formData.append('action', 'saveTarget');
@@ -1318,12 +1390,14 @@
             } catch (err) { showToast("Koneksi gagal saat simpan target.", "error"); }
             btn.disabled = false;
             btn.innerHTML = btnOriginal;
+            hideLoading();
         }
 
         // ---- C. Ambang Batas RC ----
         async function loadAmbangRCTable() {
             let tbody = document.getElementById('ambangRcTableBody');
             tbody.innerHTML = '<tr><td colspan="3" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
+            showLoading('Memuat ambang batas RC...');
             try {
                 let res = await fetch(API_URL + "?action=getAmbangRC");
                 let json = await res.json();
@@ -1341,6 +1415,7 @@
                 tbody.innerHTML = '<tr><td colspan="3" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
                 showToast("Gagal memuat ambang batas RC.", "error");
             }
+            hideLoading();
         }
 
         async function saveAmbangRCRow(btn, region) {
@@ -1350,6 +1425,7 @@
             const btnOriginal = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            showLoading('Menyimpan ambang batas RC...');
 
             let formData = new URLSearchParams();
             formData.append('action', 'saveAmbangRC');
@@ -1363,6 +1439,7 @@
             } catch (err) { showToast("Koneksi gagal saat simpan ambang batas.", "error"); }
             btn.disabled = false;
             btn.innerHTML = btnOriginal;
+            hideLoading();
         }
 
         // DROPDOWN AVATAR TOGGLE
