@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +16,9 @@
         }
     </script>
 </head>
-<body class="bg-aeBg text-gray-800 font-sans antialiased overflow-hidden flex h-screen dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
+
+<body
+    class="bg-aeBg text-gray-800 font-sans antialiased overflow-hidden flex h-screen dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
 
     <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
@@ -31,69 +34,96 @@
     <div id="login-page" class="absolute inset-0 z-50 flex items-center justify-center bg-aeBg dark:bg-gray-900 hidden">
         <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-md border-t-4 border-aeGreen">
             <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-aeGreen text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-md"><i class="fas fa-leaf"></i></div>
+                <div
+                    class="w-16 h-16 bg-aeGreen text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-md">
+                    <i class="fas fa-leaf"></i></div>
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Aqiqah Admin</h1>
                 <p class="text-sm mt-1 text-gray-500 dark:text-gray-400">Portal Analisis Performa CS</p>
             </div>
-            
+
             <form id="loginForm">
                 <div class="mb-4">
                     <label class="block text-sm font-semibold mb-2">Pilih Akun / ID CS</label>
-                    <select id="login-id" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" required onchange="checkPinStatus(this.value)">
+                    <select id="login-id"
+                        class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen"
+                        required onchange="checkPinStatus(this.value)">
                         <option value="">-- Memuat Data... --</option>
                     </select>
                 </div>
-                
+
                 <!-- Mode Login Biasa -->
                 <div id="login-normal-mode" class="mb-2">
                     <label class="block text-sm font-semibold mb-2">PIN Rahasia</label>
                     <div class="relative">
-                        <input type="password" id="login-pin" class="w-full p-3 pr-10 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Masukkan PIN">
-                        <button type="button" class="toggle-pin absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                        <input type="password" id="login-pin"
+                            class="w-full p-3 pr-10 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen"
+                            placeholder="Masukkan PIN">
+                        <button type="button"
+                            class="toggle-pin absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i
+                                class="fas fa-eye"></i></button>
                     </div>
                 </div>
                 <!-- Error PIN -->
-                <div id="login-pin-error" class="hidden mb-3 flex items-center gap-2 p-2.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-xs text-red-600 dark:text-red-300">
+                <div id="login-pin-error"
+                    class="hidden mb-3 flex items-center gap-2 p-2.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-xs text-red-600 dark:text-red-300">
                     <i class="fas fa-exclamation-circle flex-shrink-0"></i>
                     <span id="login-pin-error-msg">PIN salah. Silakan coba lagi.</span>
                 </div>
                 <!-- Link Lupa PIN -->
                 <div id="login-forgot-wrapper" class="hidden text-right mb-4">
-                    <button type="button" onclick="openResetPinModal()" class="text-xs text-aeGreen hover:underline font-medium"><i class="fas fa-key mr-1"></i>Lupa PIN? Reset via SPV</button>
+                    <button type="button" onclick="openResetPinModal()"
+                        class="text-xs text-aeGreen hover:underline font-medium"><i class="fas fa-key mr-1"></i>Lupa
+                        PIN? Reset via SPV</button>
                 </div>
 
                 <!-- Mode Setup PIN -->
                 <div id="login-setup-mode" class="hidden space-y-4 mb-6">
-                    <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg text-xs text-yellow-800 dark:text-yellow-200 border border-yellow-200 dark:border-yellow-800 mb-2">
-                        <i class="fas fa-info-circle mr-1"></i> Akun belum memiliki PIN. Masukkan Kode Akses dari SPV untuk membuat PIN baru.
+                    <div
+                        class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg text-xs text-yellow-800 dark:text-yellow-200 border border-yellow-200 dark:border-yellow-800 mb-2">
+                        <i class="fas fa-info-circle mr-1"></i> Akun belum memiliki PIN. Masukkan Kode Akses dari SPV
+                        untuk membuat PIN baru.
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Kode Akses</label>
-                        <input type="text" id="setup-kode" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Contoh: A3F9XQ" autocomplete="off">
+                        <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Kode
+                            Akses</label>
+                        <input type="text" id="setup-kode"
+                            class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen"
+                            placeholder="Contoh: A3F9XQ" autocomplete="off">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Buat PIN Baru (6 Digit)</label>
+                        <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Buat PIN Baru
+                            (6 Digit)</label>
                         <div class="relative">
-                            <input type="password" id="setup-pin" class="w-full p-3 pr-10 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Buat PIN" maxlength="6" pattern="\d{6}">
-                            <button type="button" class="toggle-pin absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                            <input type="password" id="setup-pin"
+                                class="w-full p-3 pr-10 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen"
+                                placeholder="Buat PIN" maxlength="6" pattern="\d{6}">
+                            <button type="button"
+                                class="toggle-pin absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i
+                                    class="fas fa-eye"></i></button>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Konfirmasi PIN Baru</label>
+                        <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Konfirmasi PIN
+                            Baru</label>
                         <div class="relative">
-                            <input type="password" id="setup-pin2" class="w-full p-3 pr-10 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen" placeholder="Ulangi PIN" maxlength="6" pattern="\d{6}">
-                            <button type="button" class="toggle-pin absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                            <input type="password" id="setup-pin2"
+                                class="w-full p-3 pr-10 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen"
+                                placeholder="Ulangi PIN" maxlength="6" pattern="\d{6}">
+                            <button type="button"
+                                class="toggle-pin absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i
+                                    class="fas fa-eye"></i></button>
                         </div>
                     </div>
                 </div>
 
-                <button type="submit" id="btnLogin" class="w-full bg-aeGreen hover:bg-[#0a2e22] text-white font-bold py-3 rounded-lg shadow-md transition duration-300">
+                <button type="submit" id="btnLogin"
+                    class="w-full bg-aeGreen hover:bg-[#0a2e22] text-white font-bold py-3 rounded-lg shadow-md transition duration-300">
                     Masuk ke Sistem
                 </button>
             </form>
         </div>
     </div>
-    
+
     <!-- Modal Ganti PIN -->
     <div id="modalChangePin" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-sm shadow-2xl">
@@ -102,37 +132,53 @@
                 <div class="mb-4">
                     <label class="block text-xs font-semibold mb-1 text-gray-500">PIN Lama</label>
                     <div class="relative">
-                        <input type="password" id="chg-pin-lama" class="w-full p-2 pr-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none" required maxlength="6" pattern="\d{6}">
-                        <button type="button" class="toggle-pin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                        <input type="password" id="chg-pin-lama"
+                            class="w-full p-2 pr-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none"
+                            required maxlength="6" pattern="\d{6}">
+                        <button type="button"
+                            class="toggle-pin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i
+                                class="fas fa-eye"></i></button>
                     </div>
                 </div>
                 <div class="mb-4">
                     <label class="block text-xs font-semibold mb-1 text-gray-500">PIN Baru</label>
                     <div class="relative">
-                        <input type="password" id="chg-pin-baru" class="w-full p-2 pr-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none" required maxlength="6" pattern="\d{6}">
-                        <button type="button" class="toggle-pin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                        <input type="password" id="chg-pin-baru"
+                            class="w-full p-2 pr-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none"
+                            required maxlength="6" pattern="\d{6}">
+                        <button type="button"
+                            class="toggle-pin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i
+                                class="fas fa-eye"></i></button>
                     </div>
                 </div>
                 <div class="mb-6">
                     <label class="block text-xs font-semibold mb-1 text-gray-500">Konfirmasi PIN Baru</label>
                     <div class="relative">
-                        <input type="password" id="chg-pin-baru2" class="w-full p-2 pr-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none" required maxlength="6" pattern="\d{6}">
-                        <button type="button" class="toggle-pin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                        <input type="password" id="chg-pin-baru2"
+                            class="w-full p-2 pr-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none"
+                            required maxlength="6" pattern="\d{6}">
+                        <button type="button"
+                            class="toggle-pin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i
+                                class="fas fa-eye"></i></button>
                     </div>
                 </div>
                 <div class="flex justify-end gap-2">
-                    <button type="button" onclick="closeChangePinModal()" class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
-                    <button type="submit" id="btnSubmitChangePin" class="px-4 py-2 text-sm bg-aeGreen text-white rounded-lg hover:bg-[#0a2e22]">Simpan</button>
+                    <button type="button" onclick="closeChangePinModal()"
+                        class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
+                    <button type="submit" id="btnSubmitChangePin"
+                        class="px-4 py-2 text-sm bg-aeGreen text-white rounded-lg hover:bg-[#0a2e22]">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Modal Reset PIN (Lupa PIN) -->
-    <div id="modalResetPin" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
+    <div id="modalResetPin"
+        class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-sm shadow-2xl">
             <div class="flex items-center gap-3 mb-1">
-                <div class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center flex-shrink-0">
+                <div
+                    class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center flex-shrink-0">
                     <i class="fas fa-key text-orange-500"></i>
                 </div>
                 <div>
@@ -140,7 +186,8 @@
                     <p class="text-[11px] text-gray-500">Hubungi SPV untuk mendapatkan Kode Akses baru</p>
                 </div>
             </div>
-            <div class="my-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-xs text-blue-700 dark:text-blue-200 border border-blue-100 dark:border-blue-800">
+            <div
+                class="my-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-xs text-blue-700 dark:text-blue-200 border border-blue-100 dark:border-blue-800">
                 <p class="font-semibold mb-1"><i class="fas fa-info-circle mr-1"></i>Cara mendapatkan Kode Akses:</p>
                 <ol class="list-decimal ml-4 space-y-0.5">
                     <li>Hubungi Admin / SPV Anda</li>
@@ -152,132 +199,226 @@
             <form id="resetPinForm" onsubmit="submitResetPin(event)">
                 <div class="mb-3">
                     <label class="block text-xs font-semibold mb-1 text-gray-500">ID Akun</label>
-                    <input type="text" id="reset-id-display" class="w-full p-2 border rounded bg-gray-100 dark:bg-gray-700 dark:border-gray-600 text-sm text-gray-500 cursor-not-allowed" readonly>
+                    <input type="text" id="reset-id-display"
+                        class="w-full p-2 border rounded bg-gray-100 dark:bg-gray-700 dark:border-gray-600 text-sm text-gray-500 cursor-not-allowed"
+                        readonly>
                 </div>
                 <div class="mb-3">
                     <label class="block text-xs font-semibold mb-1 text-gray-500">Kode Akses dari SPV</label>
                     <div class="relative">
-                        <input type="text" id="reset-kode" class="w-full p-2 pr-8 border-2 rounded bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm transition-colors" placeholder="Masukkan Kode Akses" required autocomplete="off">
-                        <i id="reset-kode-icon" class="fas absolute right-2.5 top-1/2 -translate-y-1/2 text-xs hidden"></i>
+                        <input type="text" id="reset-kode"
+                            class="w-full p-2 pr-8 border-2 rounded bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm transition-colors"
+                            placeholder="Masukkan Kode Akses" required autocomplete="off">
+                        <i id="reset-kode-icon"
+                            class="fas absolute right-2.5 top-1/2 -translate-y-1/2 text-xs hidden"></i>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label class="block text-xs font-semibold mb-1 text-gray-500">PIN Baru (6 Digit)</label>
                     <div class="relative">
-                        <input type="password" id="reset-pin" class="w-full p-2 pr-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm" placeholder="Buat PIN baru" maxlength="6" required>
-                        <button type="button" class="toggle-pin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                        <input type="password" id="reset-pin"
+                            class="w-full p-2 pr-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm"
+                            placeholder="Buat PIN baru" maxlength="6" required>
+                        <button type="button"
+                            class="toggle-pin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i
+                                class="fas fa-eye"></i></button>
                     </div>
                 </div>
                 <div class="mb-5">
                     <label class="block text-xs font-semibold mb-1 text-gray-500">Konfirmasi PIN Baru</label>
                     <div class="relative">
-                        <input type="password" id="reset-pin2" class="w-full p-2 pr-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm" placeholder="Ulangi PIN" maxlength="6" required>
-                        <button type="button" class="toggle-pin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i class="fas fa-eye"></i></button>
+                        <input type="password" id="reset-pin2"
+                            class="w-full p-2 pr-8 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm"
+                            placeholder="Ulangi PIN" maxlength="6" required>
+                        <button type="button"
+                            class="toggle-pin absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-aeGreen"><i
+                                class="fas fa-eye"></i></button>
                     </div>
                 </div>
                 <!-- Error Reset PIN -->
-                <div id="reset-pin-error" class="hidden mb-3 flex items-center gap-2 p-2.5 bg-red-50 dark:bg-red-900/20 border border-red-200 rounded-lg text-xs text-red-600">
+                <div id="reset-pin-error"
+                    class="hidden mb-3 flex items-center gap-2 p-2.5 bg-red-50 dark:bg-red-900/20 border border-red-200 rounded-lg text-xs text-red-600">
                     <i class="fas fa-exclamation-circle flex-shrink-0"></i>
                     <span id="reset-pin-error-msg">Kode Akses salah atau tidak berlaku.</span>
                 </div>
                 <div class="flex justify-end gap-2">
-                    <button type="button" onclick="closeResetPinModal()" class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
-                    <button type="submit" id="btnSubmitResetPin" class="px-4 py-2 text-sm bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold"><i class="fas fa-unlock-alt mr-1"></i>Reset PIN</button>
+                    <button type="button" onclick="closeResetPinModal()"
+                        class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
+                    <button type="submit" id="btnSubmitResetPin"
+                        class="px-4 py-2 text-sm bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold"><i
+                            class="fas fa-unlock-alt mr-1"></i>Reset PIN</button>
                 </div>
             </form>
         </div>
     </div>
 
     <div id="app-container" class="hidden flex-1 flex h-screen w-full">
-        <aside id="desktopSidebar" class="bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 hidden md:flex flex-col w-64 transition-all duration-300 relative z-20">
-            <div id="sidebarLogoToggle" onclick="toggleSidebar()" class="h-20 flex items-center justify-between px-6 border-b border-gray-100 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition group">
+        <aside id="desktopSidebar"
+            class="bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 hidden md:flex flex-col w-64 transition-all duration-300 relative z-20">
+            <div id="sidebarLogoToggle" onclick="toggleSidebar()"
+                class="h-20 flex items-center justify-between px-6 border-b border-gray-100 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition group">
                 <div class="flex items-center gap-3 overflow-hidden">
-                    <div class="bg-aeGreen text-white p-2 rounded-lg flex-shrink-0"><i class="fas fa-leaf text-xl"></i></div>
-                    <div class="menu-label overflow-hidden whitespace-nowrap"><h1 class="text-xl font-bold text-aeGreen dark:text-aeOrange leading-tight">Aqiqah Admin</h1></div>
+                    <div class="bg-aeGreen text-white p-2 rounded-lg flex-shrink-0"><i class="fas fa-leaf text-xl"></i>
+                    </div>
+                    <div class="menu-label overflow-hidden whitespace-nowrap">
+                        <h1 class="text-xl font-bold text-aeGreen dark:text-aeOrange leading-tight">Aqiqah Admin</h1>
+                    </div>
                 </div>
-                <i class="fas fa-angles-left menu-label text-gray-300 group-hover:text-aeGreen text-sm flex-shrink-0"></i>
+                <i
+                    class="fas fa-angles-left menu-label text-gray-300 group-hover:text-aeGreen text-sm flex-shrink-0"></i>
             </div>
             <div class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
-                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-4 py-3 bg-aeGreen text-white rounded-xl shadow-sm transition"><i class="fas fa-border-all w-5 text-center"></i><span class="menu-label font-medium text-sm">Dashboard</span></button>
-                <button onclick="switchTab('input')" id="nav-input" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i class="fas fa-plus-circle w-5 text-center"></i><span class="menu-label font-medium text-sm">Scan Penjualan</span></button>
-                <button onclick="switchTab('riwayat')" id="nav-riwayat" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition relative"><i class="fas fa-history w-5 text-center"></i><span class="menu-label font-medium text-sm">Riwayat Input</span><span id="riwayatBadge" class="hidden absolute right-3 top-2 w-2.5 h-2.5 bg-red-500 rounded-full"></span></button>
-                <button onclick="switchTab('profil')" id="nav-profil" class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i class="fas fa-id-badge w-5 text-center"></i><span class="menu-label font-medium text-sm">Profil Saya</span></button>
-                <button onclick="switchTab('admin')" id="nav-admin" class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i class="fas fa-shield-alt w-5 text-center"></i><span class="menu-label font-medium text-sm">Approval Admin</span></button>
-                <button onclick="switchTab('referensi')" id="nav-referensi" class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i class="fas fa-sliders-h w-5 text-center"></i><span class="menu-label font-medium text-sm">Data Referensi</span></button>
+                <button onclick="switchTab('dashboard')" id="nav-dashboard"
+                    class="nav-btn w-full flex items-center gap-3 px-4 py-3 bg-aeGreen text-white rounded-xl shadow-sm transition"><i
+                        class="fas fa-border-all w-5 text-center"></i><span
+                        class="menu-label font-medium text-sm">Dashboard</span></button>
+                <button onclick="switchTab('input')" id="nav-input"
+                    class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i
+                        class="fas fa-plus-circle w-5 text-center"></i><span class="menu-label font-medium text-sm">Scan
+                        Penjualan</span></button>
+                <button onclick="switchTab('riwayat')" id="nav-riwayat"
+                    class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition relative"><i
+                        class="fas fa-history w-5 text-center"></i><span class="menu-label font-medium text-sm">Riwayat
+                        Input</span><span id="riwayatBadge"
+                        class="hidden absolute right-3 top-2 w-2.5 h-2.5 bg-red-500 rounded-full"></span></button>
+                <button onclick="switchTab('profil')" id="nav-profil"
+                    class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i
+                        class="fas fa-id-badge w-5 text-center"></i><span class="menu-label font-medium text-sm">Profil
+                        Saya</span></button>
+                <button onclick="switchTab('admin')" id="nav-admin"
+                    class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i
+                        class="fas fa-shield-alt w-5 text-center"></i><span
+                        class="menu-label font-medium text-sm">Approval Admin</span></button>
+                <button onclick="switchTab('referensi')" id="nav-referensi"
+                    class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i
+                        class="fas fa-sliders-h w-5 text-center"></i><span class="menu-label font-medium text-sm">Data
+                        Referensi</span></button>
             </div>
             <div class="p-4 border-t border-gray-100 dark:border-gray-700 space-y-2">
-                <button id="btnThemeToggle" class="w-full flex items-center gap-3 px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition text-sm"><i class="fas fa-moon w-5 text-center"></i> <span class="menu-label font-medium">Ganti Tema</span></button>
+                <button id="btnThemeToggle"
+                    class="w-full flex items-center gap-3 px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition text-sm"><i
+                        class="fas fa-moon w-5 text-center"></i> <span class="menu-label font-medium">Ganti
+                        Tema</span></button>
                 <div class="relative">
-                    <button id="avatarBtn" onclick="toggleUserDropdown()" class="w-full flex items-center gap-3 px-2 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition text-left">
-                        <div class="w-9 h-9 rounded-full bg-aeGreen text-white flex items-center justify-center font-bold flex-shrink-0"><i class="fas fa-user"></i></div>
+                    <button id="avatarBtn" onclick="toggleUserDropdown()"
+                        class="w-full flex items-center gap-3 px-2 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition text-left">
+                        <div
+                            class="w-9 h-9 rounded-full bg-aeGreen text-white flex items-center justify-center font-bold flex-shrink-0">
+                            <i class="fas fa-user"></i></div>
                         <div class="menu-label overflow-hidden leading-tight">
-                            <p id="userNameDisplay" class="text-sm font-bold text-gray-800 dark:text-white truncate">Memuat...</p>
+                            <p id="userNameDisplay" class="text-sm font-bold text-gray-800 dark:text-white truncate">
+                                Memuat...</p>
                             <p id="userRoleDisplay" class="text-[10px] text-gray-500 uppercase tracking-wide">ROLE</p>
                         </div>
                     </button>
                     <!-- Dropdown Profil (buka ke atas karena posisinya di bawah sidebar) -->
-                    <div id="userDropdown" class="absolute left-0 bottom-full mb-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 hidden flex-col z-50 overflow-hidden">
-                        <button onclick="openChangePinModal()" class="w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700"><i class="fas fa-key mr-2"></i> Ganti PIN</button>
-                        <button onclick="logoutSystem()" class="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"><i class="fas fa-sign-out-alt mr-2"></i> Keluar</button>
+                    <div id="userDropdown"
+                        class="absolute left-0 bottom-full mb-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 hidden flex-col z-50 overflow-hidden">
+                        <button onclick="openChangePinModal()"
+                            class="w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700"><i
+                                class="fas fa-key mr-2"></i> Ganti PIN</button>
+                        <button onclick="logoutSystem()"
+                            class="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"><i
+                                class="fas fa-sign-out-alt mr-2"></i> Keluar</button>
                     </div>
                 </div>
             </div>
         </aside>
 
         <div class="flex-1 flex flex-col min-w-0">
-            <header class="h-16 md:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center gap-3 px-4 z-10">
-                <button id="mobileMenuBtn" class="text-gray-600 dark:text-gray-300 hover:text-aeGreen text-2xl"><i class="fas fa-bars"></i></button>
+            <header
+                class="h-16 md:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center gap-3 px-4 z-10">
+                <button id="mobileMenuBtn" class="text-gray-600 dark:text-gray-300 hover:text-aeGreen text-2xl"><i
+                        class="fas fa-bars"></i></button>
                 <h1 class="text-lg font-bold text-aeGreen dark:text-aeOrange">Aqiqah Admin</h1>
             </header>
 
-            <div id="mobileDropdown" class="absolute top-16 left-0 w-full bg-white dark:bg-gray-800 shadow-xl border-b border-gray-200 dark:border-gray-700 hidden flex-col md:hidden z-30">
-                <button onclick="switchTab('dashboard')" class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i class="fas fa-border-all w-5"></i> Dashboard</button>
-                <button onclick="switchTab('input')" class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i class="fas fa-plus-circle w-5"></i> Scan Penjualan</button>
-                <button onclick="switchTab('riwayat')" class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3 relative"><i class="fas fa-history w-5"></i> Riwayat Input<span id="riwayatBadgeMobile" class="hidden w-2.5 h-2.5 bg-red-500 rounded-full"></span></button>
-                <button onclick="switchTab('profil')" id="nav-profil-mobile" class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i class="fas fa-id-badge w-5"></i> Profil Saya</button>
-                <button onclick="switchTab('admin')" id="nav-admin-mobile" class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i class="fas fa-shield-alt w-5"></i> Approval Admin</button>
-                <button onclick="switchTab('referensi')" id="nav-referensi-mobile" class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i class="fas fa-sliders-h w-5"></i> Data Referensi</button>
-                <button onclick="openChangePinModal()" class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i class="fas fa-key w-5"></i> Ganti PIN</button>
-                <button onclick="logoutSystem()" class="w-full text-left px-6 py-4 text-red-600 font-medium flex items-center gap-3"><i class="fas fa-sign-out-alt w-5"></i> Keluar</button>
+            <div id="mobileDropdown"
+                class="absolute top-16 left-0 w-full bg-white dark:bg-gray-800 shadow-xl border-b border-gray-200 dark:border-gray-700 hidden flex-col md:hidden z-30">
+                <button onclick="switchTab('dashboard')"
+                    class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
+                        class="fas fa-border-all w-5"></i> Dashboard</button>
+                <button onclick="switchTab('input')"
+                    class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
+                        class="fas fa-plus-circle w-5"></i> Scan Penjualan</button>
+                <button onclick="switchTab('riwayat')"
+                    class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3 relative"><i
+                        class="fas fa-history w-5"></i> Riwayat Input<span id="riwayatBadgeMobile"
+                        class="hidden w-2.5 h-2.5 bg-red-500 rounded-full"></span></button>
+                <button onclick="switchTab('profil')" id="nav-profil-mobile"
+                    class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
+                        class="fas fa-id-badge w-5"></i> Profil Saya</button>
+                <button onclick="switchTab('admin')" id="nav-admin-mobile"
+                    class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
+                        class="fas fa-shield-alt w-5"></i> Approval Admin</button>
+                <button onclick="switchTab('referensi')" id="nav-referensi-mobile"
+                    class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
+                        class="fas fa-sliders-h w-5"></i> Data Referensi</button>
+                <button onclick="openChangePinModal()"
+                    class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
+                        class="fas fa-key w-5"></i> Ganti PIN</button>
+                <button onclick="logoutSystem()"
+                    class="w-full text-left px-6 py-4 text-red-600 font-medium flex items-center gap-3"><i
+                        class="fas fa-sign-out-alt w-5"></i> Keluar</button>
             </div>
 
             <main class="flex-1 overflow-y-auto p-4 md:p-8 relative">
-                
+
                 <div id="view-dashboard" class="block">
                     <div class="flex justify-between items-end mb-6">
                         <div>
-                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Ringkasan Performa - <span id="dashBulan">Bulan Ini</span></h2>
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Ringkasan Performa - <span
+                                    id="dashBulan">Bulan Ini</span></h2>
                             <p class="text-sm text-gray-500">Live Database Sync</p>
                         </div>
                     </div>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                        <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 flex justify-between">TOTAL REVENUE <i class="fas fa-money-bill-wave text-gray-300"></i></h3>
+                        <div
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden">
+                            <h3
+                                class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 flex justify-between">
+                                TOTAL REVENUE <i class="fas fa-money-bill-wave text-gray-300"></i></h3>
                             <p class="text-2xl font-bold text-aeGreen" id="dashRev">Rp 0</p>
-                            <p class="text-[10px] text-green-500 mt-2 font-medium"><i class="fas fa-arrow-trend-up"></i> Data tervalidasi</p>
+                            <p class="text-[10px] text-green-500 mt-2 font-medium"><i class="fas fa-arrow-trend-up"></i>
+                                Data tervalidasi</p>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">CAPAIAN TARGET</h3>
+                        <div
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden">
+                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">CAPAIAN TARGET
+                            </h3>
                             <p class="text-2xl font-bold text-gray-800 dark:text-white" id="dashCapaian">-</p>
-                            <div class="w-full bg-gray-200 rounded-full h-1.5 mt-3"><div id="dashCapaianBar" class="bg-orange-400 h-1.5 rounded-full" style="width: 0%"></div></div>
-                            <p class="text-[10px] text-gray-500 mt-1 font-medium" id="dashCapaianNote">Berdasarkan target revenue bulan ini</p>
+                            <div class="w-full bg-gray-200 rounded-full h-1.5 mt-3">
+                                <div id="dashCapaianBar" class="bg-orange-400 h-1.5 rounded-full" style="width: 0%">
+                                </div>
+                            </div>
+                            <p class="text-[10px] text-gray-500 mt-1 font-medium" id="dashCapaianNote">Berdasarkan
+                                target revenue bulan ini</p>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 flex justify-between">JUMLAH TRANSAKSI <i class="fas fa-chart-line text-gray-300"></i></h3>
+                        <div
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                            <h3
+                                class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 flex justify-between">
+                                JUMLAH TRANSAKSI <i class="fas fa-chart-line text-gray-300"></i></h3>
                             <p class="text-2xl font-bold text-gray-800 dark:text-white" id="dashTrx">0</p>
-                            <p class="text-[10px] text-green-500 mt-2 font-medium"><i class="far fa-check-circle"></i> Status Pending: <span id="dashPending" class="font-bold text-orange-500">0</span></p>
+                            <p class="text-[10px] text-green-500 mt-2 font-medium"><i class="far fa-check-circle"></i>
+                                Status Pending: <span id="dashPending" class="font-bold text-orange-500">0</span></p>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">SKOR AKHIR KPI</h3>
+                        <div
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">SKOR AKHIR KPI
+                            </h3>
                             <p class="text-2xl font-bold text-gray-800 dark:text-white" id="dashSkor">-</p>
                             <p class="text-[10px] mt-2 font-medium" id="dashKategori">Revenue + Leads + Closing + RC</p>
                         </div>
                     </div>
 
                     <!-- Card Saran SPV (khusus CS - tampil kalau SPV pernah kirim saran) -->
-                    <div id="saranCardWrapper" class="hidden bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-5 mb-6 flex gap-4 items-start">
-                        <div class="w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center flex-shrink-0"><i class="fas fa-comment-dots"></i></div>
+                    <div id="saranCardWrapper"
+                        class="hidden bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-5 mb-6 flex gap-4 items-start">
+                        <div
+                            class="w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-comment-dots"></i></div>
                         <div class="flex-1">
                             <h3 class="text-sm font-bold text-orange-700 dark:text-orange-300">Saran dari SPV</h3>
                             <p id="saranCardPesan" class="text-sm text-gray-700 dark:text-gray-200 mt-1"></p>
@@ -287,29 +428,42 @@
 
                     <!-- Insight Otomatis (khusus SPV) -->
                     <div id="insightSection" class="hidden grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                        <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3"><i class="fas fa-trophy text-yellow-500 mr-1"></i> CS Terbaik</h3>
+                        <div
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3"><i
+                                    class="fas fa-trophy text-yellow-500 mr-1"></i> CS Terbaik</h3>
                             <div id="insightTerbaik" class="text-sm text-gray-400 italic">Belum ada data.</div>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3"><i class="fas fa-triangle-exclamation text-red-500 mr-1"></i> Perlu Dievaluasi</h3>
-                            <div id="insightPerluEvaluasi" class="space-y-2 text-sm text-gray-400 italic">Belum ada data.</div>
+                        <div
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3"><i
+                                    class="fas fa-triangle-exclamation text-red-500 mr-1"></i> Perlu Dievaluasi</h3>
+                            <div id="insightPerluEvaluasi" class="space-y-2 text-sm text-gray-400 italic">Belum ada
+                                data.</div>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3"><i class="fas fa-arrow-trend-up text-green-500 mr-1"></i> CS Berprogress</h3>
-                            <div id="insightBerprogress" class="space-y-2 text-sm text-gray-400 italic">Belum ada data.</div>
+                        <div
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3"><i
+                                    class="fas fa-arrow-trend-up text-green-500 mr-1"></i> CS Berprogress</h3>
+                            <div id="insightBerprogress" class="space-y-2 text-sm text-gray-400 italic">Belum ada data.
+                            </div>
                         </div>
                     </div>
 
                     <!-- Tabel Peringkat CS Sales -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden mb-6">
-                        <div class="p-5 flex justify-between items-center border-b border-gray-100 dark:border-gray-700">
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden mb-6">
+                        <div
+                            class="p-5 flex justify-between items-center border-b border-gray-100 dark:border-gray-700">
                             <h3 class="text-lg font-bold">Peringkat CS Sales</h3>
-                            <button onclick="openBandingkanModal()" class="text-sm font-medium bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-aeGreen hover:text-aeGreen transition px-3 py-1.5 rounded-lg"><i class="fas fa-code-compare mr-1"></i> Bandingkan CS</button>
+                            <button onclick="openBandingkanModal()"
+                                class="text-sm font-medium bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-aeGreen hover:text-aeGreen transition px-3 py-1.5 rounded-lg"><i
+                                    class="fas fa-code-compare mr-1"></i> Bandingkan CS</button>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
-                                <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
+                                <thead
+                                    class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
                                     <tr>
                                         <th class="px-5 py-3 w-16 text-center">Posisi</th>
                                         <th class="px-5 py-3">Nama CS</th>
@@ -320,7 +474,10 @@
                                     </tr>
                                 </thead>
                                 <tbody id="leaderboardBody" class="divide-y divide-gray-100 dark:divide-gray-700">
-                                    <tr><td colspan="5" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>
+                                    <tr>
+                                        <td colspan="5" class="px-5 py-8 text-center text-gray-500"><i
+                                                class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -328,87 +485,143 @@
                 </div>
 
                 <div id="view-input" class="hidden">
-                    <div class="mb-6"><h2 class="text-2xl font-bold">Laporan & Scan Invoice Baru</h2></div>
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold">Laporan & Scan Invoice Baru</h2>
+                    </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="space-y-4">
-                            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                            <div
+                                class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                                 <div id="inputCsWrapper" class="hidden mb-4">
                                     <label class="block text-sm font-bold mb-2">Pilih CS Sales</label>
-                                    <select id="inputCsSelect" class="w-full p-3 border rounded-lg dark:bg-gray-700 outline-none">
+                                    <select id="inputCsSelect"
+                                        class="w-full p-3 border rounded-lg dark:bg-gray-700 outline-none">
                                         <option value="">-- Pilih CS --</option>
                                     </select>
                                 </div>
                                 <label class="block text-sm font-bold mb-2">Tanggal Laporan</label>
-                                <input type="date" id="inputTgl" class="w-full p-3 border rounded-lg dark:bg-gray-700 mb-4 outline-none">
+                                <input type="date" id="inputTgl"
+                                    class="w-full p-3 border rounded-lg dark:bg-gray-700 mb-4 outline-none">
                                 <label class="block text-sm font-bold mb-2">Total Nomor Dilayani (Lead)</label>
-                                <input type="number" id="inputLead" class="w-full p-3 border rounded-lg dark:bg-gray-700 outline-none" placeholder="Misal: 15">
+                                <input type="number" id="inputLead"
+                                    class="w-full p-3 border rounded-lg dark:bg-gray-700 outline-none"
+                                    placeholder="Misal: 15">
                             </div>
-                            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl border-2 border-dashed border-aeGreen flex flex-col items-center cursor-pointer relative hover:bg-gray-50">
-                                <input type="file" id="pdfUpload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="application/pdf" multiple>
-                                <div class="w-16 h-16 bg-green-100 text-aeGreen rounded-full flex items-center justify-center text-3xl mb-4"><i class="fas fa-file-upload"></i></div>
+                            <div
+                                class="bg-white dark:bg-gray-800 p-8 rounded-xl border-2 border-dashed border-aeGreen flex flex-col items-center cursor-pointer relative hover:bg-gray-50">
+                                <input type="file" id="pdfUpload"
+                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    accept="application/pdf" multiple>
+                                <div
+                                    class="w-16 h-16 bg-green-100 text-aeGreen rounded-full flex items-center justify-center text-3xl mb-4">
+                                    <i class="fas fa-file-upload"></i></div>
                                 <h3 class="text-lg font-bold mb-1">Upload PDF Invoice</h3>
                             </div>
 
                             <!-- Form Entri Manual (Fase 3) -->
-                            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-                                <button type="button" onclick="toggleManualForm()" class="w-full flex justify-between items-center p-4 text-left font-bold text-sm">
-                                    <span><i class="fas fa-keyboard mr-2 text-aeGreen"></i> Atau Input Manual (tanpa scan PDF)</span>
-                                    <i id="manualFormChevron" class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+                            <div
+                                class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                                <button type="button" onclick="toggleManualForm()"
+                                    class="w-full flex justify-between items-center p-4 text-left font-bold text-sm">
+                                    <span><i class="fas fa-keyboard mr-2 text-aeGreen"></i> Atau Input Manual (tanpa
+                                        scan PDF)</span>
+                                    <i id="manualFormChevron"
+                                        class="fas fa-chevron-down text-gray-400 transition-transform"></i>
                                 </button>
-                                <div id="manualFormBody" class="hidden p-4 pt-0 space-y-3 border-t border-gray-100 dark:border-gray-700">
+                                <div id="manualFormBody"
+                                    class="hidden p-4 pt-0 space-y-3 border-t border-gray-100 dark:border-gray-700">
                                     <div>
-                                        <label class="block text-xs font-semibold mb-1 text-gray-500">No. Invoice</label>
-                                        <input type="text" id="manual-no-invoice" class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" placeholder="INV/AQIQAH-EXPRESS/...">
+                                        <label class="block text-xs font-semibold mb-1 text-gray-500">No.
+                                            Invoice</label>
+                                        <input type="text" id="manual-no-invoice"
+                                            class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
+                                            placeholder="INV/AQIQAH-EXPRESS/...">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold mb-1 text-gray-500">Nama Customer</label>
-                                        <input type="text" id="manual-nama" class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" placeholder="Nama pemesan">
+                                        <label class="block text-xs font-semibold mb-1 text-gray-500">Nama
+                                            Customer</label>
+                                        <input type="text" id="manual-nama"
+                                            class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
+                                            placeholder="Nama pemesan">
                                     </div>
                                     <div class="grid grid-cols-2 gap-3">
                                         <div>
                                             <label class="block text-xs font-semibold mb-1 text-gray-500">Cabang</label>
-                                            <input type="text" id="manual-cabang" class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" placeholder="Mis. Ciputat">
+                                            <input type="text" id="manual-cabang"
+                                                class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
+                                                placeholder="Mis. Ciputat">
                                         </div>
                                         <div>
-                                            <label class="block text-xs font-semibold mb-1 text-gray-500">QTY (Ekor)</label>
-                                            <input type="number" id="manual-qty" class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" placeholder="1">
+                                            <label class="block text-xs font-semibold mb-1 text-gray-500">QTY
+                                                (Ekor)</label>
+                                            <input type="number" id="manual-qty"
+                                                class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
+                                                placeholder="1">
                                         </div>
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold mb-1 text-gray-500">Revenue (Rp)</label>
-                                        <input type="text" inputmode="numeric" id="manual-revenue" class="money-input w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" placeholder="0">
+                                        <label class="block text-xs font-semibold mb-1 text-gray-500">Revenue
+                                            (Rp)</label>
+                                        <input type="text" inputmode="numeric" id="manual-revenue"
+                                            class="money-input w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
+                                            placeholder="0">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold mb-1 text-gray-500">Tanggal Acara</label>
-                                        <input type="date" id="manual-tgl-acara" class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                                        <label class="block text-xs font-semibold mb-1 text-gray-500">Tanggal
+                                            Acara</label>
+                                        <input type="date" id="manual-tgl-acara"
+                                            class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
                                     </div>
-                                    <button type="button" onclick="tambahEntriManual()" class="w-full bg-aeGreen text-white font-bold py-2.5 rounded-lg text-sm hover:bg-[#0a2e22] transition"><i class="fas fa-plus mr-1"></i> Tambah ke Daftar</button>
+                                    <button type="button" onclick="tambahEntriManual()"
+                                        class="w-full bg-aeGreen text-white font-bold py-2.5 rounded-lg text-sm hover:bg-[#0a2e22] transition"><i
+                                            class="fas fa-plus mr-1"></i> Tambah ke Daftar</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col min-h-[400px]">
-                            <h3 class="text-lg font-bold mb-4 border-b pb-2">Preview Ekstraksi (<span id="totalScanCount" class="text-aeOrange">0</span>)</h3>
-                            <div class="flex-1 overflow-y-auto"><table class="w-full text-left text-sm"><tbody id="previewTableBody"></tbody></table></div>
-                            <button id="btnKirimLaporan" class="w-full mt-6 bg-aeGreen text-white font-bold py-3 rounded-lg shadow-md hover:bg-[#0a2e22] transition hidden"><i class="fas fa-paper-plane"></i> Kirim Laporan</button>
+                        <div
+                            class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col min-h-[400px]">
+                            <h3 class="text-lg font-bold mb-4 border-b pb-2">Preview Ekstraksi (<span
+                                    id="totalScanCount" class="text-aeOrange">0</span>)</h3>
+                            <div class="flex-1 overflow-y-auto">
+                                <table class="w-full text-left text-sm">
+                                    <tbody id="previewTableBody"></tbody>
+                                </table>
+                            </div>
+                            <button id="btnKirimLaporan"
+                                class="w-full mt-6 bg-aeGreen text-white font-bold py-3 rounded-lg shadow-md hover:bg-[#0a2e22] transition"><i
+                                    class="fas fa-paper-plane"></i> Kirim Laporan</button>
+                            <p class="text-[11px] text-gray-400 text-center mt-2">Tidak ada closing hari ini? Tidak masalah, kirim laporan cukup dengan mengisi Total Lead di atas.</p>
                         </div>
                     </div>
                 </div>
 
                 <div id="view-admin" class="hidden">
                     <div class="mb-6 flex justify-between items-end">
-                        <div><h2 class="text-2xl font-bold">Approval Laporan CS</h2><p class="text-sm text-gray-500">Tinjau antrean data dari tim Sales.</p></div>
-                        <button onclick="loadPendingApprovals()" class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm hover:bg-gray-50"><i class="fas fa-sync-alt mr-2 text-aeGreen"></i> Segarkan Data</button>
+                        <div>
+                            <h2 class="text-2xl font-bold">Approval Laporan CS</h2>
+                            <p class="text-sm text-gray-500">Tinjau antrean data dari tim Sales.</p>
+                        </div>
+                        <button onclick="loadPendingApprovals()"
+                            class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm hover:bg-gray-50"><i
+                                class="fas fa-sync-alt mr-2 text-aeGreen"></i> Segarkan Data</button>
                     </div>
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="p-5 bg-gray-50 dark:bg-gray-700/50 flex flex-wrap justify-between items-center gap-3 border-b">
-                            <h3 class="font-bold text-gray-800 dark:text-gray-200"><i class="fas fa-clock mr-2 text-orange-500"></i> Antrean Pending</h3>
-                            <button id="btnApproveSelected" onclick="approveSelected()" class="hidden bg-green-500 text-white font-medium py-2 px-4 rounded-lg shadow-sm hover:bg-green-600 text-sm"><i class="fas fa-check-double mr-1"></i> Approve Terpilih (<span id="approveSelectedCount">0</span>)</button>
+                        <div
+                            class="p-5 bg-gray-50 dark:bg-gray-700/50 flex flex-wrap justify-between items-center gap-3 border-b">
+                            <h3 class="font-bold text-gray-800 dark:text-gray-200"><i
+                                    class="fas fa-clock mr-2 text-orange-500"></i> Antrean Pending</h3>
+                            <button id="btnApproveSelected" onclick="approveSelected()"
+                                class="hidden bg-green-500 text-white font-medium py-2 px-4 rounded-lg shadow-sm hover:bg-green-600 text-sm"><i
+                                    class="fas fa-check-double mr-1"></i> Approve Terpilih (<span
+                                    id="approveSelectedCount">0</span>)</button>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
-                                <thead class="bg-white dark:bg-gray-800 text-xs text-gray-500 uppercase tracking-wider border-b">
+                                <thead
+                                    class="bg-white dark:bg-gray-800 text-xs text-gray-500 uppercase tracking-wider border-b">
                                     <tr>
-                                        <th class="px-5 py-4 w-10"><input type="checkbox" id="checkAllApproval" onchange="toggleAllApprovalCheckbox(this)"></th>
+                                        <th class="px-5 py-4 w-10"><input type="checkbox" id="checkAllApproval"
+                                                onchange="toggleAllApprovalCheckbox(this)"></th>
                                         <th class="px-5 py-4">Tgl Input</th>
                                         <th class="px-5 py-4">CS</th>
                                         <th class="px-5 py-4">Invoice & Nama</th>
@@ -417,7 +630,10 @@
                                     </tr>
                                 </thead>
                                 <tbody id="approvalTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
-                                    <tr><td colspan="6" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>
+                                    <tr>
+                                        <td colspan="6" class="px-5 py-8 text-center text-gray-500"><i
+                                                class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -425,30 +641,46 @@
                 </div>
 
                 <div id="view-referensi" class="hidden">
-                    <div class="mb-6"><h2 class="text-2xl font-bold">Data Referensi</h2><p class="text-sm text-gray-500">Kelola ID CS/SPV, target bulanan, dan ambang batas Rating Closing.</p></div>
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold">Data Referensi</h2>
+                        <p class="text-sm text-gray-500">Kelola ID CS/SPV, target bulanan, dan ambang batas Rating
+                            Closing.</p>
+                    </div>
 
                     <!-- A. Kelola ID CS/SPV -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-6 overflow-hidden">
-                        <div class="p-5 border-b border-gray-100 dark:border-gray-700"><h3 class="text-lg font-bold">Kelola ID CS/SPV</h3></div>
-                        <div class="p-5 grid grid-cols-1 md:grid-cols-5 gap-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/30">
-                            <input type="text" id="ref-add-id" placeholder="ID (mis. CS-AE-003)" class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
-                            <input type="text" id="ref-add-nama" placeholder="Nama Lengkap" class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
-                            <input type="text" id="ref-add-nohp" placeholder="No. HP (62812xxxx)" class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
-                            <select id="ref-add-role" class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-6 overflow-hidden">
+                        <div class="p-5 border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="text-lg font-bold">Kelola ID CS/SPV</h3>
+                        </div>
+                        <div
+                            class="p-5 grid grid-cols-1 md:grid-cols-5 gap-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/30">
+                            <input type="text" id="ref-add-id" placeholder="ID (mis. CS-AE-003)"
+                                class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            <input type="text" id="ref-add-nama" placeholder="Nama Lengkap"
+                                class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            <input type="text" id="ref-add-nohp" placeholder="No. HP (62812xxxx)"
+                                class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            <select id="ref-add-role"
+                                class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
                                 <option value="CS">CS Sales</option>
                                 <option value="SPV">Supervisor (SPV)</option>
                             </select>
-                            <select id="ref-add-cabang" class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            <select id="ref-add-cabang"
+                                class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
                                 <option value="Pusat">Pusat</option>
                                 <option value="Jabar">Jabar</option>
                                 <option value="Jatim">Jatim</option>
                                 <option value="Jogja">Jogja</option>
                             </select>
-                            <button id="btnAddUser" onclick="submitAddUser()" class="md:col-span-5 bg-aeGreen text-white font-bold py-2.5 rounded-lg shadow-sm hover:bg-[#0a2e22] transition text-sm"><i class="fas fa-user-plus mr-1"></i> Tambah ID Baru</button>
+                            <button id="btnAddUser" onclick="submitAddUser()"
+                                class="md:col-span-5 bg-aeGreen text-white font-bold py-2.5 rounded-lg shadow-sm hover:bg-[#0a2e22] transition text-sm"><i
+                                    class="fas fa-user-plus mr-1"></i> Tambah ID Baru</button>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
-                                <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
+                                <thead
+                                    class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
                                     <tr>
                                         <th class="px-5 py-3">ID / Nama</th>
                                         <th class="px-5 py-3">Role</th>
@@ -459,25 +691,36 @@
                                     </tr>
                                 </thead>
                                 <tbody id="userManageTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
-                                    <tr><td colspan="6" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>
+                                    <tr>
+                                        <td colspan="6" class="px-5 py-8 text-center text-gray-500"><i
+                                                class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
                     <!-- B. Atur Target Bulanan -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-6 overflow-hidden">
-                        <div class="p-5 flex flex-wrap gap-3 justify-between items-center border-b border-gray-100 dark:border-gray-700">
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-6 overflow-hidden">
+                        <div
+                            class="p-5 flex flex-wrap gap-3 justify-between items-center border-b border-gray-100 dark:border-gray-700">
                             <h3 class="text-lg font-bold">Target Bulanan CS</h3>
                             <div class="flex items-center gap-2">
-                                <input type="month" id="targetBulan" onchange="loadTargetData()" class="p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
-                                <button onclick="loadTargetData()" class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-3 rounded-lg shadow-sm hover:bg-gray-50 text-sm"><i class="fas fa-sync-alt text-aeGreen"></i></button>
-                                <button id="btnSaveAllTarget" onclick="saveAllTargets()" class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i class="fas fa-save mr-1"></i> Simpan Semua</button>
+                                <input type="month" id="targetBulan" onchange="loadTargetData()"
+                                    class="p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                                <button onclick="loadTargetData()"
+                                    class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-3 rounded-lg shadow-sm hover:bg-gray-50 text-sm"><i
+                                        class="fas fa-sync-alt text-aeGreen"></i></button>
+                                <button id="btnSaveAllTarget" onclick="saveAllTargets()"
+                                    class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i
+                                        class="fas fa-save mr-1"></i> Simpan Semua</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
-                                <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
+                                <thead
+                                    class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
                                     <tr>
                                         <th class="px-5 py-3">Nama CS</th>
                                         <th class="px-5 py-3">Target Revenue (Rp)</th>
@@ -487,25 +730,36 @@
                                     </tr>
                                 </thead>
                                 <tbody id="targetTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
-                                    <tr><td colspan="5" class="px-5 py-8 text-center text-gray-500 italic">Pilih bulan lalu klik segarkan.</td></tr>
+                                    <tr>
+                                        <td colspan="5" class="px-5 py-8 text-center text-gray-500 italic">Pilih bulan
+                                            lalu klik segarkan.</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <p class="text-xs text-gray-500 px-5 py-3 border-t border-gray-100 dark:border-gray-700"><i class="fas fa-info-circle mr-1"></i>Edit semua baris yang perlu, lalu klik <b>Simpan Semua</b> satu kali di atas.</p>
+                        <p class="text-xs text-gray-500 px-5 py-3 border-t border-gray-100 dark:border-gray-700"><i
+                                class="fas fa-info-circle mr-1"></i>Edit semua baris yang perlu, lalu klik <b>Simpan
+                                Semua</b> satu kali di atas.</p>
                     </div>
 
                     <!-- C. Ambang Batas RC -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-                        <div class="p-5 border-b border-gray-100 dark:border-gray-700 flex flex-wrap justify-between items-center gap-3">
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                        <div
+                            class="p-5 border-b border-gray-100 dark:border-gray-700 flex flex-wrap justify-between items-center gap-3">
                             <div>
                                 <h3 class="text-lg font-bold">Ambang Batas Rating Closing (RC) per Cabang</h3>
-                                <p class="text-xs text-gray-500 mt-1">RC = Closing ÷ Leads × 100%. Nilai ini jadi acuan minimal "bagus" per region.</p>
+                                <p class="text-xs text-gray-500 mt-1">RC = Closing ÷ Leads × 100%. Nilai ini jadi acuan
+                                    minimal "bagus" per region.</p>
                             </div>
-                            <button id="btnSaveAllRC" onclick="saveAllAmbangRC()" class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i class="fas fa-save mr-1"></i> Simpan Semua</button>
+                            <button id="btnSaveAllRC" onclick="saveAllAmbangRC()"
+                                class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i
+                                    class="fas fa-save mr-1"></i> Simpan Semua</button>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
-                                <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
+                                <thead
+                                    class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
                                     <tr>
                                         <th class="px-5 py-3">Region</th>
                                         <th class="px-5 py-3">Ambang Batas Minimal (%)</th>
@@ -513,7 +767,10 @@
                                     </tr>
                                 </thead>
                                 <tbody id="ambangRcTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
-                                    <tr><td colspan="3" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>
+                                    <tr>
+                                        <td colspan="3" class="px-5 py-8 text-center text-gray-500"><i
+                                                class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -522,13 +779,21 @@
 
                 <div id="view-riwayat" class="hidden">
                     <div class="mb-6 flex justify-between items-end">
-                        <div><h2 class="text-2xl font-bold">Riwayat Input</h2><p class="text-sm text-gray-500">Riwayat transaksi yang pernah kamu kirim beserta status approval-nya.</p></div>
-                        <button onclick="loadRiwayatInput()" class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm hover:bg-gray-50"><i class="fas fa-sync-alt mr-2 text-aeGreen"></i> Segarkan Data</button>
+                        <div>
+                            <h2 class="text-2xl font-bold">Riwayat Input</h2>
+                            <p class="text-sm text-gray-500">Riwayat transaksi yang pernah kamu kirim beserta status
+                                approval-nya.</p>
+                        </div>
+                        <button onclick="loadRiwayatInput()"
+                            class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm hover:bg-gray-50"><i
+                                class="fas fa-sync-alt mr-2 text-aeGreen"></i> Segarkan Data</button>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
-                                <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
+                                <thead
+                                    class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
                                     <tr>
                                         <th class="px-5 py-4">Tgl Input</th>
                                         <th id="riwayatCsTh" class="hidden px-5 py-4">CS</th>
@@ -539,7 +804,10 @@
                                     </tr>
                                 </thead>
                                 <tbody id="riwayatTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
-                                    <tr><td colspan="5" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>
+                                    <tr>
+                                        <td colspan="5" class="px-5 py-8 text-center text-gray-500"><i
+                                                class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -547,38 +815,55 @@
                 </div>
 
                 <div id="view-profil" class="hidden">
-                    <div class="mb-6"><h2 class="text-2xl font-bold">Profil Saya</h2><p class="text-sm text-gray-500" id="profilSubtitle">Ringkasan performa personal</p></div>
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold">Profil Saya</h2>
+                        <p class="text-sm text-gray-500" id="profilSubtitle">Ringkasan performa personal</p>
+                    </div>
 
                     <!-- Target Pribadi: breakdown 4 aspek vs aktual bulan berjalan -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                        <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                             <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Revenue</h3>
                             <p class="text-lg font-bold text-gray-800 dark:text-white" id="profilRevAktual">Rp 0</p>
-                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-3"><div id="profilRevBar" class="bg-aeGreen h-1.5 rounded-full" style="width: 0%"></div></div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-3">
+                                <div id="profilRevBar" class="bg-aeGreen h-1.5 rounded-full" style="width: 0%"></div>
+                            </div>
                             <p class="text-[10px] text-gray-500 mt-1" id="profilRevTarget">Target: Rp 0</p>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                             <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Leads</h3>
                             <p class="text-lg font-bold text-gray-800 dark:text-white" id="profilLeadAktual">0</p>
-                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-3"><div id="profilLeadBar" class="bg-aeGreen h-1.5 rounded-full" style="width: 0%"></div></div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-3">
+                                <div id="profilLeadBar" class="bg-aeGreen h-1.5 rounded-full" style="width: 0%"></div>
+                            </div>
                             <p class="text-[10px] text-gray-500 mt-1" id="profilLeadTarget">Target: 0</p>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                             <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Closing</h3>
                             <p class="text-lg font-bold text-gray-800 dark:text-white" id="profilCloseAktual">0</p>
-                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-3"><div id="profilCloseBar" class="bg-aeGreen h-1.5 rounded-full" style="width: 0%"></div></div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-3">
+                                <div id="profilCloseBar" class="bg-aeGreen h-1.5 rounded-full" style="width: 0%"></div>
+                            </div>
                             <p class="text-[10px] text-gray-500 mt-1" id="profilCloseTarget">Target: 0</p>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Rating Closing (RC)</h3>
+                        <div
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Rating Closing
+                                (RC)</h3>
                             <p class="text-lg font-bold text-gray-800 dark:text-white" id="profilRcAktual">0%</p>
-                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-3"><div id="profilRcBar" class="bg-aeGreen h-1.5 rounded-full" style="width: 0%"></div></div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-3">
+                                <div id="profilRcBar" class="bg-aeGreen h-1.5 rounded-full" style="width: 0%"></div>
+                            </div>
                             <p class="text-[10px] text-gray-500 mt-1" id="profilRcTarget">Ambang Batas: 0%</p>
                         </div>
                     </div>
 
                     <!-- Grafik Personal: tren Nilai Akhir 6 bulan terakhir -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 mb-6">
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 mb-6">
                         <h3 class="text-lg font-bold mb-1">Tren Skor Akhir (6 Bulan Terakhir)</h3>
                         <p class="text-xs text-gray-500 mb-4">Nilai Akhir KPI per bulan</p>
                         <div id="profilTrenChart" class="flex items-end gap-3 h-48"></div>
@@ -589,84 +874,119 @@
     </div>
 
     <!-- Modal Hasil Kode Akses (Fase 2) -->
-    <div id="modalKodeAksesHasil" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
+    <div id="modalKodeAksesHasil"
+        class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-sm shadow-2xl text-center">
-            <div class="w-14 h-14 bg-green-100 dark:bg-green-900/30 text-green-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-3"><i class="fas fa-key"></i></div>
+            <div
+                class="w-14 h-14 bg-green-100 dark:bg-green-900/30 text-green-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-3">
+                <i class="fas fa-key"></i></div>
             <h3 class="text-base font-bold mb-1 text-gray-800 dark:text-white">Kode Akses Berhasil Dibuat</h3>
             <p class="text-xs text-gray-500 mb-4" id="hasilKodeAksesUser">ID - Nama</p>
             <div class="bg-gray-50 dark:bg-gray-700 border-2 border-dashed border-aeGreen rounded-lg py-3 mb-4">
                 <p class="text-2xl font-bold tracking-widest text-aeGreen" id="hasilKodeAksesValue">------</p>
             </div>
             <div class="flex gap-2">
-                <button onclick="copyKodeAkses()" class="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium py-2 rounded-lg text-sm hover:bg-gray-200 dark:hover:bg-gray-600"><i class="fas fa-copy mr-1"></i> Copy</button>
-                <button onclick="kirimKodeAksesWA()" class="flex-1 bg-green-500 text-white font-medium py-2 rounded-lg text-sm hover:bg-green-600"><i class="fab fa-whatsapp mr-1"></i> Kirim WA</button>
+                <button onclick="copyKodeAkses()"
+                    class="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium py-2 rounded-lg text-sm hover:bg-gray-200 dark:hover:bg-gray-600"><i
+                        class="fas fa-copy mr-1"></i> Copy</button>
+                <button onclick="kirimKodeAksesWA()"
+                    class="flex-1 bg-green-500 text-white font-medium py-2 rounded-lg text-sm hover:bg-green-600"><i
+                        class="fab fa-whatsapp mr-1"></i> Kirim WA</button>
             </div>
-            <button onclick="closeKodeAksesModal()" class="mt-4 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">Tutup</button>
+            <button onclick="closeKodeAksesModal()"
+                class="mt-4 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">Tutup</button>
         </div>
     </div>
 
     <!-- Modal Alasan Penolakan (Fase 3 - SPV Reject) -->
-    <div id="modalAlasanReject" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
+    <div id="modalAlasanReject"
+        class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-sm shadow-2xl">
             <div class="flex items-center gap-3 mb-4">
-                <div class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0"><i class="fas fa-times text-red-500"></i></div>
+                <div
+                    class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-times text-red-500"></i></div>
                 <div>
                     <h3 class="text-base font-bold text-gray-800 dark:text-white">Tolak Invoice</h3>
                     <p class="text-[11px] text-gray-500" id="alasanRejectInvoiceLabel">No. Invoice</p>
                 </div>
             </div>
             <form onsubmit="submitAlasanReject(event)">
-                <label class="block text-xs font-semibold mb-1 text-gray-500">Alasan Penolakan (wajib diisi, akan dikirim ke CS)</label>
-                <textarea id="alasan-reject-input" rows="3" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm mb-4" placeholder="Contoh: File PDF terpotong/buram" required></textarea>
+                <label class="block text-xs font-semibold mb-1 text-gray-500">Alasan Penolakan (wajib diisi, akan
+                    dikirim ke CS)</label>
+                <textarea id="alasan-reject-input" rows="3"
+                    class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm mb-4"
+                    placeholder="Contoh: File PDF terpotong/buram" required></textarea>
                 <div class="flex justify-end gap-2">
-                    <button type="button" onclick="closeAlasanRejectModal()" class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
-                    <button type="submit" id="btnSubmitAlasanReject" class="px-4 py-2 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold">Tolak & Kirim Alasan</button>
+                    <button type="button" onclick="closeAlasanRejectModal()"
+                        class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
+                    <button type="submit" id="btnSubmitAlasanReject"
+                        class="px-4 py-2 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold">Tolak
+                        & Kirim Alasan</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Modal Revisi & Submit Ulang (Fase 3 - CS) -->
-    <div id="modalRevisiTransaksi" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
+    <div id="modalRevisiTransaksi"
+        class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-md shadow-2xl">
             <h3 class="text-lg font-bold mb-1 text-gray-800 dark:text-white">Revisi Transaksi</h3>
-            <p class="text-xs text-red-500 mb-4"><i class="fas fa-exclamation-circle mr-1"></i><span id="revisiAlasanLabel">Alasan penolakan</span></p>
+            <p class="text-xs text-red-500 mb-4"><i class="fas fa-exclamation-circle mr-1"></i><span
+                    id="revisiAlasanLabel">Alasan penolakan</span></p>
             <form onsubmit="submitRevisiTransaksi(event)">
                 <div class="grid grid-cols-2 gap-3 mb-4">
                     <div class="col-span-2">
                         <label class="block text-xs font-semibold mb-1 text-gray-500">No. Invoice</label>
-                        <input type="text" id="revisi-no-invoice" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm" required>
+                        <input type="text" id="revisi-no-invoice"
+                            class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm"
+                            required>
                     </div>
                     <div class="col-span-2">
                         <label class="block text-xs font-semibold mb-1 text-gray-500">Nama Customer</label>
-                        <input type="text" id="revisi-nama" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm" required>
+                        <input type="text" id="revisi-nama"
+                            class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm"
+                            required>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold mb-1 text-gray-500">Cabang</label>
-                        <input type="text" id="revisi-cabang" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm" required>
+                        <input type="text" id="revisi-cabang"
+                            class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm"
+                            required>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold mb-1 text-gray-500">QTY (Ekor)</label>
-                        <input type="number" id="revisi-qty" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm" required>
+                        <input type="number" id="revisi-qty"
+                            class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm"
+                            required>
                     </div>
                     <div class="col-span-2">
                         <label class="block text-xs font-semibold mb-1 text-gray-500">Revenue (Rp)</label>
-                        <input type="text" inputmode="numeric" id="revisi-revenue" class="money-input w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm" required>
+                        <input type="text" inputmode="numeric" id="revisi-revenue"
+                            class="money-input w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm"
+                            required>
                     </div>
                 </div>
                 <div class="flex justify-end gap-2">
-                    <button type="button" onclick="closeRevisiModal()" class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
-                    <button type="submit" id="btnSubmitRevisi" class="px-4 py-2 text-sm bg-aeGreen text-white rounded-lg hover:bg-[#0a2e22] font-semibold"><i class="fas fa-paper-plane mr-1"></i> Kirim Ulang</button>
+                    <button type="button" onclick="closeRevisiModal()"
+                        class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
+                    <button type="submit" id="btnSubmitRevisi"
+                        class="px-4 py-2 text-sm bg-aeGreen text-white rounded-lg hover:bg-[#0a2e22] font-semibold"><i
+                            class="fas fa-paper-plane mr-1"></i> Kirim Ulang</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Modal Beri Saran SPV (Fase 4 - Card Saran) -->
-    <div id="modalBeriSaran" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
+    <div id="modalBeriSaran"
+        class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-sm shadow-2xl">
             <div class="flex items-center gap-3 mb-4">
-                <div class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center flex-shrink-0"><i class="fas fa-comment-dots text-orange-500"></i></div>
+                <div
+                    class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-comment-dots text-orange-500"></i></div>
                 <div>
                     <h3 class="text-base font-bold text-gray-800 dark:text-white">Beri Saran</h3>
                     <p class="text-[11px] text-gray-500" id="beriSaranNamaLabel">Nama CS</p>
@@ -674,32 +994,43 @@
             </div>
             <form onsubmit="submitBeriSaran(event)">
                 <label class="block text-xs font-semibold mb-1 text-gray-500">Pesan / Catatan Coaching</label>
-                <textarea id="beri-saran-input" rows="4" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm mb-4" placeholder="Contoh: Tingkatkan follow up leads harian ya, closing rate masih di bawah target." required></textarea>
+                <textarea id="beri-saran-input" rows="4"
+                    class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm mb-4"
+                    placeholder="Contoh: Tingkatkan follow up leads harian ya, closing rate masih di bawah target."
+                    required></textarea>
                 <div class="flex justify-end gap-2">
-                    <button type="button" onclick="closeBeriSaranModal()" class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
-                    <button type="submit" id="btnSubmitBeriSaran" class="px-4 py-2 text-sm bg-aeGreen hover:bg-[#0a2e22] text-white rounded-lg font-semibold">Kirim Saran</button>
+                    <button type="button" onclick="closeBeriSaranModal()"
+                        class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
+                    <button type="submit" id="btnSubmitBeriSaran"
+                        class="px-4 py-2 text-sm bg-aeGreen hover:bg-[#0a2e22] text-white rounded-lg font-semibold">Kirim
+                        Saran</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Modal Bandingkan CS (Fase 4.F) -->
-    <div id="modalBandingkan" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
+    <div id="modalBandingkan"
+        class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-3xl shadow-2xl max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-bold text-gray-800 dark:text-white">Bandingkan CS</h3>
-                <button onclick="closeBandingkanModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"><i class="fas fa-times text-lg"></i></button>
+                <button onclick="closeBandingkanModal()"
+                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"><i
+                        class="fas fa-times text-lg"></i></button>
             </div>
-            <div id="bandingkanPicker" class="flex flex-wrap gap-2 mb-4 pb-4 border-b border-gray-100 dark:border-gray-700"></div>
+            <div id="bandingkanPicker"
+                class="flex flex-wrap gap-2 mb-4 pb-4 border-b border-gray-100 dark:border-gray-700"></div>
             <div id="bandingkanResult" class="flex-1 overflow-auto">
-                <p class="text-sm text-gray-400 italic text-center py-8">Pilih minimal 2 CS untuk membandingkan (maks. 4).</p>
+                <p class="text-sm text-gray-400 italic text-center py-8">Pilih minimal 2 CS untuk membandingkan (maks.
+                    4).</p>
             </div>
         </div>
     </div>
 
     <script>
         // URL ASLI MILIKMU
-        const API_URL = "https://script.google.com/macros/s/AKfycbzj-KXl-P2I9zs_jRomVUGLZRwG9PagcfU7H2vei3fWsk5K7SD7ktfxJZUW9-nKOUe9gA/exec"; 
+        const API_URL = "https://script.google.com/macros/s/AKfycbzj-KXl-P2I9zs_jRomVUGLZRwG9PagcfU7H2vei3fWsk5K7SD7ktfxJZUW9-nKOUe9gA/exec";
         let currentUser = null;
         let scannedInvoices = [];
         let allUsers = [];
@@ -715,7 +1046,7 @@
             toast.className = `px-4 py-3 rounded-lg shadow-lg text-white text-sm font-medium transition-all duration-300 transform translate-y-10 opacity-0 flex items-center gap-2 ${type === 'error' ? 'bg-red-500' : 'bg-green-500'}`;
             toast.innerHTML = `<i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${message}`;
             container.appendChild(toast);
-            
+
             setTimeout(() => { toast.classList.remove('translate-y-10', 'opacity-0'); }, 10);
             setTimeout(() => {
                 toast.classList.add('translate-y-10', 'opacity-0');
@@ -763,7 +1094,7 @@
             let modeNormal = document.getElementById('login-normal-mode');
             let modeSetup = document.getElementById('login-setup-mode');
             let btn = document.getElementById('btnLogin');
-            
+
             document.getElementById('login-pin').required = false;
             document.getElementById('setup-kode').required = false;
             document.getElementById('setup-pin').required = false;
@@ -798,7 +1129,7 @@
         window.onload = async () => {
             document.getElementById('inputTgl').valueAsDate = new Date();
             await fetchUsers(); // Harus await agar data users siap untuk checkPinStatus
-            
+
             let savedSession = localStorage.getItem('aeSession');
             if (savedSession) {
                 let session = JSON.parse(savedSession);
@@ -812,12 +1143,12 @@
         };
 
         // 2. FUNGSI SUBMIT LOGIN / SETUP PIN
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
             e.preventDefault();
             const btn = document.getElementById('btnLogin');
             const idCs = document.getElementById('login-id').value;
             let user = allUsers.find(u => u.id === idCs);
-            
+
             if (!user) return;
 
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Proses...';
@@ -849,18 +1180,18 @@
                 let kode = document.getElementById('setup-kode').value;
                 let pin1 = document.getElementById('setup-pin').value;
                 let pin2 = document.getElementById('setup-pin2').value;
-                
+
                 if (pin1 !== pin2) {
                     showToast("Konfirmasi PIN tidak cocok!", "error");
                     btn.innerHTML = 'Buat PIN & Masuk'; btn.disabled = false;
                     hideLoading();
                     return;
                 }
-                
+
                 formData.append('action', 'setupPin');
                 formData.append('kode_akses', kode);
                 formData.append('pin_baru', pin1);
-                
+
                 try {
                     let res = await fetch(API_URL, { method: 'POST', body: formData });
                     let json = await res.json();
@@ -882,8 +1213,8 @@
                     }
                 } catch (err) { showToast("Koneksi gagal saat setup PIN.", "error"); }
             }
-            
-            if(!currentUser) {
+
+            if (!currentUser) {
                 btn.innerHTML = user.has_pin ? 'Masuk ke Sistem' : 'Buat PIN & Masuk';
                 btn.disabled = false;
                 hideLoading();
@@ -897,7 +1228,7 @@
             document.getElementById('app-container').classList.remove('hidden');
             document.getElementById('userNameDisplay').innerText = currentUser.nama;
             document.getElementById('userRoleDisplay').innerText = currentUser.role;
-            if(currentUser.role === 'SPV') {
+            if (currentUser.role === 'SPV') {
                 document.getElementById('nav-admin').classList.remove('hidden');
                 document.getElementById('nav-admin-mobile').classList.remove('hidden');
                 document.getElementById('nav-referensi').classList.remove('hidden');
@@ -954,29 +1285,29 @@
             });
 
             const activeBtn = document.getElementById('nav-' + tabId);
-            if(activeBtn) {
+            if (activeBtn) {
                 activeBtn.classList.remove('text-gray-600', 'hover:bg-gray-100');
                 activeBtn.classList.add('bg-aeGreen', 'text-white', 'shadow-sm');
             }
             document.getElementById('mobileDropdown').classList.add('hidden');
 
             // Trigger fetch data jika tab ditekan
-            if(tabId === 'dashboard') loadDashboardData();
-            if(tabId === 'admin' && currentUser.role === 'SPV') loadPendingApprovals();
-            if(tabId === 'referensi' && currentUser.role === 'SPV') loadReferensiData();
-            if(tabId === 'riwayat') loadRiwayatInput();
-            if(tabId === 'profil') loadProfilData();
+            if (tabId === 'dashboard') loadDashboardData();
+            if (tabId === 'admin' && currentUser.role === 'SPV') loadPendingApprovals();
+            if (tabId === 'referensi' && currentUser.role === 'SPV') loadReferensiData();
+            if (tabId === 'riwayat') loadRiwayatInput();
+            if (tabId === 'profil') loadProfilData();
         }
 
         // 4. LOGIKA SCANNER (CONTEKAN PERSIS DARI SCRIPT .MD)
-        document.getElementById('pdfUpload').addEventListener('change', async function(e) {
+        document.getElementById('pdfUpload').addEventListener('change', async function (e) {
             const files = e.target.files;
             let tbody = document.getElementById('previewTableBody');
-            if(scannedInvoices.length === 0) tbody.innerHTML = '';
-            
+            if (scannedInvoices.length === 0) tbody.innerHTML = '';
+
             for (let i = 0; i < files.length; i++) {
                 let reader = new FileReader();
-                reader.onload = async function() {
+                reader.onload = async function () {
                     let typedarray = new Uint8Array(this.result);
                     let pdf = await pdfjsLib.getDocument(typedarray).promise;
                     let textContent = "";
@@ -998,7 +1329,7 @@
                         let rawDapur = dapurMatch[1].trim().toUpperCase();
                         if (rawDapur.indexOf("KBB") > -1 || rawDapur.indexOf("CIMAHI") > -1) dapur = "KBB CIMAHI";
                         else if (rawDapur.indexOf("YOGYAKARTA") > -1 || rawDapur.indexOf("YOGYA") > -1) dapur = "JOGJA";
-                        else dapur = rawDapur.split(/\s+/)[0]; 
+                        else dapur = rawDapur.split(/\s+/)[0];
                     }
 
                     // C. Ekstrak Nama
@@ -1040,46 +1371,43 @@
             tbody.innerHTML = '';
             scannedInvoices.forEach((inv, index) => {
                 tbody.innerHTML += `
-                    <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
-                        <td class="p-2">
-                            <input type="text" class="font-bold w-full bg-transparent border-b border-dashed border-gray-300 dark:border-gray-600 focus:outline-none focus:border-aeGreen text-sm text-gray-800 dark:text-gray-200" value="${inv.nama_cust}" onchange="updateInvoice(${index}, 'nama_cust', this.value)" placeholder="Nama Pemesan">
-                            <div class="flex items-center gap-2 mt-1">
-                                <input type="text" class="text-[10px] text-gray-500 bg-transparent border-b border-dashed border-gray-300 dark:border-gray-600 focus:outline-none w-28" value="${inv.no_invoice}" onchange="updateInvoice(${index}, 'no_invoice', this.value)" placeholder="No Invoice">
-                                <span class="text-[10px] text-gray-500">Cab:</span>
-                                <input type="text" class="text-[10px] text-gray-500 bg-transparent border-b border-dashed border-gray-300 dark:border-gray-600 focus:outline-none w-16" value="${inv.cabang}" onchange="updateInvoice(${index}, 'cabang', this.value)" placeholder="Cabang">
-                            </div>
-                        </td>
-                        <td class="p-2 text-right">
-                            <div class="flex items-center justify-end gap-1">
-                                <span class="font-bold text-aeGreen text-sm">Rp</span>
-                                <input type="text" inputmode="numeric" class="money-input font-bold text-aeGreen text-right bg-transparent border-b border-dashed border-gray-300 dark:border-gray-600 focus:outline-none w-24 text-sm" value="${formatRibuan(inv.revenue)}" onchange="updateInvoice(${index}, 'revenue', this.value)">
-                            </div>
-                            <div class="flex items-center justify-end gap-1 mt-1">
-                                <span class="text-[10px] text-gray-500">QTY:</span>
-                                <input type="number" class="text-[10px] text-gray-500 text-right bg-transparent border-b border-dashed border-gray-300 dark:border-gray-600 focus:outline-none w-12" value="${inv.qty}" onchange="updateInvoice(${index}, 'qty', this.value)">
-                                <span class="text-[10px] text-gray-500">Ekor</span>
-                            </div>
-                        </td>
-                        <td class="p-2 text-center align-middle">
-                            <button onclick="removeInvoice(${index})" class="text-red-400 hover:text-red-600 transition p-1 bg-red-50 dark:bg-red-900/20 rounded-md"><i class="fas fa-trash-alt text-xs"></i></button>
-                        </td>
-                    </tr>
-                `;
+                        <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                            <td class="p-2">
+                                <input type="text" class="font-bold w-full bg-transparent border-b border-dashed border-gray-300 dark:border-gray-600 focus:outline-none focus:border-aeGreen text-sm text-gray-800 dark:text-gray-200" value="${inv.nama_cust}" onchange="updateInvoice(${index}, 'nama_cust', this.value)" placeholder="Nama Pemesan">
+                                <div class="flex items-center gap-2 mt-1">
+                                    <input type="text" class="text-[10px] text-gray-500 bg-transparent border-b border-dashed border-gray-300 dark:border-gray-600 focus:outline-none w-28" value="${inv.no_invoice}" onchange="updateInvoice(${index}, 'no_invoice', this.value)" placeholder="No Invoice">
+                                    <span class="text-[10px] text-gray-500">Cab:</span>
+                                    <input type="text" class="text-[10px] text-gray-500 bg-transparent border-b border-dashed border-gray-300 dark:border-gray-600 focus:outline-none w-16" value="${inv.cabang}" onchange="updateInvoice(${index}, 'cabang', this.value)" placeholder="Cabang">
+                                </div>
+                            </td>
+                            <td class="p-2 text-right">
+                                <div class="flex items-center justify-end gap-1">
+                                    <span class="font-bold text-aeGreen text-sm">Rp</span>
+                                    <input type="text" inputmode="numeric" class="money-input font-bold text-aeGreen text-right bg-transparent border-b border-dashed border-gray-300 dark:border-gray-600 focus:outline-none w-24 text-sm" value="${formatRibuan(inv.revenue)}" onchange="updateInvoice(${index}, 'revenue', this.value)">
+                                </div>
+                                <div class="flex items-center justify-end gap-1 mt-1">
+                                    <span class="text-[10px] text-gray-500">QTY:</span>
+                                    <input type="number" class="text-[10px] text-gray-500 text-right bg-transparent border-b border-dashed border-gray-300 dark:border-gray-600 focus:outline-none w-12" value="${inv.qty}" onchange="updateInvoice(${index}, 'qty', this.value)">
+                                    <span class="text-[10px] text-gray-500">Ekor</span>
+                                </div>
+                            </td>
+                            <td class="p-2 text-center align-middle">
+                                <button onclick="removeInvoice(${index})" class="text-red-400 hover:text-red-600 transition p-1 bg-red-50 dark:bg-red-900/20 rounded-md"><i class="fas fa-trash-alt text-xs"></i></button>
+                            </td>
+                        </tr>
+                    `;
             });
-            
+
             document.getElementById('totalScanCount').innerText = scannedInvoices.length;
-            const btn = document.getElementById('btnKirimLaporan');
-            if (scannedInvoices.length > 0) btn.classList.remove('hidden'); 
-            else btn.classList.add('hidden');
         }
 
-        window.updateInvoice = function(index, field, value) {
+        window.updateInvoice = function (index, field, value) {
             if (field === 'revenue') value = parseRibuan(value);
             else if (field === 'qty') value = parseFloat(value) || 0;
             scannedInvoices[index][field] = value;
         };
-        
-        window.removeInvoice = function(index) {
+
+        window.removeInvoice = function (index) {
             scannedInvoices.splice(index, 1);
             renderPreviewTable();
         };
@@ -1121,7 +1449,7 @@
         document.getElementById('btnKirimLaporan').addEventListener('click', async () => {
             let totalLead = document.getElementById('inputLead').value;
             let tgl = document.getElementById('inputTgl').value;
-            if(!totalLead) return alert("Harap isi Total Lead!");
+            if (!totalLead) return alert("Harap isi Total Lead!");
 
             let idCsTarget = currentUser.id;
             if (currentUser.role === 'SPV') {
@@ -1143,7 +1471,7 @@
             try {
                 let res = await fetch(API_URL, { method: 'POST', body: formData });
                 let json = await res.json();
-                if(json.status === "success") {
+                if (json.status === "success") {
                     showToast(json.message, "success");
                     scannedInvoices = [];
                     renderPreviewTable();
@@ -1178,7 +1506,7 @@
             try {
                 let res = await fetch(`${API_URL}?action=getDashboard&id_cs=${currentUser.id}&role=${currentUser.role}`);
                 let json = await res.json();
-                if(json.status === "success"){
+                if (json.status === "success") {
                     document.getElementById('dashRev').innerText = "Rp " + json.data.revenue.toLocaleString('id-ID');
                     document.getElementById('dashTrx').innerText = json.data.transaksi;
                     document.getElementById('dashPending').innerText = json.data.pending;
@@ -1216,12 +1544,12 @@
                     let tbody = document.getElementById('leaderboardBody');
                     if (tbody) {
                         tbody.innerHTML = '';
-                        if(lastLeaderboard.length === 0) {
+                        if (lastLeaderboard.length === 0) {
                             tbody.innerHTML = `<tr><td colspan="${isSpv ? 6 : 5}" class="px-5 py-8 text-center text-gray-500 italic">Belum ada CS Sales aktif.</td></tr>`;
                         } else {
                             lastLeaderboard.forEach(cs => {
                                 let posClass = 'bg-gray-200 text-gray-500 font-medium';
-                                if(cs.posisi === 1) posClass = 'bg-[#985F24] text-white shadow-md';
+                                if (cs.posisi === 1) posClass = 'bg-[#985F24] text-white shadow-md';
                                 else if (cs.posisi === 2) posClass = 'bg-[#114232] text-white shadow-md';
 
                                 let badgeColor = kategoriBadgeColor(cs.warna);
@@ -1237,30 +1565,30 @@
                                     : '';
 
                                 tbody.innerHTML += `
-                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
-                                        <td class="px-5 py-4 text-center">
-                                            <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm mx-auto ${posClass}">${cs.posisi}</div>
-                                        </td>
-                                        <td class="px-5 py-4">
-                                            <div class="flex items-center gap-3">
-                                                <div class="w-9 h-9 rounded-full bg-[#E8F0FE] text-[#1967D2] flex items-center justify-center font-bold text-xs flex-shrink-0">${initials}</div>
-                                                <div class="leading-tight">
-                                                    ${nameText}
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                                            <td class="px-5 py-4 text-center">
+                                                <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm mx-auto ${posClass}">${cs.posisi}</div>
+                                            </td>
+                                            <td class="px-5 py-4">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="w-9 h-9 rounded-full bg-[#E8F0FE] text-[#1967D2] flex items-center justify-center font-bold text-xs flex-shrink-0">${initials}</div>
+                                                    <div class="leading-tight">
+                                                        ${nameText}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-5 py-4 text-right">
-                                            <p class="font-bold text-sm text-gray-800 dark:text-gray-200">Rp ${cs.revenue.toLocaleString('id-ID')}</p>
-                                        </td>
-                                        <td class="px-5 py-4 text-center">
-                                            <span class="bg-orange-50 text-orange-600 px-2.5 py-1 rounded text-xs font-bold">${cs.nilai_akhir}%</span>
-                                        </td>
-                                        <td class="px-5 py-4 text-center">
-                                            <span class="${badgeColor} px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">${cs.kategori}</span>
-                                        </td>
-                                        ${aksiCell}
-                                    </tr>
-                                `;
+                                            </td>
+                                            <td class="px-5 py-4 text-right">
+                                                <p class="font-bold text-sm text-gray-800 dark:text-gray-200">Rp ${cs.revenue.toLocaleString('id-ID')}</p>
+                                            </td>
+                                            <td class="px-5 py-4 text-center">
+                                                <span class="bg-orange-50 text-orange-600 px-2.5 py-1 rounded text-xs font-bold">${cs.nilai_akhir}%</span>
+                                            </td>
+                                            <td class="px-5 py-4 text-center">
+                                                <span class="${badgeColor} px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">${cs.kategori}</span>
+                                            </td>
+                                            ${aksiCell}
+                                        </tr>
+                                    `;
                             });
                         }
                     }
@@ -1280,9 +1608,9 @@
             const terbaikEl = document.getElementById('insightTerbaik');
             if (insights.terbaik) {
                 terbaikEl.innerHTML = `
-                    <p class="text-xl font-bold text-gray-800 dark:text-white">${insights.terbaik.nama}</p>
-                    <p class="text-xs text-gray-500 mt-1">Skor Akhir: <span class="font-bold text-aeGreen">${insights.terbaik.nilai_akhir}%</span></p>
-                `;
+                        <p class="text-xl font-bold text-gray-800 dark:text-white">${insights.terbaik.nama}</p>
+                        <p class="text-xs text-gray-500 mt-1">Skor Akhir: <span class="font-bold text-aeGreen">${insights.terbaik.nilai_akhir}%</span></p>
+                    `;
             } else {
                 terbaikEl.innerHTML = '<p class="text-sm text-gray-400 italic">Belum ada data.</p>';
             }
@@ -1290,11 +1618,11 @@
             const evalEl = document.getElementById('insightPerluEvaluasi');
             if (insights.perlu_evaluasi && insights.perlu_evaluasi.length > 0) {
                 evalEl.innerHTML = insights.perlu_evaluasi.map(cs => `
-                    <div class="flex justify-between items-center bg-red-50 dark:bg-red-900/20 rounded-lg px-3 py-2">
-                        <span class="font-medium text-gray-700 dark:text-gray-200 text-sm">${cs.nama}</span>
-                        <span class="text-red-600 font-bold text-xs">${cs.nilai_akhir}%</span>
-                    </div>
-                `).join('');
+                        <div class="flex justify-between items-center bg-red-50 dark:bg-red-900/20 rounded-lg px-3 py-2">
+                            <span class="font-medium text-gray-700 dark:text-gray-200 text-sm">${cs.nama}</span>
+                            <span class="text-red-600 font-bold text-xs">${cs.nilai_akhir}%</span>
+                        </div>
+                    `).join('');
             } else {
                 evalEl.innerHTML = '<p class="text-sm text-gray-400 italic">Tidak ada CS kategori Kurang. 🎉</p>';
             }
@@ -1302,11 +1630,11 @@
             const progEl = document.getElementById('insightBerprogress');
             if (insights.berprogress && insights.berprogress.length > 0) {
                 progEl.innerHTML = insights.berprogress.slice(0, 5).map(cs => `
-                    <div class="flex justify-between items-center bg-green-50 dark:bg-green-900/20 rounded-lg px-3 py-2">
-                        <span class="font-medium text-gray-700 dark:text-gray-200 text-sm">${cs.nama}</span>
-                        <span class="text-green-600 font-bold text-xs">+${cs.delta}%</span>
-                    </div>
-                `).join('');
+                        <div class="flex justify-between items-center bg-green-50 dark:bg-green-900/20 rounded-lg px-3 py-2">
+                            <span class="font-medium text-gray-700 dark:text-gray-200 text-sm">${cs.nama}</span>
+                            <span class="text-green-600 font-bold text-xs">+${cs.delta}%</span>
+                        </div>
+                    `).join('');
             } else {
                 progEl.innerHTML = '<p class="text-sm text-gray-400 italic">Belum ada CS yang naik dibanding bulan lalu.</p>';
             }
@@ -1420,28 +1748,28 @@
             ];
 
             let html = `<table class="w-full text-left text-sm">
-                <thead>
-                    <tr class="border-b border-gray-100 dark:border-gray-700">
-                        <th class="py-2 pr-4 text-xs text-gray-500 uppercase">Aspek</th>
-                        ${items.map(cs => `<th class="py-2 px-3 text-center text-xs text-gray-500 uppercase">${cs.nama}</th>`).join('')}
-                    </tr>
-                </thead>
-                <tbody>`;
+                    <thead>
+                        <tr class="border-b border-gray-100 dark:border-gray-700">
+                            <th class="py-2 pr-4 text-xs text-gray-500 uppercase">Aspek</th>
+                            ${items.map(cs => `<th class="py-2 px-3 text-center text-xs text-gray-500 uppercase">${cs.nama}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>`;
 
             aspects.forEach(asp => {
                 html += `<tr class="border-b border-gray-50 dark:border-gray-700/50">
-                    <td class="py-3 pr-4 font-medium text-gray-600 dark:text-gray-300">${asp.label}</td>
-                    ${items.map(cs => `<td class="py-3 px-3 text-center">
-                        <p class="font-bold text-gray-800 dark:text-white">${asp.fmt(cs[asp.key])}</p>
-                        <p class="text-[10px] text-gray-400">${asp.score(cs)}% dari target</p>
-                    </td>`).join('')}
-                </tr>`;
+                        <td class="py-3 pr-4 font-medium text-gray-600 dark:text-gray-300">${asp.label}</td>
+                        ${items.map(cs => `<td class="py-3 px-3 text-center">
+                            <p class="font-bold text-gray-800 dark:text-white">${asp.fmt(cs[asp.key])}</p>
+                            <p class="text-[10px] text-gray-400">${asp.score(cs)}% dari target</p>
+                        </td>`).join('')}
+                    </tr>`;
             });
 
             html += `<tr>
-                <td class="py-3 pr-4 font-bold text-gray-800 dark:text-white">Nilai Akhir</td>
-                ${items.map(cs => `<td class="py-3 px-3 text-center"><span class="${kategoriBadgeColor(cs.warna)} px-3 py-1 rounded-full text-xs font-bold">${cs.nilai_akhir}%</span></td>`).join('')}
-            </tr>`;
+                    <td class="py-3 pr-4 font-bold text-gray-800 dark:text-white">Nilai Akhir</td>
+                    ${items.map(cs => `<td class="py-3 px-3 text-center"><span class="${kategoriBadgeColor(cs.warna)} px-3 py-1 rounded-full text-xs font-bold">${cs.nilai_akhir}%</span></td>`).join('')}
+                </tr>`;
 
             html += `</tbody></table>`;
             result.innerHTML = html;
@@ -1494,12 +1822,12 @@
             chart.innerHTML = tren.map(t => {
                 let barColor = t.nilai_akhir > 80 ? 'bg-green-500' : (t.nilai_akhir >= 50 ? 'bg-yellow-400' : 'bg-red-400');
                 return `
-                    <div class="flex-1 flex flex-col items-center justify-end h-full">
-                        <span class="text-[10px] font-bold text-gray-600 dark:text-gray-300 mb-1">${t.nilai_akhir}%</span>
-                        <div class="w-full ${barColor} rounded-t-md transition-all" style="height: ${Math.max(2, t.nilai_akhir)}%"></div>
-                        <span class="text-[10px] text-gray-400 mt-2">${t.bulan}</span>
-                    </div>
-                `;
+                        <div class="flex-1 flex flex-col items-center justify-end h-full">
+                            <span class="text-[10px] font-bold text-gray-600 dark:text-gray-300 mb-1">${t.nilai_akhir}%</span>
+                            <div class="w-full ${barColor} rounded-t-md transition-all" style="height: ${Math.max(2, t.nilai_akhir)}%"></div>
+                            <span class="text-[10px] text-gray-400 mt-2">${t.bulan}</span>
+                        </div>
+                    `;
             }).join('');
         }
 
@@ -1514,22 +1842,22 @@
                 let res = await fetch(API_URL + "?action=getPendingApprovals");
                 let json = await res.json();
                 tbody.innerHTML = '';
-                if(json.data.length === 0) {
+                if (json.data.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-8 text-center text-gray-500 italic">Tidak ada antrean pending.</td></tr>';
                 } else {
                     json.data.forEach(item => {
                         tbody.innerHTML += `
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors border-b dark:border-gray-700">
-                                <td class="px-5 py-4"><input type="checkbox" class="approval-check" data-no-invoice="${item.no_invoice}" data-timestamp="${item.raw_timestamp}" onchange="updateApproveSelectedCount()"></td>
-                                <td class="px-5 py-4 text-sm">${item.timestamp}</td>
-                                <td class="px-5 py-4 font-bold text-aeGreen">${getNamaCsById(item.id_cs)}</td>
-                                <td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>
-                                <td class="px-5 py-4 text-sm font-bold">Rp ${parseInt(item.revenue).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span></td>
-                                <td class="px-5 py-4 text-center flex gap-2 justify-center">
-                                    <button onclick="openAlasanRejectModal('${item.no_invoice}', '${item.raw_timestamp}')" class="bg-red-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-red-600 transition" title="Reject"><i class="fas fa-times"></i></button>
-                                </td>
-                            </tr>
-                        `;
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors border-b dark:border-gray-700">
+                                    <td class="px-5 py-4"><input type="checkbox" class="approval-check" data-no-invoice="${item.no_invoice}" data-timestamp="${item.raw_timestamp}" onchange="updateApproveSelectedCount()"></td>
+                                    <td class="px-5 py-4 text-sm">${item.timestamp}</td>
+                                    <td class="px-5 py-4 font-bold text-aeGreen">${getNamaCsById(item.id_cs)}</td>
+                                    <td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>
+                                    <td class="px-5 py-4 text-sm font-bold">Rp ${parseInt(item.revenue).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span></td>
+                                    <td class="px-5 py-4 text-center flex gap-2 justify-center">
+                                        <button onclick="openAlasanRejectModal('${item.no_invoice}', '${item.raw_timestamp}')" class="bg-red-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-red-600 transition" title="Reject"><i class="fas fa-times"></i></button>
+                                    </td>
+                                </tr>
+                            `;
                     });
                 }
             } catch (err) {
@@ -1596,14 +1924,14 @@
             try {
                 let res = await fetch(API_URL, { method: 'POST', body: formData });
                 let json = await res.json();
-                if(json.status === "success") {
+                if (json.status === "success") {
                     showToast(json.message, "success");
                     loadPendingApprovals(); // Refresh Tabel
                     loadDashboardData(); // Refresh Dashboard Angka
                 } else {
                     showToast(json.message, "error");
                 }
-            } catch(e) { showToast("Gagal mengirim persetujuan.", "error"); }
+            } catch (e) { showToast("Gagal mengirim persetujuan.", "error"); }
             hideLoading();
         }
 
@@ -1672,15 +2000,15 @@
                     let csCell = isSpv ? `<td class="px-5 py-4 text-sm font-bold text-aeGreen">${getNamaCsById(item.id_cs)}</td>` : '';
 
                     tbody.innerHTML += `
-                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
-                            <td class="px-5 py-4 text-sm">${item.timestamp}</td>
-                            ${csCell}
-                            <td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>
-                            <td class="px-5 py-4 text-sm font-bold">Rp ${(parseInt(item.revenue) || 0).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span>${rejectNote}</td>
-                            <td class="px-5 py-4 text-center">${statusBadge}</td>
-                            <td class="px-5 py-4 text-center">${aksi}</td>
-                        </tr>
-                    `;
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                                <td class="px-5 py-4 text-sm">${item.timestamp}</td>
+                                ${csCell}
+                                <td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>
+                                <td class="px-5 py-4 text-sm font-bold">Rp ${(parseInt(item.revenue) || 0).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span>${rejectNote}</td>
+                                <td class="px-5 py-4 text-center">${statusBadge}</td>
+                                <td class="px-5 py-4 text-center">${aksi}</td>
+                            </tr>
+                        `;
                 });
             } catch (err) {
                 tbody.innerHTML = `<tr><td colspan="${isSpv ? 6 : 5}" class="text-center text-red-500 py-8">Koneksi Error</td></tr>`;
@@ -1749,15 +2077,15 @@
             else { sidebar.classList.replace('w-20', 'w-64'); setTimeout(() => { menuLabels.forEach(el => el.classList.remove('hidden')); }, 150); }
         }
         document.getElementById('mobileMenuBtn').addEventListener('click', () => document.getElementById('mobileDropdown').classList.toggle('hidden'));
-        
+
         document.querySelectorAll('.toggle-pin').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 let pinInput = this.previousElementSibling;
                 pinInput.type = pinInput.type === "password" ? "text" : "password";
                 this.innerHTML = pinInput.type === "password" ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
             });
         });
-        
+
         document.getElementById('btnThemeToggle').addEventListener('click', () => document.documentElement.classList.toggle('dark'));
 
         document.getElementById('login-pin').addEventListener('input', () => {
@@ -1777,11 +2105,11 @@
             let pinLama = document.getElementById('chg-pin-lama').value;
             let pinBaru = document.getElementById('chg-pin-baru').value;
             let pinBaru2 = document.getElementById('chg-pin-baru2').value;
-            
-            if(pinBaru !== pinBaru2) {
+
+            if (pinBaru !== pinBaru2) {
                 showToast("Konfirmasi PIN baru tidak cocok!", "error"); return;
             }
-            
+
             let btn = document.getElementById('btnSubmitChangePin');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
             showLoading('Mengganti PIN...');
@@ -1791,17 +2119,17 @@
             formData.append('id_cs', currentUser.id);
             formData.append('pin_lama', pinLama);
             formData.append('pin_baru', pinBaru);
-            
+
             try {
                 let res = await fetch(API_URL, { method: 'POST', body: formData });
                 let json = await res.json();
-                if(json.status === "success") {
+                if (json.status === "success") {
                     showToast(json.message, "success");
                     closeChangePinModal();
                 } else {
                     showToast(json.message, "error");
                 }
-            } catch(err) {
+            } catch (err) {
                 showToast("Koneksi gagal saat ganti PIN", "error");
             }
             btn.innerHTML = 'Simpan'; btn.disabled = false;
@@ -1850,7 +2178,7 @@
         }
 
         let kodeAksesCheckTimeout = null;
-        document.getElementById('reset-kode').addEventListener('input', function() {
+        document.getElementById('reset-kode').addEventListener('input', function () {
             const val = this.value.trim();
             const idCs = document.getElementById('modalResetPin').dataset.idCs;
             clearTimeout(kodeAksesCheckTimeout);
@@ -1936,7 +2264,7 @@
             return parseFloat(str.replace(/\./g, '').replace(',', '.')) || 0;
         }
         // Live-reformat setiap kali user mengetik di kolom bertipe uang/angka besar
-        document.addEventListener('input', function(e) {
+        document.addEventListener('input', function (e) {
             if (e.target.classList && e.target.classList.contains('money-input')) {
                 let raw = parseRibuan(e.target.value);
                 e.target.value = raw ? formatRibuan(raw) : '';
@@ -1975,20 +2303,20 @@
                     let namaSafe = String(u.nama).replace(/'/g, "\\'");
 
                     tbody.innerHTML += `
-                        <tr>
-                            <td class="px-5 py-4"><p class="font-bold text-sm">${u.id}</p><p class="text-xs text-gray-500">${u.nama}</p></td>
-                            <td class="px-5 py-4 text-sm">${u.role}</td>
-                            <td class="px-5 py-4 text-sm">${u.cabang}</td>
-                            <td class="px-5 py-4 text-center">${pinBadge}</td>
-                            <td class="px-5 py-4 text-center">${statusBadge}</td>
-                            <td class="px-5 py-4 text-center">
-                                <div class="flex gap-2 justify-center">
-                                    <button onclick="generateKodeAksesForUser('${u.id}', '${namaSafe}', '${u.no_hp}')" class="bg-orange-500 text-white px-2.5 py-1.5 rounded-md text-xs hover:bg-orange-600" title="Generate Kode Akses Baru"><i class="fas fa-key"></i></button>
-                                    <button onclick="toggleUserStatus('${u.id}', '${toggleTarget}')" class="bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-2.5 py-1.5 rounded-md text-xs hover:bg-gray-300 dark:hover:bg-gray-500" title="${toggleTitle}"><i class="fas fa-power-off"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
+                            <tr>
+                                <td class="px-5 py-4"><p class="font-bold text-sm">${u.id}</p><p class="text-xs text-gray-500">${u.nama}</p></td>
+                                <td class="px-5 py-4 text-sm">${u.role}</td>
+                                <td class="px-5 py-4 text-sm">${u.cabang}</td>
+                                <td class="px-5 py-4 text-center">${pinBadge}</td>
+                                <td class="px-5 py-4 text-center">${statusBadge}</td>
+                                <td class="px-5 py-4 text-center">
+                                    <div class="flex gap-2 justify-center">
+                                        <button onclick="generateKodeAksesForUser('${u.id}', '${namaSafe}', '${u.no_hp}')" class="bg-orange-500 text-white px-2.5 py-1.5 rounded-md text-xs hover:bg-orange-600" title="Generate Kode Akses Baru"><i class="fas fa-key"></i></button>
+                                        <button onclick="toggleUserStatus('${u.id}', '${toggleTarget}')" class="bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-2.5 py-1.5 rounded-md text-xs hover:bg-gray-300 dark:hover:bg-gray-500" title="${toggleTitle}"><i class="fas fa-power-off"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
                 });
             } catch (err) {
                 tbody.innerHTML = '<tr><td colspan="6" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
@@ -2129,14 +2457,14 @@
                         ? '<span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold">TERSIMPAN</span>'
                         : '<span class="bg-gray-100 text-gray-500 px-2 py-1 rounded text-[10px] font-bold">BELUM ADA</span>';
                     tbody.innerHTML += `
-                        <tr data-id-cs="${t.id_cs}">
-                            <td class="px-5 py-4 text-sm font-bold">${t.nama}</td>
-                            <td class="px-5 py-3"><input type="text" inputmode="numeric" class="target-rev money-input w-36 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" value="${formatRibuan(t.target_revenue)}"></td>
-                            <td class="px-5 py-3"><input type="text" inputmode="numeric" class="target-lead money-input w-24 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" value="${formatRibuan(t.target_leads)}"></td>
-                            <td class="px-5 py-3"><input type="text" inputmode="numeric" class="target-close money-input w-24 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" value="${formatRibuan(t.target_closing)}"></td>
-                            <td class="px-5 py-4 text-center">${statusBadge}</td>
-                        </tr>
-                    `;
+                            <tr data-id-cs="${t.id_cs}">
+                                <td class="px-5 py-4 text-sm font-bold">${t.nama}</td>
+                                <td class="px-5 py-3"><input type="text" inputmode="numeric" class="target-rev money-input w-36 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" value="${formatRibuan(t.target_revenue)}"></td>
+                                <td class="px-5 py-3"><input type="text" inputmode="numeric" class="target-lead money-input w-24 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" value="${formatRibuan(t.target_leads)}"></td>
+                                <td class="px-5 py-3"><input type="text" inputmode="numeric" class="target-close money-input w-24 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" value="${formatRibuan(t.target_closing)}"></td>
+                                <td class="px-5 py-4 text-center">${statusBadge}</td>
+                            </tr>
+                        `;
                 });
             } catch (err) {
                 tbody.innerHTML = '<tr><td colspan="5" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
@@ -2193,12 +2521,12 @@
                 tbody.innerHTML = '';
                 json.data.forEach(r => {
                     tbody.innerHTML += `
-                        <tr data-region="${r.region}">
-                            <td class="px-5 py-4 text-sm font-bold">${r.region}</td>
-                            <td class="px-5 py-3"><input type="number" step="0.1" class="rc-value w-24 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" value="${r.ambang_batas}"> %</td>
-                            <td class="px-5 py-4 text-center"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold">TERSIMPAN</span></td>
-                        </tr>
-                    `;
+                            <tr data-region="${r.region}">
+                                <td class="px-5 py-4 text-sm font-bold">${r.region}</td>
+                                <td class="px-5 py-3"><input type="number" step="0.1" class="rc-value w-24 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" value="${r.ambang_batas}"> %</td>
+                                <td class="px-5 py-4 text-center"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold">TERSIMPAN</span></td>
+                            </tr>
+                        `;
                 });
             } catch (err) {
                 tbody.innerHTML = '<tr><td colspan="3" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
@@ -2243,7 +2571,7 @@
         }
 
         // Tutup dropdown jika klik di luar
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             const dropdown = document.getElementById('userDropdown');
             const avatarBtn = document.getElementById('avatarBtn');
             if (dropdown && avatarBtn && !dropdown.contains(e.target) && !avatarBtn.contains(e.target)) {
@@ -2254,4 +2582,5 @@
 
     </script>
 </body>
+
 </html>
