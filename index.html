@@ -468,6 +468,9 @@
                                         <th class="px-5 py-3 w-16 text-center">Posisi</th>
                                         <th class="px-5 py-3">Nama CS</th>
                                         <th class="px-5 py-3 text-right">Revenue</th>
+                                        <th class="px-5 py-3 text-center">Lead</th>
+                                        <th class="px-5 py-3 text-center">Closing</th>
+                                        <th class="px-5 py-3 text-center">Rating Closing</th>
                                         <th class="px-5 py-3 text-center">Skor Akhir</th>
                                         <th class="px-5 py-3 text-center">Status</th>
                                         <th id="leaderboardAksiTh" class="hidden px-5 py-3 text-center">Aksi</th>
@@ -475,7 +478,7 @@
                                 </thead>
                                 <tbody id="leaderboardBody" class="divide-y divide-gray-100 dark:divide-gray-700">
                                     <tr>
-                                        <td colspan="5" class="px-5 py-8 text-center text-gray-500"><i
+                                        <td colspan="8" class="px-5 py-8 text-center text-gray-500"><i
                                                 class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
                                     </tr>
                                 </tbody>
@@ -625,13 +628,14 @@
                                         <th class="px-5 py-4">Tgl Input</th>
                                         <th class="px-5 py-4">CS</th>
                                         <th class="px-5 py-4">Invoice & Nama</th>
+                                        <th class="px-5 py-4 text-center">Lead</th>
                                         <th class="px-5 py-4">Detail</th>
                                         <th class="px-5 py-4 text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="approvalTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
                                     <tr>
-                                        <td colspan="6" class="px-5 py-8 text-center text-gray-500"><i
+                                        <td colspan="7" class="px-5 py-8 text-center text-gray-500"><i
                                                 class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
                                     </tr>
                                 </tbody>
@@ -778,9 +782,47 @@
                         </div>
                     </div>
 
-                    <!-- D. Export Data -->
+                    <!-- D. Bobot Skor Komposit -->
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden mt-6">
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden mb-6">
+                        <div class="p-5 border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="text-lg font-bold">Bobot Skor Komposit</h3>
+                            <p class="text-xs text-gray-500 mt-1">Atur persentase bobot tiap aspek untuk hitung Nilai Akhir KPI (Dashboard, Profil, Export). Total wajib tepat 100%.</p>
+                        </div>
+                        <div class="p-5 grid grid-cols-1 md:grid-cols-4 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">Revenue (%)</label>
+                                <input type="number" id="bobot-revenue" min="0" max="100" step="0.1" oninput="hitungTotalBobot()"
+                                    class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">Leads (%)</label>
+                                <input type="number" id="bobot-lead" min="0" max="100" step="0.1" oninput="hitungTotalBobot()"
+                                    class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">Closing (%)</label>
+                                <input type="number" id="bobot-closing" min="0" max="100" step="0.1" oninput="hitungTotalBobot()"
+                                    class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">Rating Closing (%)</label>
+                                <input type="number" id="bobot-rating" min="0" max="100" step="0.1" oninput="hitungTotalBobot()"
+                                    class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            </div>
+                        </div>
+                        <div class="px-5 pb-5 flex flex-wrap items-center justify-between gap-3">
+                            <p class="text-sm">Total: <span id="bobotTotalDisplay" class="font-bold">0</span>%
+                                <span id="bobotTotalWarning" class="hidden text-red-500 text-xs ml-2">(harus tepat 100%)</span></p>
+                            <button id="btnSaveBobot" onclick="submitSaveBobotConfig()"
+                                class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i
+                                    class="fas fa-save mr-1"></i> Simpan Bobot</button>
+                        </div>
+                    </div>
+
+                    <!-- E. Export Data -->
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
                         <div class="p-5 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="text-lg font-bold">Export Data</h3>
                             <p class="text-xs text-gray-500 mt-1">Bikin ringkasan performa + riwayat transaksi satu bulan ke sheet baru, lalu download Excel/PDF-nya.</p>
@@ -1602,7 +1644,7 @@
                     if (tbody) {
                         tbody.innerHTML = '';
                         if (lastLeaderboard.length === 0) {
-                            tbody.innerHTML = `<tr><td colspan="${isSpv ? 6 : 5}" class="px-5 py-8 text-center text-gray-500 italic">Belum ada CS Sales aktif.</td></tr>`;
+                            tbody.innerHTML = `<tr><td colspan="${isSpv ? 9 : 8}" class="px-5 py-8 text-center text-gray-500 italic">Belum ada CS Sales aktif.</td></tr>`;
                         } else {
                             lastLeaderboard.forEach(cs => {
                                 let posClass = 'bg-gray-200 text-gray-500 font-medium';
@@ -1637,6 +1679,9 @@
                                             <td class="px-5 py-4 text-right">
                                                 <p class="font-bold text-sm text-gray-800 dark:text-gray-200">Rp ${cs.revenue.toLocaleString('id-ID')}</p>
                                             </td>
+                                            <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.leads}</td>
+                                            <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.closing}</td>
+                                            <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.rc}%</td>
                                             <td class="px-5 py-4 text-center">
                                                 <span class="bg-orange-50 text-orange-600 px-2.5 py-1 rounded text-xs font-bold">${cs.nilai_akhir}%</span>
                                             </td>
@@ -1891,7 +1936,7 @@
         // 7. API FETCH: ADMIN APPROVAL TABLE
         async function loadPendingApprovals() {
             let tbody = document.getElementById('approvalTableBody');
-            tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
             document.getElementById('checkAllApproval').checked = false;
             document.getElementById('btnApproveSelected').classList.add('hidden');
             showLoading('Memuat antrean approval...');
@@ -1900,7 +1945,7 @@
                 let json = await res.json();
                 tbody.innerHTML = '';
                 if (json.data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-8 text-center text-gray-500 italic">Tidak ada antrean pending.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="7" class="px-5 py-8 text-center text-gray-500 italic">Tidak ada antrean pending.</td></tr>';
                 } else {
                     json.data.forEach(item => {
                         tbody.innerHTML += `
@@ -1909,6 +1954,7 @@
                                     <td class="px-5 py-4 text-sm">${item.timestamp}</td>
                                     <td class="px-5 py-4 font-bold text-aeGreen">${getNamaCsById(item.id_cs)}</td>
                                     <td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>
+                                    <td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300">${item.total_lead_hari_itu}</td>
                                     <td class="px-5 py-4 text-sm font-bold">Rp ${parseInt(item.revenue).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span></td>
                                     <td class="px-5 py-4 text-center flex gap-2 justify-center">
                                         <button onclick="openAlasanRejectModal('${item.no_invoice}', '${item.raw_timestamp}')" class="bg-red-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-red-600 transition" title="Reject"><i class="fas fa-times"></i></button>
@@ -1918,7 +1964,7 @@
                     });
                 }
             } catch (err) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
                 showToast("Gagal memuat antrean pending.", "error");
             }
             hideLoading();
@@ -2341,9 +2387,71 @@
             }
             loadTargetData();
             loadAmbangRCTable();
+            loadBobotConfig();
         }
 
-        // ---- D. Export Data ----
+        // ---- D. Bobot Skor Komposit ----
+        async function loadBobotConfig() {
+            try {
+                let res = await fetch(API_URL + "?action=getBobotConfig");
+                let json = await res.json();
+                if (json.status === 'success') {
+                    document.getElementById('bobot-revenue').value = json.data.revenue;
+                    document.getElementById('bobot-lead').value = json.data.lead;
+                    document.getElementById('bobot-closing').value = json.data.closing;
+                    document.getElementById('bobot-rating').value = json.data.rating;
+                    hitungTotalBobot();
+                }
+            } catch (err) { showToast("Gagal memuat bobot skor komposit.", "error"); }
+        }
+
+        function hitungTotalBobot() {
+            let total = (parseFloat(document.getElementById('bobot-revenue').value) || 0)
+                + (parseFloat(document.getElementById('bobot-lead').value) || 0)
+                + (parseFloat(document.getElementById('bobot-closing').value) || 0)
+                + (parseFloat(document.getElementById('bobot-rating').value) || 0);
+            total = Math.round(total * 10) / 10;
+
+            const display = document.getElementById('bobotTotalDisplay');
+            const warning = document.getElementById('bobotTotalWarning');
+            const isValid = Math.abs(total - 100) < 0.01;
+            display.innerText = total;
+            display.className = isValid ? 'font-bold text-green-600' : 'font-bold text-red-500';
+            warning.classList.toggle('hidden', isValid);
+        }
+
+        async function submitSaveBobotConfig() {
+            const revenue = parseFloat(document.getElementById('bobot-revenue').value) || 0;
+            const lead = parseFloat(document.getElementById('bobot-lead').value) || 0;
+            const closing = parseFloat(document.getElementById('bobot-closing').value) || 0;
+            const rating = parseFloat(document.getElementById('bobot-rating').value) || 0;
+            let total = Math.round((revenue + lead + closing + rating) * 10) / 10;
+            if (Math.abs(total - 100) > 0.01) { showToast(`Total bobot harus tepat 100% (saat ini ${total}%)`, "error"); return; }
+
+            const btn = document.getElementById('btnSaveBobot');
+            const btnOriginal = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            showLoading('Menyimpan bobot skor komposit...');
+
+            let formData = new URLSearchParams();
+            formData.append('action', 'saveBobotConfig');
+            formData.append('bobot_revenue', revenue);
+            formData.append('bobot_lead', lead);
+            formData.append('bobot_closing', closing);
+            formData.append('bobot_rating', rating);
+
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                showToast(json.message, json.status === "success" ? "success" : "error");
+            } catch (err) { showToast("Koneksi gagal saat simpan bobot.", "error"); }
+            btn.disabled = false;
+            btn.innerHTML = btnOriginal;
+            hideLoading();
+        }
+
+        // ---- E. Export Data ----
         async function submitExportPeriode() {
             const bulan = document.getElementById('exportBulan').value;
             if (!bulan) { showToast("Pilih bulan yang mau diexport dulu!", "error"); return; }
