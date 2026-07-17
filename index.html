@@ -612,37 +612,9 @@
                             <h2 class="text-2xl font-bold">Approval Laporan CS</h2>
                             <p class="text-sm text-gray-500">Tinjau antrean data dari tim Sales.</p>
                         </div>
-                        <button onclick="refreshApprovalAdmin()"
+                        <button onclick="loadPendingApprovals()"
                             class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm hover:bg-gray-50"><i
                                 class="fas fa-sync-alt mr-2 text-aeGreen"></i> Segarkan Data</button>
-                    </div>
-
-                    <!-- Antrean Laporan Lead: Total_Lead baru dihitung ke Dashboard/skor setelah di-Approve di sini -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-                        <div class="p-5 bg-gray-50 dark:bg-gray-700/50 border-b">
-                            <h3 class="font-bold text-gray-800 dark:text-gray-200"><i
-                                    class="fas fa-users mr-2 text-orange-500"></i> Antrean Laporan Lead Pending</h3>
-                            <p class="text-xs text-gray-500 mt-1">Khusus laporan tanpa invoice (nomor yang dilayani tapi belum ada yang closing). Laporan yang punya invoice otomatis ikut ter-Approve begitu salah satu invoice-nya di-approve di tabel Antrean Pending bawah.</p>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left">
-                                <thead
-                                    class="bg-white dark:bg-gray-800 text-xs text-gray-500 uppercase tracking-wider border-b">
-                                    <tr>
-                                        <th class="px-5 py-4">Tanggal Laporan</th>
-                                        <th class="px-5 py-4">CS</th>
-                                        <th class="px-5 py-4 text-center">Total Lead</th>
-                                        <th class="px-5 py-4 text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="leadApprovalTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
-                                    <tr>
-                                        <td colspan="4" class="px-5 py-8 text-center text-gray-500"><i
-                                                class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
 
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -1041,41 +1013,51 @@
     <!-- Modal Revisi & Submit Ulang (Fase 3 - CS) -->
     <div id="modalRevisiTransaksi"
         class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-md shadow-2xl">
-            <h3 class="text-lg font-bold mb-1 text-gray-800 dark:text-white">Revisi Transaksi</h3>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto">
+            <h3 id="revisiModalTitle" class="text-lg font-bold mb-1 text-gray-800 dark:text-white">Revisi Laporan</h3>
             <p class="text-xs text-red-500 mb-4"><i class="fas fa-exclamation-circle mr-1"></i><span
                     id="revisiAlasanLabel">Alasan penolakan</span></p>
             <form onsubmit="submitRevisiTransaksi(event)">
-                <div class="grid grid-cols-2 gap-3 mb-4">
+                <div class="grid grid-cols-2 gap-3 mb-4 pb-4 border-b border-gray-100 dark:border-gray-700">
+                    <div class="col-span-2">
+                        <label class="block text-xs font-semibold mb-1 text-gray-500">Tanggal Laporan</label>
+                        <input type="date" id="revisi-tanggal-laporan"
+                            class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm"
+                            required>
+                        <p class="text-[10px] text-gray-400 mt-1">Ubah kalau CS salah pilih tanggal saat lapor.</p>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-xs font-semibold mb-1 text-gray-500">Total Nomor Dilayani (Lead)</label>
+                        <input type="number" id="revisi-total-lead"
+                            class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm"
+                            required>
+                    </div>
+                </div>
+                <div id="revisiInvoiceFields" class="grid grid-cols-2 gap-3 mb-4">
                     <div class="col-span-2">
                         <label class="block text-xs font-semibold mb-1 text-gray-500">No. Invoice</label>
                         <input type="text" id="revisi-no-invoice"
-                            class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm"
-                            required>
+                            class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm">
                     </div>
                     <div class="col-span-2">
                         <label class="block text-xs font-semibold mb-1 text-gray-500">Nama Customer</label>
                         <input type="text" id="revisi-nama"
-                            class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm"
-                            required>
+                            class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold mb-1 text-gray-500">Cabang</label>
                         <input type="text" id="revisi-cabang"
-                            class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm"
-                            required>
+                            class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold mb-1 text-gray-500">QTY (Ekor)</label>
                         <input type="number" id="revisi-qty"
-                            class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm"
-                            required>
+                            class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm">
                     </div>
                     <div class="col-span-2">
                         <label class="block text-xs font-semibold mb-1 text-gray-500">Revenue (Rp)</label>
                         <input type="text" inputmode="numeric" id="revisi-revenue"
-                            class="money-input w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm"
-                            required>
+                            class="money-input w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm">
                     </div>
                 </div>
                 <div class="flex justify-end gap-2">
@@ -1086,6 +1068,30 @@
                             class="fas fa-paper-plane mr-1"></i> Kirim Ulang</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal Hapus Laporan (cascade delete) -->
+    <div id="modalHapusLaporan"
+        class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-sm shadow-2xl relative">
+            <button onclick="closeHapusLaporanModal()" type="button"
+                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"><i
+                    class="fas fa-times"></i></button>
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-trash-alt text-red-500"></i>
+                </div>
+                <h3 class="text-base font-bold text-gray-800 dark:text-white pr-6">Hapus Laporan?</h3>
+            </div>
+            <p id="hapusLaporanMessage" class="text-sm text-gray-600 dark:text-gray-300 mb-6"></p>
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeHapusLaporanModal()"
+                    class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
+                <button type="button" id="btnSubmitHapusLaporan" onclick="submitHapusLaporan()"
+                    class="px-4 py-2 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold"><i
+                        class="fas fa-trash-alt mr-1"></i> Ya, Hapus</button>
+            </div>
         </div>
     </div>
 
@@ -1160,6 +1166,24 @@
         </div>
     </div>
 
+    <!-- Modal Konfirmasi Generik (pengganti pop-up bawaan browser confirm()/alert(), dipakai berulang di beberapa alur) -->
+    <div id="modalConfirmGeneric"
+        class="fixed inset-0 bg-black bg-opacity-60 z-[70] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl w-full max-w-sm shadow-2xl p-6 relative">
+            <button onclick="closeConfirmGeneric(false)" type="button"
+                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"><i
+                    class="fas fa-times"></i></button>
+            <h3 id="confirmGenericTitle" class="text-base font-bold text-gray-800 dark:text-white mb-2 pr-6">Konfirmasi</h3>
+            <p id="confirmGenericMessage" class="text-sm text-gray-600 dark:text-gray-300 mb-6 whitespace-pre-line"></p>
+            <div class="flex justify-end gap-2">
+                <button onclick="closeConfirmGeneric(false)" type="button"
+                    class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
+                <button id="confirmGenericOkBtn" onclick="closeConfirmGeneric(true)" type="button"
+                    class="px-4 py-2 text-sm text-white rounded-lg font-semibold bg-aeGreen hover:bg-[#0a2e22]">Oke</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // URL ASLI MILIKMU
         const API_URL = "https://script.google.com/macros/s/AKfycbwJFRU9dehbyURfDHInXdYC8QtH4QPdNE_gL7mh0YbpzSj8OlrK73m14gaveTvhqppfmw/exec";
@@ -1202,6 +1226,23 @@
             if (loadingCounter === 0) {
                 document.getElementById('globalLoadingOverlay').classList.add('hidden');
             }
+        }
+
+        // MODAL KONFIRMASI GENERIK (pengganti confirm()/alert() bawaan browser). Dipakai dengan await, resolve
+        // true kalau user klik Oke, false kalau Batal/tombol Close/klik di luar tidak menutup (harus pilih salah satu).
+        let confirmGenericResolver = null;
+        function showConfirmGeneric(title, message, okLabel, okColorClass) {
+            document.getElementById('confirmGenericTitle').innerText = title;
+            document.getElementById('confirmGenericMessage').innerText = message;
+            let okBtn = document.getElementById('confirmGenericOkBtn');
+            okBtn.innerText = okLabel || 'Oke';
+            okBtn.className = 'px-4 py-2 text-sm text-white rounded-lg font-semibold ' + (okColorClass || 'bg-aeGreen hover:bg-[#0a2e22]');
+            document.getElementById('modalConfirmGeneric').classList.remove('hidden');
+            return new Promise(resolve => { confirmGenericResolver = resolve; });
+        }
+        function closeConfirmGeneric(result) {
+            document.getElementById('modalConfirmGeneric').classList.add('hidden');
+            if (confirmGenericResolver) { confirmGenericResolver(result); confirmGenericResolver = null; }
         }
 
         // FUNGSI FETCH USERS & CEK STATUS PIN
@@ -1418,7 +1459,7 @@
                 if (json.status === "success") {
                     if (json.ada_laporan) {
                         hideLoading();
-                        let mauEdit = confirm(`Tanggal ${tgl} sudah pernah kamu laporkan sebelumnya.\n\nApakah mau merubah (edit) laporan tersebut?`);
+                        let mauEdit = await showConfirmGeneric('Laporan Sudah Ada', `Tanggal ${tgl} sudah pernah kamu laporkan sebelumnya.\n\nApakah mau merubah (edit) laporan tersebut?`, 'Ya, Edit', 'bg-aeGreen hover:bg-[#0a2e22]');
                         showLoading('Memeriksa laporan tanggal ini...');
                         if (mauEdit) {
                             modeEditLaporan = true;
@@ -1490,7 +1531,7 @@
 
             // Trigger fetch data jika tab ditekan
             if (tabId === 'dashboard') loadDashboardData();
-            if (tabId === 'admin' && currentUser.role === 'SPV') refreshApprovalAdmin();
+            if (tabId === 'admin' && currentUser.role === 'SPV') loadPendingApprovals();
             if (tabId === 'referensi' && currentUser.role === 'SPV') loadReferensiData();
             if (tabId === 'riwayat') loadRiwayatInput();
             if (tabId === 'profil') loadProfilData();
@@ -2072,45 +2113,12 @@
             }).join('');
         }
 
-        // Refresh gabungan Approval Admin: antrean Leads + antrean Invoice sekaligus
-        function refreshApprovalAdmin() {
-            loadPendingLeadApprovals();
-            loadPendingApprovals();
-        }
-
-        // Antrean Laporan Lead Pending: Total_Lead baru dihitung ke Dashboard/skor setelah di-Approve di sini
-        async function loadPendingLeadApprovals() {
-            let tbody = document.getElementById('leadApprovalTableBody');
-            tbody.innerHTML = '<tr><td colspan="4" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
-            try {
-                let res = await fetch(API_URL + "?action=getPendingLeadApprovals");
-                let json = await res.json();
-                tbody.innerHTML = '';
-                if (!json.data || json.data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" class="px-5 py-8 text-center text-gray-500 italic">Tidak ada antrean laporan lead pending.</td></tr>';
-                    return;
-                }
-                json.data.forEach(item => {
-                    tbody.innerHTML += `
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors border-b dark:border-gray-700">
-                                <td class="px-5 py-4 text-sm">${item.tanggal_display}</td>
-                                <td class="px-5 py-4 font-bold text-aeGreen">${getNamaCsById(item.id_cs)}</td>
-                                <td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300">${item.total_lead}</td>
-                                <td class="px-5 py-4 text-center flex gap-2 justify-center">
-                                    <button onclick="actionApprovalLead('${item.id_cs}', '${item.tanggal}', 'Approved')" class="bg-green-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-green-600 transition" title="Approve"><i class="fas fa-check"></i></button>
-                                    <button onclick="actionApprovalLead('${item.id_cs}', '${item.tanggal}', 'Rejected')" class="bg-red-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-red-600 transition" title="Reject"><i class="fas fa-times"></i></button>
-                                </td>
-                            </tr>
-                        `;
-                });
-            } catch (err) {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
-            }
-        }
-
+        // Approve/Reject laporan lead-only (tanpa invoice) langsung dari baris di tabel Antrean Pending yang sama
         async function actionApprovalLead(idCs, tanggal, statusBaru) {
-            if (statusBaru === 'Approved' && !confirm(`Approve laporan Lead ${getNamaCsById(idCs)} tanggal ${tanggal}?`)) return;
-            if (statusBaru === 'Rejected' && !confirm(`Tolak laporan Lead ${getNamaCsById(idCs)} tanggal ${tanggal}? CS perlu melapor ulang tanggal itu.`)) return;
+            let ok = statusBaru === 'Approved'
+                ? await showConfirmGeneric('Approve Laporan Lead', `Approve laporan Lead ${getNamaCsById(idCs)} tanggal ${tanggal}?`, 'Ya, Approve', 'bg-green-500 hover:bg-green-600')
+                : await showConfirmGeneric('Tolak Laporan Lead', `Tolak laporan Lead ${getNamaCsById(idCs)} tanggal ${tanggal}? CS perlu melapor ulang tanggal itu.`, 'Ya, Tolak', 'bg-red-500 hover:bg-red-600');
+            if (!ok) return;
 
             let formData = new URLSearchParams();
             formData.append('action', 'actionApprovalLead');
@@ -2124,7 +2132,7 @@
                 let json = await res.json();
                 showToast(json.message, json.status === "success" ? "success" : "error");
                 if (json.status === "success") {
-                    loadPendingLeadApprovals();
+                    loadPendingApprovals();
                     loadDashboardData();
                 }
             } catch (err) { showToast("Koneksi gagal saat approval lead.", "error"); }
@@ -2149,17 +2157,33 @@
                     approvalGrouped.forEach((item, idx) => {
                         // Kolom Lead digabung (rowspan) per laporan (ID_CS+Tanggal), bukan diulang tiap invoice
                         let leadCell = leadSpans[idx] === 0 ? '' : `<td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300 align-middle" rowspan="${leadSpans[idx]}">${item.total_lead_hari_itu}</td>`;
+
+                        // Laporan lead-only (tanpa invoice sama sekali): tidak ada checkbox batch, Aksi langsung Approve/Reject laporan
+                        let checkCell = item.is_lead_only ? `<td class="px-5 py-4"></td>` : `<td class="px-5 py-4"><input type="checkbox" class="approval-check" data-no-invoice="${item.no_invoice}" data-timestamp="${item.raw_timestamp}" onchange="updateApproveSelectedCount()"></td>`;
+                        let invoiceCell = item.is_lead_only
+                            ? `<td class="px-5 py-4 text-sm text-gray-400 italic">— (laporan lead saja)</td>`
+                            : `<td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>`;
+                        let detailCell = item.is_lead_only
+                            ? `<td class="px-5 py-4 text-sm text-gray-400">-</td>`
+                            : `<td class="px-5 py-4 text-sm font-bold">Rp ${parseInt(item.revenue).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span></td>`;
+                        let aksiCell = item.is_lead_only
+                            ? `<td class="px-5 py-4 text-center flex gap-2 justify-center">
+                                <button onclick="actionApprovalLead('${item.id_cs}', '${item.tanggal_laporan}', 'Approved')" class="bg-green-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-green-600 transition" title="Approve"><i class="fas fa-check"></i></button>
+                                <button onclick="actionApprovalLead('${item.id_cs}', '${item.tanggal_laporan}', 'Rejected')" class="bg-red-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-red-600 transition" title="Reject"><i class="fas fa-times"></i></button>
+                               </td>`
+                            : `<td class="px-5 py-4 text-center flex gap-2 justify-center">
+                                <button onclick="openAlasanRejectModal('${item.no_invoice}', '${item.raw_timestamp}')" class="bg-red-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-red-600 transition" title="Reject"><i class="fas fa-times"></i></button>
+                               </td>`;
+
                         tbody.innerHTML += `
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors border-b dark:border-gray-700">
-                                    <td class="px-5 py-4"><input type="checkbox" class="approval-check" data-no-invoice="${item.no_invoice}" data-timestamp="${item.raw_timestamp}" onchange="updateApproveSelectedCount()"></td>
+                                    ${checkCell}
                                     <td class="px-5 py-4 text-sm">${item.timestamp}</td>
                                     <td class="px-5 py-4 font-bold text-aeGreen">${getNamaCsById(item.id_cs)}</td>
-                                    <td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>
+                                    ${invoiceCell}
                                     ${leadCell}
-                                    <td class="px-5 py-4 text-sm font-bold">Rp ${parseInt(item.revenue).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span></td>
-                                    <td class="px-5 py-4 text-center flex gap-2 justify-center">
-                                        <button onclick="openAlasanRejectModal('${item.no_invoice}', '${item.raw_timestamp}')" class="bg-red-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-red-600 transition" title="Reject"><i class="fas fa-times"></i></button>
-                                    </td>
+                                    ${detailCell}
+                                    ${aksiCell}
                                 </tr>
                             `;
                     });
@@ -2322,11 +2346,12 @@
                         statusBadge = '<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase">Disetujui</span>';
                     } else if (item.status === 'Rejected') {
                         statusBadge = '<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase">Ditolak</span>';
-                        if (!isSpv) {
-                            // Revisi hanya untuk CS pemilik laporan, bukan SPV yang cuma meninjau
-                            let itemJsonSafe = JSON.stringify(item).replace(/'/g, '&#39;');
-                            aksi = `<button data-item='${itemJsonSafe}' onclick="openRevisiModal(JSON.parse(this.dataset.item))" class="bg-orange-500 text-white px-3 py-1.5 rounded-md text-xs hover:bg-orange-600"><i class="fas fa-edit mr-1"></i> Revisi</button>`;
-                        }
+                        // Revisi & Hapus tersedia utk CS pemilik laporan MAUPUN SPV (siapapun CS-nya)
+                        let itemJsonSafe = JSON.stringify(item).replace(/'/g, '&#39;');
+                        aksi = `<div class="flex gap-2 justify-center">
+                                <button data-item='${itemJsonSafe}' onclick="openRevisiModal(JSON.parse(this.dataset.item))" class="bg-orange-500 text-white px-3 py-1.5 rounded-md text-xs hover:bg-orange-600" title="Revisi"><i class="fas fa-edit"></i></button>
+                                <button onclick="openHapusLaporanModal('${item.id_cs}', '${item.tanggal_laporan}')" class="bg-red-500 text-white px-3 py-1.5 rounded-md text-xs hover:bg-red-600" title="Hapus Laporan"><i class="fas fa-trash-alt"></i></button>
+                            </div>`;
                     } else {
                         statusBadge = '<span class="bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-[10px] font-bold uppercase">Menunggu</span>';
                     }
@@ -2334,13 +2359,20 @@
                     let csCell = isSpv ? `<td class="px-5 py-4 text-sm font-bold text-aeGreen">${getNamaCsById(item.id_cs)}</td>` : '';
                     // Kolom Lead digabung (rowspan) per laporan (ID_CS+Tanggal), bukan diulang tiap invoice
                     let leadCell = leadSpans[idx] === 0 ? '' : `<td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300 align-middle" rowspan="${leadSpans[idx]}">${item.total_lead_hari_itu}</td>`;
+                    // Laporan lead-only (tanpa invoice sama sekali): kosongkan kolom Invoice & Nama, dan Detail
+                    let invoiceCell = item.is_lead_only
+                        ? `<td class="px-5 py-4 text-sm text-gray-400 italic">— (laporan lead saja)</td>`
+                        : `<td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>`;
+                    let detailCell = item.is_lead_only
+                        ? `<td class="px-5 py-4 text-sm text-gray-400">-</td>`
+                        : `<td class="px-5 py-4 text-sm font-bold">Rp ${(parseInt(item.revenue) || 0).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span>${rejectNote}</td>`;
 
                     tbody.innerHTML += `
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
                                 <td class="px-5 py-4 text-sm">${item.timestamp}</td>
                                 ${csCell}
-                                <td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>
-                                <td class="px-5 py-4 text-sm font-bold">Rp ${(parseInt(item.revenue) || 0).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span>${rejectNote}</td>
+                                ${invoiceCell}
+                                ${detailCell}
                                 ${leadCell}
                                 <td class="px-5 py-4 text-center">${statusBadge}</td>
                                 <td class="px-5 py-4 text-center">${aksi}</td>
@@ -2354,16 +2386,23 @@
             hideLoading();
         }
 
-        // ---- Modal Revisi & Submit Ulang ----
+        // ---- Modal Revisi Laporan (level laporan: Tanggal + Total Lead, + field invoice kalau bukan lead-only) ----
         let revisiTarget = null;
         function openRevisiModal(item) {
             revisiTarget = item;
+            document.getElementById('revisiModalTitle').innerText = item.is_lead_only ? 'Revisi Laporan Lead' : 'Revisi Invoice';
             document.getElementById('revisiAlasanLabel').innerText = item.alasan_reject || 'Alasan penolakan tidak tercatat';
-            document.getElementById('revisi-no-invoice').value = item.no_invoice;
-            document.getElementById('revisi-nama').value = item.nama;
-            document.getElementById('revisi-cabang').value = item.cabang;
-            document.getElementById('revisi-qty').value = item.qty;
-            document.getElementById('revisi-revenue').value = formatRibuan(item.revenue);
+            document.getElementById('revisi-tanggal-laporan').value = item.tanggal_laporan;
+            document.getElementById('revisi-total-lead').value = item.total_lead_hari_itu;
+
+            document.getElementById('revisiInvoiceFields').classList.toggle('hidden', !!item.is_lead_only);
+            if (!item.is_lead_only) {
+                document.getElementById('revisi-no-invoice').value = item.no_invoice;
+                document.getElementById('revisi-nama').value = item.nama;
+                document.getElementById('revisi-cabang').value = item.cabang;
+                document.getElementById('revisi-qty').value = item.qty;
+                document.getElementById('revisi-revenue').value = formatRibuan(item.revenue);
+            }
             document.getElementById('modalRevisiTransaksi').classList.remove('hidden');
         }
         function closeRevisiModal() {
@@ -2381,15 +2420,21 @@
             showLoading('Mengirim ulang revisi...');
 
             let formData = new URLSearchParams();
-            formData.append('action', 'resubmitTransaksi');
-            formData.append('raw_timestamp', revisiTarget.raw_timestamp);
-            formData.append('no_invoice_lama', revisiTarget.no_invoice);
-            formData.append('no_invoice', document.getElementById('revisi-no-invoice').value);
-            formData.append('nama_cust', document.getElementById('revisi-nama').value);
-            formData.append('cabang', document.getElementById('revisi-cabang').value);
-            formData.append('qty', document.getElementById('revisi-qty').value);
-            formData.append('revenue', parseRibuan(document.getElementById('revisi-revenue').value));
-            formData.append('tgl_acara', revisiTarget.tgl_acara || '-');
+            formData.append('action', 'revisiLaporan');
+            formData.append('id_cs', revisiTarget.id_cs);
+            formData.append('tanggal_lama', revisiTarget.tanggal_laporan);
+            formData.append('tanggal_baru', document.getElementById('revisi-tanggal-laporan').value);
+            formData.append('total_lead', document.getElementById('revisi-total-lead').value);
+            if (!revisiTarget.is_lead_only) {
+                formData.append('raw_timestamp', revisiTarget.raw_timestamp);
+                formData.append('no_invoice_lama', revisiTarget.no_invoice);
+                formData.append('no_invoice', document.getElementById('revisi-no-invoice').value);
+                formData.append('nama_cust', document.getElementById('revisi-nama').value);
+                formData.append('cabang', document.getElementById('revisi-cabang').value);
+                formData.append('qty', document.getElementById('revisi-qty').value);
+                formData.append('revenue', parseRibuan(document.getElementById('revisi-revenue').value));
+                formData.append('tgl_acara', revisiTarget.tgl_acara || '-');
+            }
 
             try {
                 let res = await fetch(API_URL, { method: 'POST', body: formData });
@@ -2401,6 +2446,45 @@
                     loadDashboardData(); // Refresh badge notifikasi
                 }
             } catch (err) { showToast("Koneksi gagal saat mengirim revisi.", "error"); }
+            btn.disabled = false;
+            btn.innerHTML = btnOriginal;
+            hideLoading();
+        }
+
+        // ---- Modal Hapus Laporan (cascade delete Data_Lead + semua invoice terkait) ----
+        let hapusLaporanTarget = null;
+        function openHapusLaporanModal(idCs, tanggal) {
+            hapusLaporanTarget = { idCs, tanggal };
+            document.getElementById('hapusLaporanMessage').innerHTML = `Yakin ingin menghapus <b>seluruh laporan</b> tanggal <b>${tanggal}</b> milik <b>${getNamaCsById(idCs)}</b>? Semua invoice di laporan ini akan ikut terhapus permanen dan tidak bisa dikembalikan.`;
+            document.getElementById('modalHapusLaporan').classList.remove('hidden');
+        }
+        function closeHapusLaporanModal() {
+            document.getElementById('modalHapusLaporan').classList.add('hidden');
+            hapusLaporanTarget = null;
+        }
+        async function submitHapusLaporan() {
+            if (!hapusLaporanTarget) return;
+            const btn = document.getElementById('btnSubmitHapusLaporan');
+            const btnOriginal = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            showLoading('Menghapus laporan...');
+
+            let formData = new URLSearchParams();
+            formData.append('action', 'deleteLaporan');
+            formData.append('id_cs', hapusLaporanTarget.idCs);
+            formData.append('tanggal', hapusLaporanTarget.tanggal);
+
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                showToast(json.message, json.status === "success" ? "success" : "error");
+                if (json.status === "success") {
+                    closeHapusLaporanModal();
+                    loadRiwayatInput();
+                    loadDashboardData();
+                }
+            } catch (err) { showToast("Koneksi gagal saat menghapus laporan.", "error"); }
             btn.disabled = false;
             btn.innerHTML = btnOriginal;
             hideLoading();
