@@ -654,12 +654,14 @@
                             <h3 class="text-lg font-bold">Kelola ID CS/SPV</h3>
                         </div>
                         <div
-                            class="p-5 grid grid-cols-1 md:grid-cols-5 gap-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/30">
+                            class="p-5 grid grid-cols-1 md:grid-cols-6 gap-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/30">
                             <input type="text" id="ref-add-id" placeholder="ID (mis. CS-AE-003)"
                                 class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
                             <input type="text" id="ref-add-nama" placeholder="Nama Lengkap"
                                 class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
                             <input type="text" id="ref-add-nohp" placeholder="No. HP (62812xxxx)"
+                                class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            <input type="email" id="ref-add-email" placeholder="Email (utk Notifikasi & Reminder)"
                                 class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
                             <select id="ref-add-role"
                                 class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
@@ -674,7 +676,7 @@
                                 <option value="Jogja">Jogja</option>
                             </select>
                             <button id="btnAddUser" onclick="submitAddUser()"
-                                class="md:col-span-5 bg-aeGreen text-white font-bold py-2.5 rounded-lg shadow-sm hover:bg-[#0a2e22] transition text-sm"><i
+                                class="md:col-span-6 bg-aeGreen text-white font-bold py-2.5 rounded-lg shadow-sm hover:bg-[#0a2e22] transition text-sm"><i
                                     class="fas fa-user-plus mr-1"></i> Tambah ID Baru</button>
                         </div>
                         <div class="overflow-x-auto">
@@ -774,6 +776,34 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+
+                    <!-- D. Export Data -->
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden mt-6">
+                        <div class="p-5 border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="text-lg font-bold">Export Data</h3>
+                            <p class="text-xs text-gray-500 mt-1">Bikin ringkasan performa + riwayat transaksi satu bulan ke sheet baru, lalu download Excel/PDF-nya.</p>
+                        </div>
+                        <div class="p-5 flex flex-wrap items-center gap-3">
+                            <input type="month" id="exportBulan"
+                                class="p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            <button id="btnExportPeriode" onclick="submitExportPeriode()"
+                                class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i
+                                    class="fas fa-file-export mr-1"></i> Generate Export</button>
+                        </div>
+                        <div id="exportResultWrapper" class="hidden px-5 pb-5 flex flex-wrap gap-2">
+                            <a id="exportSheetLink" href="#" target="_blank"
+                                class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-aeGreen hover:text-aeGreen transition px-3 py-1.5 rounded-lg text-sm"><i
+                                    class="fas fa-table mr-1"></i> Buka di Google Sheets</a>
+                            <a id="exportPdfLink" href="#" target="_blank"
+                                class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-aeGreen hover:text-aeGreen transition px-3 py-1.5 rounded-lg text-sm"><i
+                                    class="fas fa-file-pdf mr-1"></i> Download PDF</a>
+                            <a id="exportXlsxLink" href="#" target="_blank"
+                                class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-aeGreen hover:text-aeGreen transition px-3 py-1.5 rounded-lg text-sm"><i
+                                    class="fas fa-file-excel mr-1"></i> Download Excel</a>
+                        </div>
+                        <p class="text-[11px] text-gray-400 px-5 pb-4">Catatan: Download Excel berisi seluruh spreadsheet (semua sheet), sedangkan PDF hanya berisi sheet ringkasan periode yang baru dibuat.</p>
                     </div>
                 </div>
 
@@ -1036,6 +1066,8 @@
         let allUsers = [];
         let lastLeaderboard = [];
         let bandingkanSelected = [];
+        let sudahIngatkanLaporHariIni = false;
+        let sudahIngatkanKategoriKurang = false;
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
         // Fungsi Menampilkan Toast
@@ -1526,6 +1558,12 @@
                         document.getElementById('dashKategori').innerText = 'Lihat peringkat di bawah';
                     }
 
+                    // Reminder "belum lapor hari ini" (khusus CS, sekali per sesi biar tidak spam)
+                    if (json.data.own && json.data.own.lapor_hari_ini === false && !sudahIngatkanLaporHariIni) {
+                        sudahIngatkanLaporHariIni = true;
+                        showToast("Kamu belum lapor hari ini. Yuk kirim laporan lewat menu Scan Penjualan.", "error");
+                    }
+
                     // Badge notifikasi transaksi ditolak (perlu direvisi CS)
                     let hasRejected = (json.data.rejected || 0) > 0;
                     document.getElementById('riwayatBadge').classList.toggle('hidden', !hasRejected);
@@ -1536,8 +1574,17 @@
 
                     // Insight Otomatis (khusus SPV) & Card Saran (khusus CS)
                     document.getElementById('insightSection').classList.toggle('hidden', !isSpv);
-                    if (isSpv) renderInsights(json.data.insights);
-                    else loadSaranCard();
+                    if (isSpv) {
+                        renderInsights(json.data.insights);
+                        // Alert kategori Kurang (sekali per sesi biar tidak spam)
+                        let jumlahKurang = json.data.insights && json.data.insights.perlu_evaluasi ? json.data.insights.perlu_evaluasi.length : 0;
+                        if (jumlahKurang > 0 && !sudahIngatkanKategoriKurang) {
+                            sudahIngatkanKategoriKurang = true;
+                            showToast(`${jumlahKurang} CS masuk kategori Kurang bulan ini, cek Insight Otomatis di bawah.`, "error");
+                        }
+                    } else {
+                        loadSaranCard();
+                    }
 
                     document.getElementById('leaderboardAksiTh').classList.toggle('hidden', !isSpv);
 
@@ -2277,8 +2324,43 @@
                 const now = new Date();
                 document.getElementById('targetBulan').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
             }
+            if (!document.getElementById('exportBulan').value) {
+                const now = new Date();
+                document.getElementById('exportBulan').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            }
             loadTargetData();
             loadAmbangRCTable();
+        }
+
+        // ---- D. Export Data ----
+        async function submitExportPeriode() {
+            const bulan = document.getElementById('exportBulan').value;
+            if (!bulan) { showToast("Pilih bulan yang mau diexport dulu!", "error"); return; }
+
+            const btn = document.getElementById('btnExportPeriode');
+            const btnOriginal = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Membuat export...';
+            showLoading('Membuat sheet export...');
+
+            let formData = new URLSearchParams();
+            formData.append('action', 'exportPeriode');
+            formData.append('bulan_tahun', bulan);
+
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                showToast(json.message, json.status === "success" ? "success" : "error");
+                if (json.status === "success") {
+                    document.getElementById('exportSheetLink').href = json.sheet_url;
+                    document.getElementById('exportPdfLink').href = json.pdf_url;
+                    document.getElementById('exportXlsxLink').href = json.xlsx_url;
+                    document.getElementById('exportResultWrapper').classList.remove('hidden');
+                }
+            } catch (err) { showToast("Koneksi gagal saat membuat export.", "error"); }
+            btn.disabled = false;
+            btn.innerHTML = btnOriginal;
+            hideLoading();
         }
 
         // ---- A. Kelola ID CS/SPV ----
@@ -2329,6 +2411,7 @@
             const id = document.getElementById('ref-add-id').value.trim();
             const nama = document.getElementById('ref-add-nama').value.trim();
             const noHp = document.getElementById('ref-add-nohp').value.trim();
+            const email = document.getElementById('ref-add-email').value.trim();
             const role = document.getElementById('ref-add-role').value;
             const cabang = document.getElementById('ref-add-cabang').value;
 
@@ -2344,6 +2427,7 @@
             formData.append('id_cs', id);
             formData.append('nama', nama);
             formData.append('no_hp', noHp);
+            formData.append('email', email);
             formData.append('role', role);
             formData.append('cabang', cabang);
 
@@ -2355,6 +2439,7 @@
                     document.getElementById('ref-add-id').value = '';
                     document.getElementById('ref-add-nama').value = '';
                     document.getElementById('ref-add-nohp').value = '';
+                    document.getElementById('ref-add-email').value = '';
                     openKodeAksesModal(id, nama, noHp, json.kode_akses);
                     loadUserManageTable();
                     fetchUsers();
