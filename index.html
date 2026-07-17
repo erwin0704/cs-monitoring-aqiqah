@@ -190,49 +190,52 @@
 
     <div id="app-container" class="hidden flex-1 flex h-screen w-full">
         <aside id="desktopSidebar" class="bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 hidden md:flex flex-col w-64 transition-all duration-300 relative z-20">
-            <div class="h-20 flex items-center px-6 border-b border-gray-100 dark:border-gray-700">
-                <div class="flex items-center gap-3">
+            <div id="sidebarLogoToggle" onclick="toggleSidebar()" class="h-20 flex items-center justify-between px-6 border-b border-gray-100 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition group">
+                <div class="flex items-center gap-3 overflow-hidden">
                     <div class="bg-aeGreen text-white p-2 rounded-lg flex-shrink-0"><i class="fas fa-leaf text-xl"></i></div>
                     <div class="menu-label overflow-hidden whitespace-nowrap"><h1 class="text-xl font-bold text-aeGreen dark:text-aeOrange leading-tight">Aqiqah Admin</h1></div>
                 </div>
+                <i class="fas fa-angles-left menu-label text-gray-300 group-hover:text-aeGreen text-sm flex-shrink-0"></i>
             </div>
             <div class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
                 <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-4 py-3 bg-aeGreen text-white rounded-xl shadow-sm transition"><i class="fas fa-border-all w-5 text-center"></i><span class="menu-label font-medium text-sm">Dashboard</span></button>
                 <button onclick="switchTab('input')" id="nav-input" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i class="fas fa-plus-circle w-5 text-center"></i><span class="menu-label font-medium text-sm">Scan Penjualan</span></button>
+                <button onclick="switchTab('riwayat')" id="nav-riwayat" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition relative"><i class="fas fa-history w-5 text-center"></i><span class="menu-label font-medium text-sm">Riwayat Input</span><span id="riwayatBadge" class="hidden absolute right-3 top-2 w-2.5 h-2.5 bg-red-500 rounded-full"></span></button>
                 <button onclick="switchTab('admin')" id="nav-admin" class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i class="fas fa-shield-alt w-5 text-center"></i><span class="menu-label font-medium text-sm">Approval Admin</span></button>
                 <button onclick="switchTab('referensi')" id="nav-referensi" class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i class="fas fa-sliders-h w-5 text-center"></i><span class="menu-label font-medium text-sm">Data Referensi</span></button>
             </div>
             <div class="p-4 border-t border-gray-100 dark:border-gray-700 space-y-2">
                 <button id="btnThemeToggle" class="w-full flex items-center gap-3 px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition text-sm"><i class="fas fa-moon w-5 text-center"></i> <span class="menu-label font-medium">Ganti Tema</span></button>
-                <button onclick="logoutSystem()" class="w-full flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition text-sm"><i class="fas fa-sign-out-alt w-5 text-center"></i> <span class="menu-label font-medium">Keluar</span></button>
-            </div>
-        </aside>
-
-        <div class="flex-1 flex flex-col min-w-0">
-            <header class="h-20 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-4 md:px-8 z-10">
-                <div class="flex items-center gap-4 flex-1">
-                    <button id="mobileMenuBtn" class="md:hidden text-gray-600 dark:text-gray-300 hover:text-aeGreen text-2xl"><i class="fas fa-bars"></i></button>
-                    <button id="desktopToggleBtn" class="hidden md:block text-gray-400 hover:text-aeGreen text-xl"><i class="fas fa-bars"></i></button>
-                </div>
-                <div class="flex items-center gap-3 relative">
-                    <div class="text-right hidden sm:block">
-                        <p id="userNameDisplay" class="text-sm font-bold text-gray-800 dark:text-white leading-none">Memuat...</p>
-                        <p id="userRoleDisplay" class="text-[10px] text-gray-500 uppercase tracking-wide">ROLE</p>
-                    </div>
-                    <button id="avatarBtn" onclick="toggleUserDropdown()" class="w-10 h-10 rounded-full bg-aeGreen text-white flex items-center justify-center font-bold border-2 border-white shadow-sm hover:ring-2 hover:ring-aeGreen focus:outline-none cursor-pointer relative z-10"><i class="fas fa-user"></i></button>
-                    <!-- Dropdown Avatar -->
-                    <div id="userDropdown" class="absolute right-0 top-12 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 hidden flex-col z-50 overflow-hidden">
+                <div class="relative">
+                    <button id="avatarBtn" onclick="toggleUserDropdown()" class="w-full flex items-center gap-3 px-2 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition text-left">
+                        <div class="w-9 h-9 rounded-full bg-aeGreen text-white flex items-center justify-center font-bold flex-shrink-0"><i class="fas fa-user"></i></div>
+                        <div class="menu-label overflow-hidden leading-tight">
+                            <p id="userNameDisplay" class="text-sm font-bold text-gray-800 dark:text-white truncate">Memuat...</p>
+                            <p id="userRoleDisplay" class="text-[10px] text-gray-500 uppercase tracking-wide">ROLE</p>
+                        </div>
+                    </button>
+                    <!-- Dropdown Profil (buka ke atas karena posisinya di bawah sidebar) -->
+                    <div id="userDropdown" class="absolute left-0 bottom-full mb-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 hidden flex-col z-50 overflow-hidden">
                         <button onclick="openChangePinModal()" class="w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700"><i class="fas fa-key mr-2"></i> Ganti PIN</button>
                         <button onclick="logoutSystem()" class="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"><i class="fas fa-sign-out-alt mr-2"></i> Keluar</button>
                     </div>
                 </div>
+            </div>
+        </aside>
+
+        <div class="flex-1 flex flex-col min-w-0">
+            <header class="h-16 md:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center gap-3 px-4 z-10">
+                <button id="mobileMenuBtn" class="text-gray-600 dark:text-gray-300 hover:text-aeGreen text-2xl"><i class="fas fa-bars"></i></button>
+                <h1 class="text-lg font-bold text-aeGreen dark:text-aeOrange">Aqiqah Admin</h1>
             </header>
 
-            <div id="mobileDropdown" class="absolute top-20 left-0 w-full bg-white dark:bg-gray-800 shadow-xl border-b border-gray-200 dark:border-gray-700 hidden flex-col md:hidden z-30">
+            <div id="mobileDropdown" class="absolute top-16 left-0 w-full bg-white dark:bg-gray-800 shadow-xl border-b border-gray-200 dark:border-gray-700 hidden flex-col md:hidden z-30">
                 <button onclick="switchTab('dashboard')" class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i class="fas fa-border-all w-5"></i> Dashboard</button>
                 <button onclick="switchTab('input')" class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i class="fas fa-plus-circle w-5"></i> Scan Penjualan</button>
+                <button onclick="switchTab('riwayat')" class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3 relative"><i class="fas fa-history w-5"></i> Riwayat Input<span id="riwayatBadgeMobile" class="hidden w-2.5 h-2.5 bg-red-500 rounded-full"></span></button>
                 <button onclick="switchTab('admin')" id="nav-admin-mobile" class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i class="fas fa-shield-alt w-5"></i> Approval Admin</button>
                 <button onclick="switchTab('referensi')" id="nav-referensi-mobile" class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i class="fas fa-sliders-h w-5"></i> Data Referensi</button>
+                <button onclick="openChangePinModal()" class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i class="fas fa-key w-5"></i> Ganti PIN</button>
                 <button onclick="logoutSystem()" class="w-full text-left px-6 py-4 text-red-600 font-medium flex items-center gap-3"><i class="fas fa-sign-out-alt w-5"></i> Keluar</button>
             </div>
 
@@ -309,6 +312,43 @@
                                 <input type="file" id="pdfUpload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="application/pdf" multiple>
                                 <div class="w-16 h-16 bg-green-100 text-aeGreen rounded-full flex items-center justify-center text-3xl mb-4"><i class="fas fa-file-upload"></i></div>
                                 <h3 class="text-lg font-bold mb-1">Upload PDF Invoice</h3>
+                            </div>
+
+                            <!-- Form Entri Manual (Fase 3) -->
+                            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                                <button type="button" onclick="toggleManualForm()" class="w-full flex justify-between items-center p-4 text-left font-bold text-sm">
+                                    <span><i class="fas fa-keyboard mr-2 text-aeGreen"></i> Atau Input Manual (tanpa scan PDF)</span>
+                                    <i id="manualFormChevron" class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+                                </button>
+                                <div id="manualFormBody" class="hidden p-4 pt-0 space-y-3 border-t border-gray-100 dark:border-gray-700">
+                                    <div>
+                                        <label class="block text-xs font-semibold mb-1 text-gray-500">No. Invoice</label>
+                                        <input type="text" id="manual-no-invoice" class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" placeholder="INV/AQIQAH-EXPRESS/...">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold mb-1 text-gray-500">Nama Customer</label>
+                                        <input type="text" id="manual-nama" class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" placeholder="Nama pemesan">
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-xs font-semibold mb-1 text-gray-500">Cabang</label>
+                                            <input type="text" id="manual-cabang" class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" placeholder="Mis. Ciputat">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-semibold mb-1 text-gray-500">QTY (Ekor)</label>
+                                            <input type="number" id="manual-qty" class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" placeholder="1">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold mb-1 text-gray-500">Revenue (Rp)</label>
+                                        <input type="number" id="manual-revenue" class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" placeholder="0">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold mb-1 text-gray-500">Tanggal Acara</label>
+                                        <input type="date" id="manual-tgl-acara" class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                                    </div>
+                                    <button type="button" onclick="tambahEntriManual()" class="w-full bg-aeGreen text-white font-bold py-2.5 rounded-lg text-sm hover:bg-[#0a2e22] transition"><i class="fas fa-plus mr-1"></i> Tambah ke Daftar</button>
+                                </div>
                             </div>
                         </div>
                         <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col min-h-[400px]">
@@ -437,6 +477,31 @@
                         </div>
                     </div>
                 </div>
+
+                <div id="view-riwayat" class="hidden">
+                    <div class="mb-6 flex justify-between items-end">
+                        <div><h2 class="text-2xl font-bold">Riwayat Input</h2><p class="text-sm text-gray-500">Riwayat transaksi yang pernah kamu kirim beserta status approval-nya.</p></div>
+                        <button onclick="loadRiwayatInput()" class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm hover:bg-gray-50"><i class="fas fa-sync-alt mr-2 text-aeGreen"></i> Segarkan Data</button>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
+                                    <tr>
+                                        <th class="px-5 py-4">Tgl Input</th>
+                                        <th class="px-5 py-4">Invoice & Nama</th>
+                                        <th class="px-5 py-4">Detail</th>
+                                        <th class="px-5 py-4 text-center">Status</th>
+                                        <th class="px-5 py-4 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="riwayatTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
+                                    <tr><td colspan="5" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </main>
         </div>
     </div>
@@ -455,6 +520,63 @@
                 <button onclick="kirimKodeAksesWA()" class="flex-1 bg-green-500 text-white font-medium py-2 rounded-lg text-sm hover:bg-green-600"><i class="fab fa-whatsapp mr-1"></i> Kirim WA</button>
             </div>
             <button onclick="closeKodeAksesModal()" class="mt-4 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Modal Alasan Penolakan (Fase 3 - SPV Reject) -->
+    <div id="modalAlasanReject" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-sm shadow-2xl">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0"><i class="fas fa-times text-red-500"></i></div>
+                <div>
+                    <h3 class="text-base font-bold text-gray-800 dark:text-white">Tolak Invoice</h3>
+                    <p class="text-[11px] text-gray-500" id="alasanRejectInvoiceLabel">No. Invoice</p>
+                </div>
+            </div>
+            <form onsubmit="submitAlasanReject(event)">
+                <label class="block text-xs font-semibold mb-1 text-gray-500">Alasan Penolakan (wajib diisi, akan dikirim ke CS)</label>
+                <textarea id="alasan-reject-input" rows="3" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-aeGreen text-sm mb-4" placeholder="Contoh: File PDF terpotong/buram" required></textarea>
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeAlasanRejectModal()" class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
+                    <button type="submit" id="btnSubmitAlasanReject" class="px-4 py-2 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold">Tolak & Kirim Alasan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Revisi & Submit Ulang (Fase 3 - CS) -->
+    <div id="modalRevisiTransaksi" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-md shadow-2xl">
+            <h3 class="text-lg font-bold mb-1 text-gray-800 dark:text-white">Revisi Transaksi</h3>
+            <p class="text-xs text-red-500 mb-4"><i class="fas fa-exclamation-circle mr-1"></i><span id="revisiAlasanLabel">Alasan penolakan</span></p>
+            <form onsubmit="submitRevisiTransaksi(event)">
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="col-span-2">
+                        <label class="block text-xs font-semibold mb-1 text-gray-500">No. Invoice</label>
+                        <input type="text" id="revisi-no-invoice" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm" required>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-xs font-semibold mb-1 text-gray-500">Nama Customer</label>
+                        <input type="text" id="revisi-nama" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 text-gray-500">Cabang</label>
+                        <input type="text" id="revisi-cabang" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 text-gray-500">QTY (Ekor)</label>
+                        <input type="number" id="revisi-qty" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm" required>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-xs font-semibold mb-1 text-gray-500">Revenue (Rp)</label>
+                        <input type="number" id="revisi-revenue" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm" required>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeRevisiModal()" class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
+                    <button type="submit" id="btnSubmitRevisi" class="px-4 py-2 text-sm bg-aeGreen text-white rounded-lg hover:bg-[#0a2e22] font-semibold"><i class="fas fa-paper-plane mr-1"></i> Kirim Ulang</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -681,6 +803,7 @@
             document.getElementById('view-input').classList.add('hidden');
             document.getElementById('view-admin').classList.add('hidden');
             document.getElementById('view-referensi').classList.add('hidden');
+            document.getElementById('view-riwayat').classList.add('hidden');
 
             document.getElementById('view-' + tabId).classList.remove('hidden');
             document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -699,6 +822,7 @@
             if(tabId === 'dashboard') loadDashboardData();
             if(tabId === 'admin' && currentUser.role === 'SPV') loadPendingApprovals();
             if(tabId === 'referensi' && currentUser.role === 'SPV') loadReferensiData();
+            if(tabId === 'riwayat') loadRiwayatInput();
         }
 
         // 4. LOGIKA SCANNER (CONTEKAN PERSIS DARI SCRIPT .MD)
@@ -816,6 +940,39 @@
             renderPreviewTable();
         };
 
+        // 4b. FORM ENTRI MANUAL (Fase 3 - tanpa scan PDF)
+        function toggleManualForm() {
+            const body = document.getElementById('manualFormBody');
+            const chevron = document.getElementById('manualFormChevron');
+            body.classList.toggle('hidden');
+            chevron.classList.toggle('rotate-180');
+        }
+
+        function tambahEntriManual() {
+            const noInvoice = document.getElementById('manual-no-invoice').value.trim();
+            const nama = document.getElementById('manual-nama').value.trim();
+            const cabang = document.getElementById('manual-cabang').value.trim();
+            const qty = parseFloat(document.getElementById('manual-qty').value) || 0;
+            const revenue = parseFloat(document.getElementById('manual-revenue').value) || 0;
+            const tglAcara = document.getElementById('manual-tgl-acara').value || '-';
+
+            if (!noInvoice || !nama || !cabang || !qty || !revenue) {
+                showToast("Semua field wajib diisi (No. Invoice, Nama, Cabang, QTY, Revenue)!", "error");
+                return;
+            }
+
+            scannedInvoices.push({ no_invoice: noInvoice, cabang: cabang, nama_cust: nama, qty: qty, revenue: revenue, tgl_acara: tglAcara });
+            renderPreviewTable();
+            showToast("Entri manual ditambahkan ke daftar.", "success");
+
+            // Kosongkan form untuk entri berikutnya
+            document.getElementById('manual-no-invoice').value = '';
+            document.getElementById('manual-nama').value = '';
+            document.getElementById('manual-cabang').value = '';
+            document.getElementById('manual-qty').value = '';
+            document.getElementById('manual-revenue').value = '';
+        }
+
         // 5. KIRIM DATA SCAN KE BACKEND
         document.getElementById('btnKirimLaporan').addEventListener('click', async () => {
             let totalLead = document.getElementById('inputLead').value;
@@ -862,6 +1019,11 @@
                     document.getElementById('dashRev').innerText = "Rp " + json.data.revenue.toLocaleString('id-ID');
                     document.getElementById('dashTrx').innerText = json.data.transaksi;
                     document.getElementById('dashPending').innerText = json.data.pending;
+
+                    // Badge notifikasi transaksi ditolak (perlu direvisi CS)
+                    let hasRejected = (json.data.rejected || 0) > 0;
+                    document.getElementById('riwayatBadge').classList.toggle('hidden', !hasRejected);
+                    document.getElementById('riwayatBadgeMobile').classList.toggle('hidden', !hasRejected);
                     
                     let tbody = document.getElementById('leaderboardBody');
                     if (tbody) {
@@ -946,7 +1108,7 @@
                                 <td class="px-5 py-4 text-sm font-bold">Rp ${parseInt(item.revenue).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span></td>
                                 <td class="px-5 py-4 text-center flex gap-2 justify-center">
                                     <button onclick="actionApproval('${item.no_invoice}', '${item.raw_timestamp}', 'Approved')" class="bg-green-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-green-600 transition" title="Approve"><i class="fas fa-check"></i></button>
-                                    <button onclick="actionApproval('${item.no_invoice}', '${item.raw_timestamp}', 'Rejected')" class="bg-red-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-red-600 transition" title="Reject"><i class="fas fa-times"></i></button>
+                                    <button onclick="openAlasanRejectModal('${item.no_invoice}', '${item.raw_timestamp}')" class="bg-red-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-red-600 transition" title="Reject"><i class="fas fa-times"></i></button>
                                 </td>
                             </tr>
                         `;
@@ -960,13 +1122,14 @@
         }
 
         // 8. FUNGSI TOMBOL APPROVE / REJECT
-        async function actionApproval(noInvoice, rawTimestamp, statusBaru) {
-            if(!confirm(`Anda yakin ingin merubah status invoice ini menjadi ${statusBaru}?`)) return;
+        async function actionApproval(noInvoice, rawTimestamp, statusBaru, alasanReject) {
+            if (statusBaru === 'Approved' && !confirm(`Anda yakin ingin menyetujui invoice ini?`)) return;
             let formData = new URLSearchParams();
             formData.append('action', 'actionApproval');
             formData.append('no_invoice', noInvoice);
             formData.append('timestamp', rawTimestamp);
             formData.append('status_baru', statusBaru);
+            if (alasanReject) formData.append('alasan_reject', alasanReject);
             showLoading('Memproses approval...');
             try {
                 let res = await fetch(API_URL, { method: 'POST', body: formData });
@@ -982,13 +1145,141 @@
             hideLoading();
         }
 
+        // ---- Modal Alasan Penolakan ----
+        let rejectTarget = null;
+        function openAlasanRejectModal(noInvoice, rawTimestamp) {
+            rejectTarget = { noInvoice, rawTimestamp };
+            document.getElementById('alasanRejectInvoiceLabel').innerText = noInvoice;
+            document.getElementById('alasan-reject-input').value = '';
+            document.getElementById('modalAlasanReject').classList.remove('hidden');
+        }
+        function closeAlasanRejectModal() {
+            document.getElementById('modalAlasanReject').classList.add('hidden');
+            rejectTarget = null;
+        }
+        async function submitAlasanReject(e) {
+            e.preventDefault();
+            if (!rejectTarget) return;
+            const alasan = document.getElementById('alasan-reject-input').value.trim();
+            if (!alasan) { showToast("Alasan penolakan wajib diisi!", "error"); return; }
+
+            const btn = document.getElementById('btnSubmitAlasanReject');
+            const btnOriginal = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            await actionApproval(rejectTarget.noInvoice, rejectTarget.rawTimestamp, 'Rejected', alasan);
+            btn.disabled = false;
+            btn.innerHTML = btnOriginal;
+            closeAlasanRejectModal();
+        }
+
+        // ===================================================
+        // FASE 3: RIWAYAT INPUT & REVISI TRANSAKSI DITOLAK
+        // ===================================================
+        async function loadRiwayatInput() {
+            let tbody = document.getElementById('riwayatTableBody');
+            tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
+            showLoading('Memuat riwayat input...');
+            try {
+                let res = await fetch(`${API_URL}?action=getRiwayatInput&id_cs=${encodeURIComponent(currentUser.id)}`);
+                let json = await res.json();
+                tbody.innerHTML = '';
+                if (!json.data || json.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-8 text-center text-gray-500 italic">Belum ada riwayat input.</td></tr>';
+                    hideLoading();
+                    return;
+                }
+                json.data.forEach(item => {
+                    let statusBadge = '';
+                    let aksi = '-';
+                    if (item.status === 'Approved') {
+                        statusBadge = '<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase">Disetujui</span>';
+                    } else if (item.status === 'Rejected') {
+                        statusBadge = '<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase">Ditolak</span>';
+                        // Simpan data via data-attribute (bukan inline JSON di onclick) supaya aman dari tanda kutip di nama/alasan
+                        let itemJsonSafe = JSON.stringify(item).replace(/'/g, '&#39;');
+                        aksi = `<button data-item='${itemJsonSafe}' onclick="openRevisiModal(JSON.parse(this.dataset.item))" class="bg-orange-500 text-white px-3 py-1.5 rounded-md text-xs hover:bg-orange-600"><i class="fas fa-edit mr-1"></i> Revisi</button>`;
+                    } else {
+                        statusBadge = '<span class="bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-[10px] font-bold uppercase">Menunggu</span>';
+                    }
+                    let rejectNote = item.status === 'Rejected' ? `<p class="text-[10px] text-red-500 mt-1"><i class="fas fa-exclamation-circle mr-1"></i>${item.alasan_reject || '-'}</p>` : '';
+
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                            <td class="px-5 py-4 text-sm">${item.timestamp}</td>
+                            <td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>
+                            <td class="px-5 py-4 text-sm font-bold">Rp ${(parseInt(item.revenue) || 0).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span>${rejectNote}</td>
+                            <td class="px-5 py-4 text-center">${statusBadge}</td>
+                            <td class="px-5 py-4 text-center">${aksi}</td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
+                showToast("Gagal memuat riwayat input.", "error");
+            }
+            hideLoading();
+        }
+
+        // ---- Modal Revisi & Submit Ulang ----
+        let revisiTarget = null;
+        function openRevisiModal(item) {
+            revisiTarget = item;
+            document.getElementById('revisiAlasanLabel').innerText = item.alasan_reject || 'Alasan penolakan tidak tercatat';
+            document.getElementById('revisi-no-invoice').value = item.no_invoice;
+            document.getElementById('revisi-nama').value = item.nama;
+            document.getElementById('revisi-cabang').value = item.cabang;
+            document.getElementById('revisi-qty').value = item.qty;
+            document.getElementById('revisi-revenue').value = item.revenue;
+            document.getElementById('modalRevisiTransaksi').classList.remove('hidden');
+        }
+        function closeRevisiModal() {
+            document.getElementById('modalRevisiTransaksi').classList.add('hidden');
+            revisiTarget = null;
+        }
+        async function submitRevisiTransaksi(e) {
+            e.preventDefault();
+            if (!revisiTarget) return;
+
+            const btn = document.getElementById('btnSubmitRevisi');
+            const btnOriginal = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            showLoading('Mengirim ulang revisi...');
+
+            let formData = new URLSearchParams();
+            formData.append('action', 'resubmitTransaksi');
+            formData.append('raw_timestamp', revisiTarget.raw_timestamp);
+            formData.append('no_invoice_lama', revisiTarget.no_invoice);
+            formData.append('no_invoice', document.getElementById('revisi-no-invoice').value);
+            formData.append('nama_cust', document.getElementById('revisi-nama').value);
+            formData.append('cabang', document.getElementById('revisi-cabang').value);
+            formData.append('qty', document.getElementById('revisi-qty').value);
+            formData.append('revenue', document.getElementById('revisi-revenue').value);
+            formData.append('tgl_acara', revisiTarget.tgl_acara || '-');
+
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                showToast(json.message, json.status === "success" ? "success" : "error");
+                if (json.status === "success") {
+                    closeRevisiModal();
+                    loadRiwayatInput();
+                    loadDashboardData(); // Refresh badge notifikasi
+                }
+            } catch (err) { showToast("Koneksi gagal saat mengirim revisi.", "error"); }
+            btn.disabled = false;
+            btn.innerHTML = btnOriginal;
+            hideLoading();
+        }
+
         // UI Helpers
-        document.getElementById('desktopToggleBtn').addEventListener('click', () => {
+        function toggleSidebar() {
             const sidebar = document.getElementById('desktopSidebar');
             const menuLabels = document.querySelectorAll('.menu-label');
-            if (sidebar.classList.contains('w-64')) { sidebar.classList.replace('w-64', 'w-20'); menuLabels.forEach(el => el.classList.add('hidden')); } 
+            if (sidebar.classList.contains('w-64')) { sidebar.classList.replace('w-64', 'w-20'); menuLabels.forEach(el => el.classList.add('hidden')); }
             else { sidebar.classList.replace('w-20', 'w-64'); setTimeout(() => { menuLabels.forEach(el => el.classList.remove('hidden')); }, 150); }
-        });
+        }
         document.getElementById('mobileMenuBtn').addEventListener('click', () => document.getElementById('mobileDropdown').classList.toggle('hidden'));
         
         document.querySelectorAll('.toggle-pin').forEach(btn => {
