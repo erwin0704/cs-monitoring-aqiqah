@@ -341,7 +341,7 @@
                                     </div>
                                     <div>
                                         <label class="block text-xs font-semibold mb-1 text-gray-500">Revenue (Rp)</label>
-                                        <input type="number" id="manual-revenue" class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" placeholder="0">
+                                        <input type="text" inputmode="numeric" id="manual-revenue" class="money-input w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" placeholder="0">
                                     </div>
                                     <div>
                                         <label class="block text-xs font-semibold mb-1 text-gray-500">Tanggal Acara</label>
@@ -365,13 +365,15 @@
                         <button onclick="loadPendingApprovals()" class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm hover:bg-gray-50"><i class="fas fa-sync-alt mr-2 text-aeGreen"></i> Segarkan Data</button>
                     </div>
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="p-5 bg-gray-50 dark:bg-gray-700/50 flex justify-between items-center border-b">
+                        <div class="p-5 bg-gray-50 dark:bg-gray-700/50 flex flex-wrap justify-between items-center gap-3 border-b">
                             <h3 class="font-bold text-gray-800 dark:text-gray-200"><i class="fas fa-clock mr-2 text-orange-500"></i> Antrean Pending</h3>
+                            <button id="btnApproveSelected" onclick="approveSelected()" class="hidden bg-green-500 text-white font-medium py-2 px-4 rounded-lg shadow-sm hover:bg-green-600 text-sm"><i class="fas fa-check-double mr-1"></i> Approve Terpilih (<span id="approveSelectedCount">0</span>)</button>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
                                 <thead class="bg-white dark:bg-gray-800 text-xs text-gray-500 uppercase tracking-wider border-b">
                                     <tr>
+                                        <th class="px-5 py-4 w-10"><input type="checkbox" id="checkAllApproval" onchange="toggleAllApprovalCheckbox(this)"></th>
                                         <th class="px-5 py-4">Tgl Input</th>
                                         <th class="px-5 py-4">CS</th>
                                         <th class="px-5 py-4">Invoice & Nama</th>
@@ -380,7 +382,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="approvalTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
-                                    <tr><td colspan="5" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>
+                                    <tr><td colspan="6" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -435,6 +437,7 @@
                             <div class="flex items-center gap-2">
                                 <input type="month" id="targetBulan" onchange="loadTargetData()" class="p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
                                 <button onclick="loadTargetData()" class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-3 rounded-lg shadow-sm hover:bg-gray-50 text-sm"><i class="fas fa-sync-alt text-aeGreen"></i></button>
+                                <button id="btnSaveAllTarget" onclick="saveAllTargets()" class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i class="fas fa-save mr-1"></i> Simpan Semua</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
@@ -445,7 +448,7 @@
                                         <th class="px-5 py-3">Target Revenue (Rp)</th>
                                         <th class="px-5 py-3">Target Leads</th>
                                         <th class="px-5 py-3">Target Closing</th>
-                                        <th class="px-5 py-3 text-center">Aksi</th>
+                                        <th class="px-5 py-3 text-center">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody id="targetTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
@@ -453,13 +456,17 @@
                                 </tbody>
                             </table>
                         </div>
+                        <p class="text-xs text-gray-500 px-5 py-3 border-t border-gray-100 dark:border-gray-700"><i class="fas fa-info-circle mr-1"></i>Edit semua baris yang perlu, lalu klik <b>Simpan Semua</b> satu kali di atas.</p>
                     </div>
 
                     <!-- C. Ambang Batas RC -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-                        <div class="p-5 border-b border-gray-100 dark:border-gray-700">
-                            <h3 class="text-lg font-bold">Ambang Batas Rating Closing (RC) per Cabang</h3>
-                            <p class="text-xs text-gray-500 mt-1">RC = Closing ÷ Leads × 100%. Nilai ini jadi acuan minimal "bagus" per region.</p>
+                        <div class="p-5 border-b border-gray-100 dark:border-gray-700 flex flex-wrap justify-between items-center gap-3">
+                            <div>
+                                <h3 class="text-lg font-bold">Ambang Batas Rating Closing (RC) per Cabang</h3>
+                                <p class="text-xs text-gray-500 mt-1">RC = Closing ÷ Leads × 100%. Nilai ini jadi acuan minimal "bagus" per region.</p>
+                            </div>
+                            <button id="btnSaveAllRC" onclick="saveAllAmbangRC()" class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i class="fas fa-save mr-1"></i> Simpan Semua</button>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
@@ -467,11 +474,10 @@
                                     <tr>
                                         <th class="px-5 py-3">Region</th>
                                         <th class="px-5 py-3">Ambang Batas Minimal (%)</th>
-                                        <th class="px-5 py-3 text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="ambangRcTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
-                                    <tr><td colspan="3" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>
+                                    <tr><td colspan="2" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -569,7 +575,7 @@
                     </div>
                     <div class="col-span-2">
                         <label class="block text-xs font-semibold mb-1 text-gray-500">Revenue (Rp)</label>
-                        <input type="number" id="revisi-revenue" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm" required>
+                        <input type="text" inputmode="numeric" id="revisi-revenue" class="money-input w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm" required>
                     </div>
                 </div>
                 <div class="flex justify-end gap-2">
@@ -909,7 +915,7 @@
                         <td class="p-2 text-right">
                             <div class="flex items-center justify-end gap-1">
                                 <span class="font-bold text-aeGreen text-sm">Rp</span>
-                                <input type="number" class="font-bold text-aeGreen text-right bg-transparent border-b border-dashed border-gray-300 dark:border-gray-600 focus:outline-none w-24 text-sm" value="${inv.revenue}" onchange="updateInvoice(${index}, 'revenue', this.value)">
+                                <input type="text" inputmode="numeric" class="money-input font-bold text-aeGreen text-right bg-transparent border-b border-dashed border-gray-300 dark:border-gray-600 focus:outline-none w-24 text-sm" value="${formatRibuan(inv.revenue)}" onchange="updateInvoice(${index}, 'revenue', this.value)">
                             </div>
                             <div class="flex items-center justify-end gap-1 mt-1">
                                 <span class="text-[10px] text-gray-500">QTY:</span>
@@ -931,7 +937,8 @@
         }
 
         window.updateInvoice = function(index, field, value) {
-            if (field === 'revenue' || field === 'qty') value = parseFloat(value) || 0;
+            if (field === 'revenue') value = parseRibuan(value);
+            else if (field === 'qty') value = parseFloat(value) || 0;
             scannedInvoices[index][field] = value;
         };
         
@@ -953,7 +960,7 @@
             const nama = document.getElementById('manual-nama').value.trim();
             const cabang = document.getElementById('manual-cabang').value.trim();
             const qty = parseFloat(document.getElementById('manual-qty').value) || 0;
-            const revenue = parseFloat(document.getElementById('manual-revenue').value) || 0;
+            const revenue = parseRibuan(document.getElementById('manual-revenue').value);
             const tglAcara = document.getElementById('manual-tgl-acara').value || '-';
 
             if (!noInvoice || !nama || !cabang || !qty || !revenue) {
@@ -1090,18 +1097,21 @@
         // 7. API FETCH: ADMIN APPROVAL TABLE
         async function loadPendingApprovals() {
             let tbody = document.getElementById('approvalTableBody');
-            tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
+            document.getElementById('checkAllApproval').checked = false;
+            document.getElementById('btnApproveSelected').classList.add('hidden');
             showLoading('Memuat antrean approval...');
             try {
                 let res = await fetch(API_URL + "?action=getPendingApprovals");
                 let json = await res.json();
                 tbody.innerHTML = '';
                 if(json.data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-8 text-center text-gray-500 italic">Tidak ada antrean pending.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-8 text-center text-gray-500 italic">Tidak ada antrean pending.</td></tr>';
                 } else {
                     json.data.forEach(item => {
                         tbody.innerHTML += `
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors border-b dark:border-gray-700">
+                                <td class="px-5 py-4"><input type="checkbox" class="approval-check" data-no-invoice="${item.no_invoice}" data-timestamp="${item.raw_timestamp}" onchange="updateApproveSelectedCount()"></td>
                                 <td class="px-5 py-4 text-sm">${item.timestamp}</td>
                                 <td class="px-5 py-4 font-bold text-aeGreen">${item.id_cs}</td>
                                 <td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>
@@ -1115,9 +1125,53 @@
                     });
                 }
             } catch (err) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
                 showToast("Gagal memuat antrean pending.", "error");
             }
+            hideLoading();
+        }
+
+        // ---- Approve Terpilih (Batch) ----
+        function toggleAllApprovalCheckbox(masterCheckbox) {
+            document.querySelectorAll('.approval-check').forEach(cb => cb.checked = masterCheckbox.checked);
+            updateApproveSelectedCount();
+        }
+
+        function updateApproveSelectedCount() {
+            let checked = document.querySelectorAll('.approval-check:checked');
+            let btn = document.getElementById('btnApproveSelected');
+            document.getElementById('approveSelectedCount').innerText = checked.length;
+            btn.classList.toggle('hidden', checked.length === 0);
+        }
+
+        async function approveSelected() {
+            let checked = document.querySelectorAll('.approval-check:checked');
+            if (checked.length === 0) return;
+            if (!confirm(`Approve ${checked.length} invoice terpilih sekaligus?`)) return;
+
+            let items = Array.from(checked).map(cb => ({ no_invoice: cb.dataset.noInvoice, timestamp: cb.dataset.timestamp }));
+
+            const btn = document.getElementById('btnApproveSelected');
+            const btnOriginal = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            showLoading('Menyetujui invoice terpilih...');
+
+            let formData = new URLSearchParams();
+            formData.append('action', 'actionApprovalBatch');
+            formData.append('items', JSON.stringify(items));
+
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                showToast(json.message, json.status === "success" ? "success" : "error");
+                if (json.status === "success") {
+                    loadPendingApprovals();
+                    loadDashboardData();
+                }
+            } catch (err) { showToast("Koneksi gagal saat approve terpilih.", "error"); }
+            btn.disabled = false;
+            btn.innerHTML = btnOriginal;
             hideLoading();
         }
 
@@ -1230,7 +1284,7 @@
             document.getElementById('revisi-nama').value = item.nama;
             document.getElementById('revisi-cabang').value = item.cabang;
             document.getElementById('revisi-qty').value = item.qty;
-            document.getElementById('revisi-revenue').value = item.revenue;
+            document.getElementById('revisi-revenue').value = formatRibuan(item.revenue);
             document.getElementById('modalRevisiTransaksi').classList.remove('hidden');
         }
         function closeRevisiModal() {
@@ -1255,7 +1309,7 @@
             formData.append('nama_cust', document.getElementById('revisi-nama').value);
             formData.append('cabang', document.getElementById('revisi-cabang').value);
             formData.append('qty', document.getElementById('revisi-qty').value);
-            formData.append('revenue', document.getElementById('revisi-revenue').value);
+            formData.append('revenue', parseRibuan(document.getElementById('revisi-revenue').value));
             formData.append('tgl_acara', revisiTarget.tgl_acara || '-');
 
             try {
@@ -1657,19 +1711,16 @@
                     return;
                 }
                 json.data.forEach(t => {
-                    let locked = t.has_target;
-                    let disabledAttr = locked ? 'disabled' : '';
-                    let lockedClass = locked ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed text-gray-500' : '';
-                    let btnHtml = locked
-                        ? `<button onclick="enableTargetEdit(this)" class="bg-blue-500 text-white px-3 py-1.5 rounded-md text-xs hover:bg-blue-600"><i class="fas fa-pen"></i> Edit</button>`
-                        : `<button onclick="saveTargetRow(this, '${t.id_cs}')" class="bg-aeGreen text-white px-3 py-1.5 rounded-md text-xs hover:bg-[#0a2e22]"><i class="fas fa-save"></i> Simpan</button>`;
+                    let statusBadge = t.has_target
+                        ? '<span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold">TERSIMPAN</span>'
+                        : '<span class="bg-gray-100 text-gray-500 px-2 py-1 rounded text-[10px] font-bold">BELUM ADA</span>';
                     tbody.innerHTML += `
                         <tr data-id-cs="${t.id_cs}">
                             <td class="px-5 py-4 text-sm font-bold">${t.nama}</td>
-                            <td class="px-5 py-3"><input type="text" inputmode="numeric" class="target-rev money-input w-36 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none ${lockedClass}" value="${formatRibuan(t.target_revenue)}" ${disabledAttr}></td>
-                            <td class="px-5 py-3"><input type="text" inputmode="numeric" class="target-lead money-input w-24 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none ${lockedClass}" value="${formatRibuan(t.target_leads)}" ${disabledAttr}></td>
-                            <td class="px-5 py-3"><input type="text" inputmode="numeric" class="target-close money-input w-24 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none ${lockedClass}" value="${formatRibuan(t.target_closing)}" ${disabledAttr}></td>
-                            <td class="px-5 py-4 text-center">${btnHtml}</td>
+                            <td class="px-5 py-3"><input type="text" inputmode="numeric" class="target-rev money-input w-36 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" value="${formatRibuan(t.target_revenue)}"></td>
+                            <td class="px-5 py-3"><input type="text" inputmode="numeric" class="target-lead money-input w-24 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" value="${formatRibuan(t.target_leads)}"></td>
+                            <td class="px-5 py-3"><input type="text" inputmode="numeric" class="target-close money-input w-24 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" value="${formatRibuan(t.target_closing)}"></td>
+                            <td class="px-5 py-4 text-center">${statusBadge}</td>
                         </tr>
                     `;
                 });
@@ -1680,58 +1731,47 @@
             hideLoading();
         }
 
-        function enableTargetEdit(btn) {
-            let row = btn.closest('tr');
-            let idCs = row.dataset.idCs;
-            row.querySelectorAll('input').forEach(inp => {
-                inp.disabled = false;
-                inp.classList.remove('bg-gray-100', 'dark:bg-gray-800', 'cursor-not-allowed', 'text-gray-500');
-            });
-            btn.outerHTML = `<button onclick="saveTargetRow(this, '${idCs}')" class="bg-aeGreen text-white px-3 py-1.5 rounded-md text-xs hover:bg-[#0a2e22]"><i class="fas fa-save"></i> Simpan</button>`;
-        }
-
-        async function saveTargetRow(btn, idCs) {
-            let row = btn.closest('tr');
+        async function saveAllTargets() {
             let bulan = document.getElementById('targetBulan').value;
-            let targetRevenue = parseRibuan(row.querySelector('.target-rev').value);
-            let targetLeads = parseRibuan(row.querySelector('.target-lead').value);
-            let targetClosing = parseRibuan(row.querySelector('.target-close').value);
+            if (!bulan) { showToast("Pilih bulan terlebih dahulu!", "error"); return; }
 
+            let rows = [];
+            document.querySelectorAll('#targetTableBody tr[data-id-cs]').forEach(row => {
+                rows.push({
+                    id_cs: row.dataset.idCs,
+                    target_revenue: parseRibuan(row.querySelector('.target-rev').value),
+                    target_leads: parseRibuan(row.querySelector('.target-lead').value),
+                    target_closing: parseRibuan(row.querySelector('.target-close').value)
+                });
+            });
+            if (rows.length === 0) return;
+
+            const btn = document.getElementById('btnSaveAllTarget');
             const btnOriginal = btn.innerHTML;
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            showLoading('Menyimpan target...');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            showLoading('Menyimpan semua target...');
 
             let formData = new URLSearchParams();
-            formData.append('action', 'saveTarget');
+            formData.append('action', 'saveTargetBatch');
             formData.append('bulan_tahun', bulan);
-            formData.append('id_cs', idCs);
-            formData.append('target_revenue', targetRevenue);
-            formData.append('target_leads', targetLeads);
-            formData.append('target_closing', targetClosing);
+            formData.append('data', JSON.stringify(rows));
 
             try {
                 let res = await fetch(API_URL, { method: 'POST', body: formData });
                 let json = await res.json();
                 showToast(json.message, json.status === "success" ? "success" : "error");
-                if (json.status === "success") {
-                    loadTargetData(); // refresh & kunci ulang baris
-                } else {
-                    btn.disabled = false;
-                    btn.innerHTML = btnOriginal;
-                }
-            } catch (err) {
-                showToast("Koneksi gagal saat simpan target.", "error");
-                btn.disabled = false;
-                btn.innerHTML = btnOriginal;
-            }
+                if (json.status === "success") loadTargetData();
+            } catch (err) { showToast("Koneksi gagal saat simpan semua target.", "error"); }
+            btn.disabled = false;
+            btn.innerHTML = btnOriginal;
             hideLoading();
         }
 
         // ---- C. Ambang Batas RC ----
         async function loadAmbangRCTable() {
             let tbody = document.getElementById('ambangRcTableBody');
-            tbody.innerHTML = '<tr><td colspan="3" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="2" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
             showLoading('Memuat ambang batas RC...');
             try {
                 let res = await fetch(API_URL + "?action=getAmbangRC");
@@ -1741,56 +1781,42 @@
                     tbody.innerHTML += `
                         <tr data-region="${r.region}">
                             <td class="px-5 py-4 text-sm font-bold">${r.region}</td>
-                            <td class="px-5 py-3"><input type="number" step="0.1" class="rc-value w-24 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none bg-gray-100 dark:bg-gray-800 cursor-not-allowed text-gray-500" value="${r.ambang_batas}" disabled> %</td>
-                            <td class="px-5 py-4 text-center"><button onclick="enableRCEdit(this)" class="bg-blue-500 text-white px-3 py-1.5 rounded-md text-xs hover:bg-blue-600"><i class="fas fa-pen"></i> Edit</button></td>
+                            <td class="px-5 py-3"><input type="number" step="0.1" class="rc-value w-24 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" value="${r.ambang_batas}"> %</td>
                         </tr>
                     `;
                 });
             } catch (err) {
-                tbody.innerHTML = '<tr><td colspan="3" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="2" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
                 showToast("Gagal memuat ambang batas RC.", "error");
             }
             hideLoading();
         }
 
-        function enableRCEdit(btn) {
-            let row = btn.closest('tr');
-            let region = row.dataset.region;
-            let input = row.querySelector('.rc-value');
-            input.disabled = false;
-            input.classList.remove('bg-gray-100', 'dark:bg-gray-800', 'cursor-not-allowed', 'text-gray-500');
-            btn.outerHTML = `<button onclick="saveAmbangRCRow(this, '${region}')" class="bg-aeGreen text-white px-3 py-1.5 rounded-md text-xs hover:bg-[#0a2e22]"><i class="fas fa-save"></i> Simpan</button>`;
-        }
+        async function saveAllAmbangRC() {
+            let rows = [];
+            document.querySelectorAll('#ambangRcTableBody tr[data-region]').forEach(row => {
+                rows.push({ region: row.dataset.region, ambang_batas: row.querySelector('.rc-value').value || 0 });
+            });
+            if (rows.length === 0) return;
 
-        async function saveAmbangRCRow(btn, region) {
-            let row = btn.closest('tr');
-            let ambangBatas = row.querySelector('.rc-value').value || 0;
-
+            const btn = document.getElementById('btnSaveAllRC');
             const btnOriginal = btn.innerHTML;
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
             showLoading('Menyimpan ambang batas RC...');
 
             let formData = new URLSearchParams();
-            formData.append('action', 'saveAmbangRC');
-            formData.append('region', region);
-            formData.append('ambang_batas', ambangBatas);
+            formData.append('action', 'saveAmbangRCBatch');
+            formData.append('data', JSON.stringify(rows));
 
             try {
                 let res = await fetch(API_URL, { method: 'POST', body: formData });
                 let json = await res.json();
                 showToast(json.message, json.status === "success" ? "success" : "error");
-                if (json.status === "success") {
-                    loadAmbangRCTable(); // refresh & kunci ulang baris
-                } else {
-                    btn.disabled = false;
-                    btn.innerHTML = btnOriginal;
-                }
-            } catch (err) {
-                showToast("Koneksi gagal saat simpan ambang batas.", "error");
-                btn.disabled = false;
-                btn.innerHTML = btnOriginal;
-            }
+                if (json.status === "success") loadAmbangRCTable();
+            } catch (err) { showToast("Koneksi gagal saat simpan ambang batas.", "error"); }
+            btn.disabled = false;
+            btn.innerHTML = btnOriginal;
             hideLoading();
         }
 
