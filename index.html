@@ -503,8 +503,16 @@
                                     </select>
                                 </div>
                                 <label class="block text-sm font-bold mb-2">Tanggal Laporan</label>
-                                <input type="date" id="inputTgl"
-                                    class="w-full p-3 border rounded-lg dark:bg-gray-700 mb-4 outline-none">
+                                <div class="flex gap-2 mb-2">
+                                    <input type="date" id="inputTgl"
+                                        class="flex-1 p-3 border rounded-lg dark:bg-gray-700 outline-none">
+                                    <button type="button" onclick="cekDanMuatLaporan()" title="Cek ulang tanggal ini"
+                                        class="px-3 border rounded-lg text-gray-500 hover:text-aeGreen hover:border-aeGreen dark:border-gray-600"><i
+                                            class="fas fa-rotate"></i></button>
+                                </div>
+                                <p id="tanggalLaporanStatus" class="hidden text-[11px] text-red-500 mb-3"><i
+                                        class="fas fa-triangle-exclamation mr-1"></i>Tanggal ini belum dikonfirmasi. Klik tombol
+                                    <i class="fas fa-rotate"></i> untuk cek ulang.</p>
                                 <label class="block text-sm font-bold mb-2">Total Nomor Dilayani (Lead)</label>
                                 <input type="number" id="inputLead"
                                     class="w-full p-3 border rounded-lg dark:bg-gray-700 outline-none"
@@ -604,10 +612,39 @@
                             <h2 class="text-2xl font-bold">Approval Laporan CS</h2>
                             <p class="text-sm text-gray-500">Tinjau antrean data dari tim Sales.</p>
                         </div>
-                        <button onclick="loadPendingApprovals()"
+                        <button onclick="refreshApprovalAdmin()"
                             class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg shadow-sm hover:bg-gray-50"><i
                                 class="fas fa-sync-alt mr-2 text-aeGreen"></i> Segarkan Data</button>
                     </div>
+
+                    <!-- Antrean Laporan Lead: Total_Lead baru dihitung ke Dashboard/skor setelah di-Approve di sini -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+                        <div class="p-5 bg-gray-50 dark:bg-gray-700/50 border-b">
+                            <h3 class="font-bold text-gray-800 dark:text-gray-200"><i
+                                    class="fas fa-users mr-2 text-orange-500"></i> Antrean Laporan Lead Pending</h3>
+                            <p class="text-xs text-gray-500 mt-1">Khusus laporan tanpa invoice (nomor yang dilayani tapi belum ada yang closing). Laporan yang punya invoice otomatis ikut ter-Approve begitu salah satu invoice-nya di-approve di tabel Antrean Pending bawah.</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead
+                                    class="bg-white dark:bg-gray-800 text-xs text-gray-500 uppercase tracking-wider border-b">
+                                    <tr>
+                                        <th class="px-5 py-4">Tanggal Laporan</th>
+                                        <th class="px-5 py-4">CS</th>
+                                        <th class="px-5 py-4 text-center">Total Lead</th>
+                                        <th class="px-5 py-4 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leadApprovalTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
+                                    <tr>
+                                        <td colspan="4" class="px-5 py-8 text-center text-gray-500"><i
+                                                class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                         <div
                             class="p-5 bg-gray-50 dark:bg-gray-700/50 flex flex-wrap justify-between items-center gap-3 border-b">
@@ -1101,12 +1138,35 @@
         </div>
     </div>
 
+    <!-- Modal Peringatan Invoice Duplikat (Fase 3) -->
+    <div id="modalInvoiceDuplikat"
+        class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-sm shadow-2xl">
+            <div class="flex items-center gap-3 mb-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-triangle-exclamation text-orange-500"></i>
+                </div>
+                <h3 class="text-base font-bold text-gray-800 dark:text-white">Ada Invoice Duplikat</h3>
+            </div>
+            <p class="text-xs text-gray-600 dark:text-gray-300 mb-3">Nomor invoice berikut sudah pernah tercatat
+                sebelumnya (di laporan lain). Data <b>lama tetap dipertahankan</b>, data baru untuk nomor ini <b>tidak
+                    disimpan</b>:</p>
+            <ul id="invoiceDuplikatList"
+                class="text-xs bg-orange-50 dark:bg-orange-900/20 rounded-lg p-3 mb-4 space-y-1 max-h-40 overflow-y-auto">
+            </ul>
+            <button onclick="closeInvoiceDuplikatModal()"
+                class="w-full bg-aeGreen text-white font-bold py-2 rounded-lg text-sm hover:bg-[#0a2e22]">Mengerti</button>
+        </div>
+    </div>
+
     <script>
         // URL ASLI MILIKMU
         const API_URL = "https://script.google.com/macros/s/AKfycbwJFRU9dehbyURfDHInXdYC8QtH4QPdNE_gL7mh0YbpzSj8OlrK73m14gaveTvhqppfmw/exec";
         let currentUser = null;
         let scannedInvoices = [];
         let modeEditLaporan = false; // true kalau ID_CS+Tanggal terpilih sudah pernah lapor (submit ulang = update, bukan baris baru)
+        let tanggalLaporanValid = false; // true kalau tanggal terpilih aman untuk disubmit (baru, atau edit yang sudah dikonfirmasi CS/SPV)
         let allUsers = [];
         let lastLeaderboard = [];
         let bandingkanSelected = [];
@@ -1348,24 +1408,38 @@
             if (!currentUser) return;
             let tgl = document.getElementById('inputTgl').value;
             let idCsTarget = currentUser.role === 'SPV' ? document.getElementById('inputCsSelect').value : currentUser.id;
-            if (!tgl || !idCsTarget) return;
+            if (!tgl || !idCsTarget) { tanggalLaporanValid = false; updateTombolKirimLaporan(); return; }
 
+            tanggalLaporanValid = false; // diblokir sampai pengecekan ini selesai (dan, kalau sudah ada laporan, dikonfirmasi)
             showLoading('Memeriksa laporan tanggal ini...');
             try {
                 let res = await fetch(`${API_URL}?action=getLaporanTanggal&id_cs=${idCsTarget}&tanggal=${tgl}`);
                 let json = await res.json();
                 if (json.status === "success") {
                     if (json.ada_laporan) {
-                        modeEditLaporan = true;
-                        document.getElementById('inputLead').value = json.total_lead;
-                        scannedInvoices = json.invoices.map(inv => ({
-                            no_invoice: inv.no_invoice, nama_cust: inv.nama_cust, cabang: inv.cabang,
-                            qty: parseFloat(inv.qty) || 0, revenue: parseFloat(inv.revenue) || 0,
-                            tgl_acara: inv.tgl_acara, status_lama: inv.status
-                        }));
-                        showToast("Tanggal ini sudah pernah dilaporkan. Form dimuat ulang untuk mode edit.", "success");
+                        hideLoading();
+                        let mauEdit = confirm(`Tanggal ${tgl} sudah pernah kamu laporkan sebelumnya.\n\nApakah mau merubah (edit) laporan tersebut?`);
+                        showLoading('Memeriksa laporan tanggal ini...');
+                        if (mauEdit) {
+                            modeEditLaporan = true;
+                            tanggalLaporanValid = true;
+                            document.getElementById('inputLead').value = json.total_lead;
+                            scannedInvoices = json.invoices.map(inv => ({
+                                no_invoice: inv.no_invoice, nama_cust: inv.nama_cust, cabang: inv.cabang,
+                                qty: parseFloat(inv.qty) || 0, revenue: parseFloat(inv.revenue) || 0,
+                                tgl_acara: inv.tgl_acara, status_lama: inv.status
+                            }));
+                            showToast("Mode edit aktif. Ubah data lalu klik Simpan Perubahan.", "success");
+                        } else {
+                            modeEditLaporan = false;
+                            tanggalLaporanValid = false; // tetap diblokir sampai user ganti tanggal atau konfirmasi ulang
+                            document.getElementById('inputLead').value = '';
+                            scannedInvoices = [];
+                            showToast("Dibatalkan. Pilih tanggal lain, atau pilih tanggal yang sama lagi untuk mengedit laporan itu.", "error");
+                        }
                     } else {
                         modeEditLaporan = false;
+                        tanggalLaporanValid = true;
                         document.getElementById('inputLead').value = '';
                         scannedInvoices = [];
                     }
@@ -1381,6 +1455,7 @@
             btn.innerHTML = modeEditLaporan
                 ? '<i class="fas fa-save"></i> Simpan Perubahan'
                 : '<i class="fas fa-paper-plane"></i> Kirim Laporan';
+            document.getElementById('tanggalLaporanStatus').classList.toggle('hidden', tanggalLaporanValid);
         }
 
         document.getElementById('inputTgl').addEventListener('change', cekDanMuatLaporan);
@@ -1415,7 +1490,7 @@
 
             // Trigger fetch data jika tab ditekan
             if (tabId === 'dashboard') loadDashboardData();
-            if (tabId === 'admin' && currentUser.role === 'SPV') loadPendingApprovals();
+            if (tabId === 'admin' && currentUser.role === 'SPV') refreshApprovalAdmin();
             if (tabId === 'referensi' && currentUser.role === 'SPV') loadReferensiData();
             if (tabId === 'riwayat') loadRiwayatInput();
             if (tabId === 'profil') loadProfilData();
@@ -1589,6 +1664,11 @@
                 if (!idCsTarget) { showToast("Pilih CS Sales terlebih dahulu!", "error"); return; }
             }
 
+            if (!tanggalLaporanValid) {
+                showToast("Tanggal laporan belum dikonfirmasi. Klik tombol cek ulang (ikon refresh) di sebelah tanggal dulu.", "error");
+                return;
+            }
+
             let btn = document.getElementById('btnKirimLaporan');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...'; btn.disabled = true;
             showLoading('Mengupload laporan...');
@@ -1605,7 +1685,9 @@
                 let json = await res.json();
                 if (json.status === "success") {
                     showToast(json.message, "success");
+                    if (json.duplikat && json.duplikat.length > 0) openInvoiceDuplikatModal(json.duplikat);
                     modeEditLaporan = false;
+                    tanggalLaporanValid = false; // paksa cek ulang sebelum submit berikutnya, cegah submit kosong menimpa laporan barusan
                     scannedInvoices = [];
                     renderPreviewTable();
                     document.getElementById('inputLead').value = '';
@@ -1618,6 +1700,14 @@
             updateTombolKirimLaporan(); btn.disabled = false;
             hideLoading();
         });
+
+        function openInvoiceDuplikatModal(list) {
+            document.getElementById('invoiceDuplikatList').innerHTML = list.map(no => `<li><i class="fas fa-circle text-[4px] mr-1 align-middle"></i>${no}</li>`).join('');
+            document.getElementById('modalInvoiceDuplikat').classList.remove('hidden');
+        }
+        function closeInvoiceDuplikatModal() {
+            document.getElementById('modalInvoiceDuplikat').classList.add('hidden');
+        }
 
         // 6. API FETCH: DASHBOARD DATA
         // Warna kategori Skor KPI: hijau (Sangat Baik >80%), kuning (Cukup 50-79%), merah (Kurang <50%)
@@ -1982,6 +2072,65 @@
             }).join('');
         }
 
+        // Refresh gabungan Approval Admin: antrean Leads + antrean Invoice sekaligus
+        function refreshApprovalAdmin() {
+            loadPendingLeadApprovals();
+            loadPendingApprovals();
+        }
+
+        // Antrean Laporan Lead Pending: Total_Lead baru dihitung ke Dashboard/skor setelah di-Approve di sini
+        async function loadPendingLeadApprovals() {
+            let tbody = document.getElementById('leadApprovalTableBody');
+            tbody.innerHTML = '<tr><td colspan="4" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
+            try {
+                let res = await fetch(API_URL + "?action=getPendingLeadApprovals");
+                let json = await res.json();
+                tbody.innerHTML = '';
+                if (!json.data || json.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="px-5 py-8 text-center text-gray-500 italic">Tidak ada antrean laporan lead pending.</td></tr>';
+                    return;
+                }
+                json.data.forEach(item => {
+                    tbody.innerHTML += `
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors border-b dark:border-gray-700">
+                                <td class="px-5 py-4 text-sm">${item.tanggal_display}</td>
+                                <td class="px-5 py-4 font-bold text-aeGreen">${getNamaCsById(item.id_cs)}</td>
+                                <td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300">${item.total_lead}</td>
+                                <td class="px-5 py-4 text-center flex gap-2 justify-center">
+                                    <button onclick="actionApprovalLead('${item.id_cs}', '${item.tanggal}', 'Approved')" class="bg-green-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-green-600 transition" title="Approve"><i class="fas fa-check"></i></button>
+                                    <button onclick="actionApprovalLead('${item.id_cs}', '${item.tanggal}', 'Rejected')" class="bg-red-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-red-600 transition" title="Reject"><i class="fas fa-times"></i></button>
+                                </td>
+                            </tr>
+                        `;
+                });
+            } catch (err) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
+            }
+        }
+
+        async function actionApprovalLead(idCs, tanggal, statusBaru) {
+            if (statusBaru === 'Approved' && !confirm(`Approve laporan Lead ${getNamaCsById(idCs)} tanggal ${tanggal}?`)) return;
+            if (statusBaru === 'Rejected' && !confirm(`Tolak laporan Lead ${getNamaCsById(idCs)} tanggal ${tanggal}? CS perlu melapor ulang tanggal itu.`)) return;
+
+            let formData = new URLSearchParams();
+            formData.append('action', 'actionApprovalLead');
+            formData.append('id_cs', idCs);
+            formData.append('tanggal', tanggal);
+            formData.append('status_baru', statusBaru);
+
+            showLoading('Memproses approval lead...');
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                showToast(json.message, json.status === "success" ? "success" : "error");
+                if (json.status === "success") {
+                    loadPendingLeadApprovals();
+                    loadDashboardData();
+                }
+            } catch (err) { showToast("Koneksi gagal saat approval lead.", "error"); }
+            hideLoading();
+        }
+
         // 7. API FETCH: ADMIN APPROVAL TABLE
         async function loadPendingApprovals() {
             let tbody = document.getElementById('approvalTableBody');
@@ -1996,14 +2145,17 @@
                 if (json.data.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="7" class="px-5 py-8 text-center text-gray-500 italic">Tidak ada antrean pending.</td></tr>';
                 } else {
-                    json.data.forEach(item => {
+                    let { items: approvalGrouped, spans: leadSpans } = groupForLeadDisplay(json.data);
+                    approvalGrouped.forEach((item, idx) => {
+                        // Kolom Lead digabung (rowspan) per laporan (ID_CS+Tanggal), bukan diulang tiap invoice
+                        let leadCell = leadSpans[idx] === 0 ? '' : `<td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300 align-middle" rowspan="${leadSpans[idx]}">${item.total_lead_hari_itu}</td>`;
                         tbody.innerHTML += `
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors border-b dark:border-gray-700">
                                     <td class="px-5 py-4"><input type="checkbox" class="approval-check" data-no-invoice="${item.no_invoice}" data-timestamp="${item.raw_timestamp}" onchange="updateApproveSelectedCount()"></td>
                                     <td class="px-5 py-4 text-sm">${item.timestamp}</td>
                                     <td class="px-5 py-4 font-bold text-aeGreen">${getNamaCsById(item.id_cs)}</td>
                                     <td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>
-                                    <td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300">${item.total_lead_hari_itu}</td>
+                                    ${leadCell}
                                     <td class="px-5 py-4 text-sm font-bold">Rp ${parseInt(item.revenue).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span></td>
                                     <td class="px-5 py-4 text-center flex gap-2 justify-center">
                                         <button onclick="openAlasanRejectModal('${item.no_invoice}', '${item.raw_timestamp}')" class="bg-red-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-red-600 transition" title="Reject"><i class="fas fa-times"></i></button>
@@ -2118,6 +2270,35 @@
         // ===================================================
         // FASE 3: RIWAYAT INPUT & REVISI TRANSAKSI DITOLAK
         // ===================================================
+        // Baris-baris invoice dari laporan yang sama (ID_CS + Tanggal_Laporan) berbagi satu angka Total Lead yang sama
+        // (bukan dijumlah per-invoice). Fungsi ini mengelompokkan baris per laporan (supaya selalu berdekatan --
+        // invoice baru yang ditambahkan lewat mode edit bisa saja berada di posisi sheet yang jauh dari invoice lama
+        // laporan yang sama) lalu hitung rowspan supaya kolom Lead digabung jadi satu sel per laporan, biar tidak
+        // keliru diasumsikan "5 + 5 = 10" padahal itu angka yang sama untuk 2 invoice di tanggal yang sama.
+        function groupForLeadDisplay(items) {
+            let groups = {};
+            let order = [];
+            items.forEach(item => {
+                let key = item.id_cs + '_' + item.tanggal_laporan;
+                if (!groups[key]) { groups[key] = []; order.push(key); }
+                groups[key].push(item);
+            });
+            let grouped = [];
+            order.forEach(key => grouped.push(...groups[key]));
+
+            let spans = new Array(grouped.length).fill(1);
+            let i = 0;
+            while (i < grouped.length) {
+                let key = grouped[i].id_cs + '_' + grouped[i].tanggal_laporan;
+                let j = i + 1;
+                while (j < grouped.length && (grouped[j].id_cs + '_' + grouped[j].tanggal_laporan) === key) j++;
+                spans[i] = j - i;
+                for (let k = i + 1; k < j; k++) spans[k] = 0;
+                i = j;
+            }
+            return { items: grouped, spans: spans };
+        }
+
         async function loadRiwayatInput() {
             let isSpv = currentUser.role === 'SPV';
             document.getElementById('riwayatCsTh').classList.toggle('hidden', !isSpv);
@@ -2133,7 +2314,8 @@
                     hideLoading();
                     return;
                 }
-                json.data.forEach(item => {
+                let { items: riwayatGrouped, spans: leadSpans } = groupForLeadDisplay(json.data);
+                riwayatGrouped.forEach((item, idx) => {
                     let statusBadge = '';
                     let aksi = '-';
                     if (item.status === 'Approved') {
@@ -2150,6 +2332,8 @@
                     }
                     let rejectNote = item.status === 'Rejected' ? `<p class="text-[10px] text-red-500 mt-1"><i class="fas fa-exclamation-circle mr-1"></i>${item.alasan_reject || '-'}</p>` : '';
                     let csCell = isSpv ? `<td class="px-5 py-4 text-sm font-bold text-aeGreen">${getNamaCsById(item.id_cs)}</td>` : '';
+                    // Kolom Lead digabung (rowspan) per laporan (ID_CS+Tanggal), bukan diulang tiap invoice
+                    let leadCell = leadSpans[idx] === 0 ? '' : `<td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300 align-middle" rowspan="${leadSpans[idx]}">${item.total_lead_hari_itu}</td>`;
 
                     tbody.innerHTML += `
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
@@ -2157,7 +2341,7 @@
                                 ${csCell}
                                 <td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>
                                 <td class="px-5 py-4 text-sm font-bold">Rp ${(parseInt(item.revenue) || 0).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span>${rejectNote}</td>
-                                <td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300">${item.total_lead_hari_itu}</td>
+                                ${leadCell}
                                 <td class="px-5 py-4 text-center">${statusBadge}</td>
                                 <td class="px-5 py-4 text-center">${aksi}</td>
                             </tr>
