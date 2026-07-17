@@ -1103,9 +1103,10 @@
 
     <script>
         // URL ASLI MILIKMU
-        const API_URL = "https://script.google.com/macros/s/AKfycbwJFRU9dehbyURfDHInXdYC8QtH4QPdNE_gL7mh0YbpzSj8OlrK73m14gaveTvhqppfmw/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbzj-KXl-P2I9zs_jRomVUGLZRwG9PagcfU7H2vei3fWsk5K7SD7ktfxJZUW9-nKOUe9gA/exec";
         let currentUser = null;
         let scannedInvoices = [];
+        let modeEditLaporan = false; // true kalau ID_CS+Tanggal terpilih sudah pernah lapor (submit ulang = update, bukan baris baru)
         let allUsers = [];
         let lastLeaderboard = [];
         let bandingkanSelected = [];
@@ -1320,6 +1321,7 @@
                 document.getElementById('inputCsWrapper').classList.add('hidden');
                 document.getElementById('nav-profil').classList.remove('hidden');
                 document.getElementById('nav-profil-mobile').classList.remove('hidden');
+                cekDanMuatLaporan(); // CS: tanggal default sudah "hari ini", langsung cek apakah sudah pernah lapor
             }
             loadDashboardData();
         }
@@ -1338,6 +1340,51 @@
             let u = allUsers.find(u => u.id === id);
             return u ? u.nama : id;
         }
+
+        // Satu ID_CS cuma boleh punya satu laporan per tanggal: tiap kali Tanggal Laporan (atau CS terpilih, khusus SPV)
+        // berubah, cek ke backend apakah kombinasi ini sudah pernah lapor. Kalau sudah, form dimuat ulang dengan data
+        // yang tersimpan (mode edit, submit ulang = update laporan itu). Kalau belum, form dikosongkan (submit baru).
+        async function cekDanMuatLaporan() {
+            if (!currentUser) return;
+            let tgl = document.getElementById('inputTgl').value;
+            let idCsTarget = currentUser.role === 'SPV' ? document.getElementById('inputCsSelect').value : currentUser.id;
+            if (!tgl || !idCsTarget) return;
+
+            showLoading('Memeriksa laporan tanggal ini...');
+            try {
+                let res = await fetch(`${API_URL}?action=getLaporanTanggal&id_cs=${idCsTarget}&tanggal=${tgl}`);
+                let json = await res.json();
+                if (json.status === "success") {
+                    if (json.ada_laporan) {
+                        modeEditLaporan = true;
+                        document.getElementById('inputLead').value = json.total_lead;
+                        scannedInvoices = json.invoices.map(inv => ({
+                            no_invoice: inv.no_invoice, nama_cust: inv.nama_cust, cabang: inv.cabang,
+                            qty: parseFloat(inv.qty) || 0, revenue: parseFloat(inv.revenue) || 0,
+                            tgl_acara: inv.tgl_acara, status_lama: inv.status
+                        }));
+                        showToast("Tanggal ini sudah pernah dilaporkan. Form dimuat ulang untuk mode edit.", "success");
+                    } else {
+                        modeEditLaporan = false;
+                        document.getElementById('inputLead').value = '';
+                        scannedInvoices = [];
+                    }
+                    renderPreviewTable();
+                    updateTombolKirimLaporan();
+                }
+            } catch (err) { showToast("Gagal memeriksa laporan tanggal ini.", "error"); }
+            hideLoading();
+        }
+
+        function updateTombolKirimLaporan() {
+            let btn = document.getElementById('btnKirimLaporan');
+            btn.innerHTML = modeEditLaporan
+                ? '<i class="fas fa-save"></i> Simpan Perubahan'
+                : '<i class="fas fa-paper-plane"></i> Kirim Laporan';
+        }
+
+        document.getElementById('inputTgl').addEventListener('change', cekDanMuatLaporan);
+        document.getElementById('inputCsSelect').addEventListener('change', cekDanMuatLaporan);
 
         function logoutSystem() {
             localStorage.removeItem('aeSession');
@@ -1458,6 +1505,7 @@
                                     <span class="text-[10px] text-gray-500">Cab:</span>
                                     <input type="text" class="text-[10px] text-gray-500 bg-transparent border-b border-dashed border-gray-300 dark:border-gray-600 focus:outline-none w-16" value="${inv.cabang}" onchange="updateInvoice(${index}, 'cabang', this.value)" placeholder="Cabang">
                                 </div>
+                                ${(inv.status_lama === 'Approved' || inv.status_lama === 'Rejected') ? `<p class="text-[10px] text-orange-500 mt-1"><i class="fas fa-triangle-exclamation"></i> Sudah ${inv.status_lama === 'Approved' ? 'Disetujui' : 'Ditolak'}, kalau diubah akan kembali jadi Pending & perlu di-review ulang SPV.</p>` : ''}
                             </td>
                             <td class="p-2 text-right">
                                 <div class="flex items-center justify-end gap-1">
@@ -1557,6 +1605,7 @@
                 let json = await res.json();
                 if (json.status === "success") {
                     showToast(json.message, "success");
+                    modeEditLaporan = false;
                     scannedInvoices = [];
                     renderPreviewTable();
                     document.getElementById('inputLead').value = '';
@@ -1566,7 +1615,7 @@
                     showToast(json.message, "error");
                 }
             } catch (err) { showToast("Koneksi gagal saat mengirim data.", "error"); }
-            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Kirim Laporan'; btn.disabled = false;
+            updateTombolKirimLaporan(); btn.disabled = false;
             hideLoading();
         });
 
