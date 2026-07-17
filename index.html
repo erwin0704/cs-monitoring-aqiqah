@@ -829,13 +829,14 @@
                                         <th id="riwayatCsTh" class="hidden px-5 py-4">CS</th>
                                         <th class="px-5 py-4">Invoice & Nama</th>
                                         <th class="px-5 py-4">Detail</th>
+                                        <th class="px-5 py-4 text-center">Lead</th>
                                         <th class="px-5 py-4 text-center">Status</th>
                                         <th class="px-5 py-4 text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="riwayatTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
                                     <tr>
-                                        <td colspan="5" class="px-5 py-8 text-center text-gray-500"><i
+                                        <td colspan="6" class="px-5 py-8 text-center text-gray-500"><i
                                                 class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
                                     </tr>
                                 </tbody>
@@ -1389,9 +1390,13 @@
                     let diskon = diskonMatch ? parseFloat(diskonMatch[1].replace(/[,.]/g, '')) : 0;
                     let totalRevenue = subtotal + layanan - diskon;
 
-                    scannedInvoices.push({
-                        no_invoice: noInvoice, cabang: dapur, nama_cust: nama, qty: ekor, revenue: totalRevenue, tgl_acara: "-"
-                    });
+                    if (noInvoice !== "-" && scannedInvoices.some(inv => inv.no_invoice === noInvoice)) {
+                        showToast(`Invoice ${noInvoice} sudah ada di daftar, dilewati.`, "error");
+                    } else {
+                        scannedInvoices.push({
+                            no_invoice: noInvoice, cabang: dapur, nama_cust: nama, qty: ekor, revenue: totalRevenue, tgl_acara: "-"
+                        });
+                    }
                     renderPreviewTable();
                 };
                 reader.readAsArrayBuffer(files[i]);
@@ -1462,6 +1467,11 @@
 
             if (!noInvoice || !nama || !cabang || !qty || !revenue) {
                 showToast("Semua field wajib diisi (No. Invoice, Nama, Cabang, QTY, Revenue)!", "error");
+                return;
+            }
+
+            if (scannedInvoices.some(inv => inv.no_invoice === noInvoice)) {
+                showToast(`Invoice ${noInvoice} sudah ada di daftar!`, "error");
                 return;
             }
 
@@ -2017,14 +2027,14 @@
             let isSpv = currentUser.role === 'SPV';
             document.getElementById('riwayatCsTh').classList.toggle('hidden', !isSpv);
             let tbody = document.getElementById('riwayatTableBody');
-            tbody.innerHTML = `<tr><td colspan="${isSpv ? 6 : 5}" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="${isSpv ? 7 : 6}" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>`;
             showLoading('Memuat riwayat input...');
             try {
                 let res = await fetch(`${API_URL}?action=getRiwayatInput&id_cs=${encodeURIComponent(currentUser.id)}&role=${encodeURIComponent(currentUser.role)}`);
                 let json = await res.json();
                 tbody.innerHTML = '';
                 if (!json.data || json.data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="${isSpv ? 6 : 5}" class="px-5 py-8 text-center text-gray-500 italic">Belum ada riwayat input.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="${isSpv ? 7 : 6}" class="px-5 py-8 text-center text-gray-500 italic">Belum ada riwayat input.</td></tr>`;
                     hideLoading();
                     return;
                 }
@@ -2052,13 +2062,14 @@
                                 ${csCell}
                                 <td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>
                                 <td class="px-5 py-4 text-sm font-bold">Rp ${(parseInt(item.revenue) || 0).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span>${rejectNote}</td>
+                                <td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300">${item.total_lead_hari_itu}</td>
                                 <td class="px-5 py-4 text-center">${statusBadge}</td>
                                 <td class="px-5 py-4 text-center">${aksi}</td>
                             </tr>
                         `;
                 });
             } catch (err) {
-                tbody.innerHTML = `<tr><td colspan="${isSpv ? 6 : 5}" class="text-center text-red-500 py-8">Koneksi Error</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="${isSpv ? 7 : 6}" class="text-center text-red-500 py-8">Koneksi Error</td></tr>`;
                 showToast("Gagal memuat riwayat input.", "error");
             }
             hideLoading();
