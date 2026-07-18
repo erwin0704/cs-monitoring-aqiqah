@@ -419,18 +419,21 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden">
-                            <h3
-                                class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 flex justify-between">
-                                TOTAL REVENUE <i class="fas fa-money-bill-wave text-gray-300"></i></h3>
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-aeGreen relative overflow-hidden">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">TOTAL REVENUE</h3>
+                                <div class="w-9 h-9 rounded-full bg-green-50 dark:bg-green-900/30 text-aeGreen flex items-center justify-center flex-shrink-0"><i class="fas fa-money-bill-wave text-sm"></i></div>
+                            </div>
                             <p class="text-2xl font-bold text-aeGreen" id="dashRev">Rp 0</p>
                             <p class="text-[10px] text-green-500 mt-2 font-medium"><i class="fas fa-arrow-trend-up"></i>
                                 Data tervalidasi</p>
                         </div>
                         <div
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">CAPAIAN TARGET
-                            </h3>
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-blue-400 relative overflow-hidden">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">CAPAIAN TARGET</h3>
+                                <div class="w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center flex-shrink-0"><i class="fas fa-bullseye text-sm"></i></div>
+                            </div>
                             <p class="text-2xl font-bold text-gray-800 dark:text-white" id="dashCapaian">-</p>
                             <div class="w-full bg-gray-200 rounded-full h-1.5 mt-3">
                                 <div id="dashCapaianBar" class="bg-orange-400 h-1.5 rounded-full" style="width: 0%">
@@ -440,18 +443,21 @@
                                 target revenue bulan ini</p>
                         </div>
                         <div
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                            <h3
-                                class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 flex justify-between">
-                                JUMLAH TRANSAKSI <i class="fas fa-chart-line text-gray-300"></i></h3>
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-aeOrange">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">JUMLAH TRANSAKSI</h3>
+                                <div class="w-9 h-9 rounded-full bg-orange-50 dark:bg-orange-900/30 text-aeOrange flex items-center justify-center flex-shrink-0"><i class="fas fa-chart-line text-sm"></i></div>
+                            </div>
                             <p class="text-2xl font-bold text-gray-800 dark:text-white" id="dashTrx">0</p>
                             <p class="text-[10px] text-green-500 mt-2 font-medium"><i class="far fa-check-circle"></i>
                                 Status Pending: <span id="dashPending" class="font-bold text-orange-500">0</span></p>
                         </div>
-                        <div
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">SKOR AKHIR KPI
-                            </h3>
+                        <div id="dashSkorCard"
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-gray-300">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">SKOR AKHIR KPI</h3>
+                                <div id="dashSkorBadge" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-400 flex items-center justify-center flex-shrink-0"><i class="fas fa-award text-sm"></i></div>
+                            </div>
                             <p class="text-2xl font-bold text-gray-800 dark:text-white" id="dashSkor">-</p>
                             <p class="text-[10px] mt-2 font-medium" id="dashKategori">Revenue + Leads + Closing + RC</p>
                         </div>
@@ -565,14 +571,19 @@
                                 <p id="inputLeadPerRegionTotal" class="hidden text-xs font-semibold text-gray-500 mt-1"></p>
                             </div>
                             <div
-                                class="bg-white dark:bg-gray-800 p-8 rounded-xl border-2 border-dashed border-aeGreen flex flex-col items-center cursor-pointer relative hover:bg-gray-50">
+                                class="bg-white dark:bg-gray-800 p-8 rounded-xl border-2 border-dashed border-aeGreen flex flex-col items-center cursor-pointer relative hover:bg-green-50 dark:hover:bg-green-900/10 transition-colors group">
                                 <input type="file" id="pdfUpload"
                                     class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                                     accept="application/pdf" multiple>
                                 <div
-                                    class="w-16 h-16 bg-green-100 text-aeGreen rounded-full flex items-center justify-center text-3xl mb-4">
+                                    class="w-16 h-16 bg-green-100 dark:bg-green-900/30 text-aeGreen rounded-full flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">
                                     <i class="fas fa-file-upload"></i></div>
                                 <h3 class="text-lg font-bold mb-1">Upload PDF Invoice</h3>
+                                <p class="text-xs text-gray-500 text-center">Drag &amp; drop file di sini, atau klik untuk pilih file</p>
+                                <div class="mt-3 flex items-center gap-2">
+                                    <span class="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-[10px] font-mono text-gray-500 dark:text-gray-400">.pdf</span>
+                                    <span class="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-[10px] font-mono text-gray-500 dark:text-gray-400">multi-file</span>
+                                </div>
                             </div>
 
                             <!-- Form Entri Manual (Fase 3) -->
@@ -951,8 +962,11 @@
                     <!-- Target Pribadi: breakdown 4 aspek vs aktual bulan berjalan -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Revenue</h3>
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-aeGreen">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Revenue</h3>
+                                <div class="w-9 h-9 rounded-full bg-green-50 dark:bg-green-900/30 text-aeGreen flex items-center justify-center flex-shrink-0"><i class="fas fa-money-bill-wave text-sm"></i></div>
+                            </div>
                             <p class="text-lg font-bold text-gray-800 dark:text-white" id="profilRevAktual">Rp 0</p>
                             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-3">
                                 <div id="profilRevBar" class="bg-aeGreen h-1.5 rounded-full" style="width: 0%"></div>
@@ -960,8 +974,11 @@
                             <p class="text-[10px] text-gray-500 mt-1" id="profilRevTarget">Target: Rp 0</p>
                         </div>
                         <div
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Leads</h3>
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-blue-400">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Leads</h3>
+                                <div class="w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center flex-shrink-0"><i class="fas fa-users text-sm"></i></div>
+                            </div>
                             <p class="text-lg font-bold text-gray-800 dark:text-white" id="profilLeadAktual">0</p>
                             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-3">
                                 <div id="profilLeadBar" class="bg-aeGreen h-1.5 rounded-full" style="width: 0%"></div>
@@ -969,18 +986,24 @@
                             <p class="text-[10px] text-gray-500 mt-1" id="profilLeadTarget">Target: 0</p>
                         </div>
                         <div
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Closing</h3>
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-aeOrange">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Closing</h3>
+                                <div class="w-9 h-9 rounded-full bg-orange-50 dark:bg-orange-900/30 text-aeOrange flex items-center justify-center flex-shrink-0"><i class="fas fa-handshake text-sm"></i></div>
+                            </div>
                             <p class="text-lg font-bold text-gray-800 dark:text-white" id="profilCloseAktual">0</p>
                             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-3">
                                 <div id="profilCloseBar" class="bg-aeGreen h-1.5 rounded-full" style="width: 0%"></div>
                             </div>
                             <p class="text-[10px] text-gray-500 mt-1" id="profilCloseTarget">Target: 0</p>
                         </div>
-                        <div
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Rating Closing
-                                (RC)</h3>
+                        <div id="profilRcCard"
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-gray-300">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Rating Closing
+                                    (RC)</h3>
+                                <div id="profilRcBadge" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-400 flex items-center justify-center flex-shrink-0"><i class="fas fa-percent text-sm"></i></div>
+                            </div>
                             <p class="text-lg font-bold text-gray-800 dark:text-white" id="profilRcAktual">0%</p>
                             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-3">
                                 <div id="profilRcBar" class="bg-aeGreen h-1.5 rounded-full" style="width: 0%"></div>
@@ -1016,9 +1039,15 @@
                     <!-- Grafik Personal: tren Nilai Akhir 6 bulan terakhir -->
                     <div
                         class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 mb-6">
-                        <h3 class="text-lg font-bold mb-1">Tren Skor Akhir (6 Bulan Terakhir)</h3>
-                        <p class="text-xs text-gray-500 mb-4">Nilai Akhir KPI per bulan</p>
-                        <div id="profilTrenChart" class="flex items-end gap-3 h-48"></div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold mb-1">Tren Skor Akhir (6 Bulan Terakhir)</h3>
+                                <p class="text-xs text-gray-500">Nilai Akhir KPI per bulan</p>
+                            </div>
+                            <div id="profilTrenDelta" class="text-xs font-bold"></div>
+                        </div>
+                        <div id="profilTrenChart" class="flex items-end gap-3 h-48 border-b border-gray-100 dark:border-gray-700 pb-2"></div>
+                        <p id="profilTrenAvg" class="text-[10px] text-gray-400 mt-2"></p>
                     </div>
                 </div>
             </main>
@@ -2014,6 +2043,16 @@
             if (warna === 'kuning') return 'text-yellow-600';
             return 'text-red-500';
         }
+        function kategoriBorderColor(warna) {
+            if (warna === 'hijau') return 'border-t-green-500';
+            if (warna === 'kuning') return 'border-t-yellow-400';
+            return 'border-t-red-400';
+        }
+        function kategoriIconBadgeColor(warna) {
+            if (warna === 'hijau') return 'bg-green-50 dark:bg-green-900/30 text-green-600';
+            if (warna === 'kuning') return 'bg-yellow-50 dark:bg-yellow-900/30 text-yellow-600';
+            return 'bg-red-50 dark:bg-red-900/30 text-red-500';
+        }
 
         // Toggle Bulanan/Tahunan di Dashboard (kartu ringkasan, leaderboard, insight semuanya ikut ganti scope).
         // Picker bulan/tahun di sebelahnya ikut ganti tampilan sesuai mode yang aktif.
@@ -2079,11 +2118,15 @@
                         document.getElementById('dashSkor').innerText = json.data.own.nilai_akhir + '%';
                         document.getElementById('dashKategori').innerText = json.data.own.kategori;
                         document.getElementById('dashKategori').className = 'text-[10px] mt-2 font-bold ' + kategoriTextColor(json.data.own.warna);
+                        document.getElementById('dashSkorCard').className = 'bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 ' + kategoriBorderColor(json.data.own.warna);
+                        document.getElementById('dashSkorBadge').className = 'w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ' + kategoriIconBadgeColor(json.data.own.warna);
                     } else {
                         document.getElementById('dashCapaian').innerText = '-';
                         document.getElementById('dashCapaianNote').innerText = 'Khusus akun CS Sales';
                         document.getElementById('dashSkor').innerText = '-';
                         document.getElementById('dashKategori').innerText = 'Lihat peringkat di bawah';
+                        document.getElementById('dashSkorCard').className = 'bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-gray-300';
+                        document.getElementById('dashSkorBadge').className = 'w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-400 flex items-center justify-center flex-shrink-0';
                     }
 
                     // Reminder "belum lapor hari ini" (khusus CS, sekali per sesi biar tidak spam)
@@ -2380,8 +2423,12 @@
                         document.getElementById('profilCloseTarget').innerText = 'Target: ' + b.target_closing;
 
                         document.getElementById('profilRcAktual').innerText = b.rc + '%';
-                        document.getElementById('profilRcBar').style.width = (b.ambang_rc > 0 ? Math.min(100, b.rc / b.ambang_rc * 100) : 0) + '%';
+                        let rcCapaian = b.ambang_rc > 0 ? Math.min(100, b.rc / b.ambang_rc * 100) : 0;
+                        document.getElementById('profilRcBar').style.width = rcCapaian + '%';
                         document.getElementById('profilRcTarget').innerText = 'Ambang Batas: ' + b.ambang_rc + '%';
+                        let rcWarna = rcCapaian > 80 ? 'hijau' : (rcCapaian >= 50 ? 'kuning' : 'merah');
+                        document.getElementById('profilRcCard').className = 'bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 ' + kategoriBorderColor(rcWarna);
+                        document.getElementById('profilRcBadge').className = 'w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ' + kategoriIconBadgeColor(rcWarna);
 
                         renderProfilRegionBreakdown(b.region_breakdown);
                     }
@@ -2402,33 +2449,54 @@
                 return;
             }
             wrapper.classList.remove('hidden');
-            document.getElementById('profilRegionBreakdownBody').innerHTML = regionBreakdown.map(r => `
+            document.getElementById('profilRegionBreakdownBody').innerHTML = regionBreakdown.map(r => {
+                let capaian = r.ambang_rc > 0 ? Math.min(100, r.rc / r.ambang_rc * 100) : 0;
+                let warna = capaian > 80 ? 'hijau' : (capaian >= 50 ? 'kuning' : 'merah');
+                return `
                     <tr>
                         <td class="px-5 py-3 text-sm font-bold">${r.region}</td>
                         <td class="px-5 py-3 text-sm text-center">${r.leads}</td>
                         <td class="px-5 py-3 text-sm text-center">${r.closing}</td>
-                        <td class="px-5 py-3 text-sm text-center">${r.rc}%</td>
+                        <td class="px-5 py-3 text-sm text-center"><span class="${kategoriBadgeColor(warna)} px-2.5 py-1 rounded-full text-xs font-bold">${r.rc}%</span></td>
                         <td class="px-5 py-3 text-sm text-center">${r.ambang_rc}%</td>
                     </tr>
-                `).join('');
+                `;
+            }).join('');
         }
 
         function renderProfilTrenChart(tren) {
             const chart = document.getElementById('profilTrenChart');
+            const deltaEl = document.getElementById('profilTrenDelta');
+            const avgEl = document.getElementById('profilTrenAvg');
             if (!tren || tren.length === 0) {
                 chart.innerHTML = '<p class="text-sm text-gray-400 italic m-auto">Belum ada data.</p>';
+                deltaEl.innerHTML = ''; avgEl.innerText = '';
                 return;
             }
-            chart.innerHTML = tren.map(t => {
+            chart.innerHTML = tren.map((t, idx) => {
                 let barColor = t.nilai_akhir > 80 ? 'bg-green-500' : (t.nilai_akhir >= 50 ? 'bg-yellow-400' : 'bg-red-400');
+                let isLast = idx === tren.length - 1;
                 return `
-                        <div class="flex-1 flex flex-col items-center justify-end h-full">
-                            <span class="text-[10px] font-bold text-gray-600 dark:text-gray-300 mb-1">${t.nilai_akhir}%</span>
-                            <div class="w-full ${barColor} rounded-t-md transition-all" style="height: ${Math.max(2, t.nilai_akhir)}%"></div>
-                            <span class="text-[10px] text-gray-400 mt-2">${t.bulan}</span>
+                        <div class="flex-1 flex flex-col items-center justify-end h-full group">
+                            <span class="text-[10px] font-bold ${isLast ? 'text-gray-800 dark:text-white' : 'text-gray-400 dark:text-gray-500'} mb-1">${t.nilai_akhir}%</span>
+                            <div class="w-full ${barColor} ${isLast ? '' : 'opacity-70'} rounded-t-md transition-all group-hover:opacity-100" style="height: ${Math.max(2, t.nilai_akhir)}%"></div>
+                            <span class="text-[10px] ${isLast ? 'font-bold text-gray-600 dark:text-gray-300' : 'text-gray-400'} mt-2">${t.bulan}</span>
                         </div>
                     `;
             }).join('');
+
+            let avg = tren.reduce((sum, t) => sum + t.nilai_akhir, 0) / tren.length;
+            avgEl.innerText = 'Rata-rata: ' + (Math.round(avg * 10) / 10) + '%';
+
+            let first = tren[0].nilai_akhir, last = tren[tren.length - 1].nilai_akhir;
+            let delta = Math.round((last - first) * 10) / 10;
+            if (delta > 0) {
+                deltaEl.innerHTML = `<span class="text-green-600"><i class="fas fa-arrow-trend-up mr-1"></i>+${delta}%</span>`;
+            } else if (delta < 0) {
+                deltaEl.innerHTML = `<span class="text-red-500"><i class="fas fa-arrow-trend-down mr-1"></i>${delta}%</span>`;
+            } else {
+                deltaEl.innerHTML = `<span class="text-gray-400">Stabil</span>`;
+            }
         }
 
         // Approve/Reject laporan lead-only (tanpa invoice) langsung dari baris di tabel Antrean Pending yang sama
