@@ -517,6 +517,8 @@
                                 <input type="number" id="inputLead"
                                     class="w-full p-3 border rounded-lg dark:bg-gray-700 outline-none"
                                     placeholder="Misal: 15">
+                                <div id="inputLeadPerRegionWrapper" class="hidden space-y-2"></div>
+                                <p id="inputLeadPerRegionTotal" class="hidden text-xs font-semibold text-gray-500 mt-1"></p>
                             </div>
                             <div
                                 class="bg-white dark:bg-gray-800 p-8 rounded-xl border-2 border-dashed border-aeGreen flex flex-col items-center cursor-pointer relative hover:bg-gray-50">
@@ -681,13 +683,10 @@
                                 <option value="CS">CS Sales</option>
                                 <option value="SPV">Supervisor (SPV)</option>
                             </select>
-                            <select id="ref-add-cabang"
-                                class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
-                                <option value="Pusat">Pusat</option>
-                                <option value="Jabar">Jabar</option>
-                                <option value="Jatim">Jatim</option>
-                                <option value="Jogja">Jogja</option>
-                            </select>
+                            <div class="p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600">
+                                <p class="text-[10px] text-gray-500 mb-1">Cabang/Region (bisa &gt;1, utk CS multi-region)</p>
+                                <div id="ref-add-cabang-group" class="flex flex-wrap gap-3"></div>
+                            </div>
                             <button id="btnAddUser" onclick="submitAddUser()"
                                 class="md:col-span-6 bg-aeGreen text-white font-bold py-2.5 rounded-lg shadow-sm hover:bg-[#0a2e22] transition text-sm"><i
                                     class="fas fa-user-plus mr-1"></i> Tambah ID Baru</button>
@@ -782,6 +781,40 @@
                                     </tr>
                                 </thead>
                                 <tbody id="ambangRcTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
+                                    <tr>
+                                        <td colspan="3" class="px-5 py-8 text-center text-gray-500"><i
+                                                class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- C2. Mapping Dapur -> Region (CS Multi-Region) -->
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-6 overflow-hidden">
+                        <div
+                            class="p-5 border-b border-gray-100 dark:border-gray-700 flex flex-wrap justify-between items-center gap-3">
+                            <div>
+                                <h3 class="text-lg font-bold">Mapping Dapur ke Region</h3>
+                                <p class="text-xs text-gray-500 mt-1">Dapur diambil otomatis dari nama Cabang di invoice.
+                                    Dipakai untuk breakdown Closing per-Region CS yang melayani &gt;1 region sekaligus.</p>
+                            </div>
+                            <button id="btnSaveAllDapurRegion" onclick="saveAllDapurRegion()"
+                                class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i
+                                    class="fas fa-save mr-1"></i> Simpan Semua</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead
+                                    class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
+                                    <tr>
+                                        <th class="px-5 py-3">Dapur</th>
+                                        <th class="px-5 py-3">Region</th>
+                                        <th class="px-5 py-3 text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dapurRegionTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
                                     <tr>
                                         <td colspan="3" class="px-5 py-8 text-center text-gray-500"><i
                                                 class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
@@ -943,6 +976,30 @@
                         </div>
                     </div>
 
+                    <!-- Breakdown per Region (CS Multi-Region) -->
+                    <div id="profilRegionBreakdownWrapper"
+                        class="hidden bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-6 overflow-hidden">
+                        <div class="p-5 border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="text-lg font-bold">Breakdown per Region</h3>
+                            <p class="text-xs text-gray-500 mt-1">CS ini melayani lebih dari satu region — Rating Closing gabungan di atas dihitung dari total Closing/Lead semua region, dibobot jumlah Lead per region.</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead
+                                    class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
+                                    <tr>
+                                        <th class="px-5 py-3">Region</th>
+                                        <th class="px-5 py-3 text-center">Lead</th>
+                                        <th class="px-5 py-3 text-center">Closing</th>
+                                        <th class="px-5 py-3 text-center">RC</th>
+                                        <th class="px-5 py-3 text-center">Ambang Batas</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="profilRegionBreakdownBody" class="divide-y divide-gray-100 dark:divide-gray-700"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <!-- Grafik Personal: tren Nilai Akhir 6 bulan terakhir -->
                     <div
                         class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-5 mb-6">
@@ -1031,6 +1088,8 @@
                         <input type="number" id="revisi-total-lead"
                             class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 focus:outline-none text-sm"
                             required>
+                        <div id="revisiLeadPerRegionWrapper" class="hidden space-y-2 mt-2"></div>
+                        <p id="revisiLeadPerRegionTotal" class="hidden text-xs font-semibold text-gray-500 mt-1"></p>
                     </div>
                 </div>
                 <div id="revisiInvoiceFields" class="grid grid-cols-2 gap-3 mb-4">
@@ -1068,6 +1127,23 @@
                             class="fas fa-paper-plane mr-1"></i> Kirim Ulang</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal Edit Cabang/Region User (CS Multi-Region) -->
+    <div id="modalEditCabang"
+        class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-sm shadow-2xl">
+            <h3 id="editCabangTitle" class="text-lg font-bold mb-4 text-gray-800 dark:text-white">Edit Cabang/Region</h3>
+            <input type="hidden" id="editCabangIdCs">
+            <div id="editCabangGroup" class="flex flex-wrap gap-3 mb-5"></div>
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeEditCabangModal()"
+                    class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
+                <button type="button" onclick="submitEditCabang()"
+                    class="px-4 py-2 text-sm bg-aeGreen text-white rounded-lg hover:bg-[#0a2e22] font-semibold"><i
+                        class="fas fa-save mr-1"></i> Simpan</button>
+            </div>
         </div>
     </div>
 
@@ -1192,6 +1268,7 @@
         let modeEditLaporan = false; // true kalau ID_CS+Tanggal terpilih sudah pernah lapor (submit ulang = update, bukan baris baru)
         let tanggalLaporanValid = false; // true kalau tanggal terpilih aman untuk disubmit (baru, atau edit yang sudah dikonfirmasi CS/SPV)
         let allUsers = [];
+        let allRegions = []; // CS Multi-Region: daftar Region yang ada (dari Data_AmbangRC), dipakai isi checkbox Cabang & dropdown mapping Dapur
         let lastLeaderboard = [];
         let bandingkanSelected = [];
         let sudahIngatkanLaporHariIni = false;
@@ -1442,6 +1519,67 @@
             return u ? u.nama : id;
         }
 
+        // CS Multi-Region: cari daftar Region CS dari ID (currentUser kalau ID sendiri, else dari allUsers -- dipakai
+        // SPV saat pilih CS lain di form Input Penjualan / buka modal Revisi laporan CS lain).
+        function getCabangListForId(id) {
+            let cabangRaw = '';
+            if (currentUser && id === currentUser.id) cabangRaw = currentUser.cabang || '';
+            else {
+                let u = allUsers.find(u => u.id === id);
+                cabangRaw = u ? (u.cabang || '') : '';
+            }
+            return String(cabangRaw).split(',').map(s => s.trim()).filter(Boolean);
+        }
+
+        // CS Multi-Region: render input Total Lead per-region (dipakai form Input Penjualan & modal Revisi Laporan).
+        // Kalau CS cuma punya 1 region, wrapper disembunyikan & input tunggal (singleInputId) dipakai seperti biasa
+        // (tidak ada perubahan perilaku utk CS single-region). Input tunggal tetap disinkron ke total tiap kali
+        // salah satu input per-region berubah, supaya semua kode lama yang baca nilainya tetap jalan tanpa perubahan.
+        function renderLeadRegionInputs(regions, prefillObj, wrapperId, singleInputId, totalLabelId) {
+            let wrapper = document.getElementById(wrapperId);
+            let singleInput = document.getElementById(singleInputId);
+            let totalLabel = document.getElementById(totalLabelId);
+
+            if (!regions || regions.length <= 1) {
+                wrapper.classList.add('hidden');
+                wrapper.innerHTML = '';
+                wrapper.dataset.active = 'false';
+                totalLabel.classList.add('hidden');
+                singleInput.classList.remove('hidden');
+                return;
+            }
+
+            singleInput.classList.add('hidden');
+            wrapper.classList.remove('hidden');
+            wrapper.dataset.active = 'true';
+            totalLabel.classList.remove('hidden');
+            wrapper.innerHTML = regions.map(r => `
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs w-16 text-gray-500 flex-shrink-0">${r}</label>
+                        <input type="number" min="0" class="lead-region-input flex-1 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
+                            data-region="${r}" value="${prefillObj && prefillObj[r] != null ? prefillObj[r] : ''}"
+                            oninput="updateLeadRegionTotal('${wrapperId}','${singleInputId}','${totalLabelId}')">
+                    </div>
+                `).join('');
+            updateLeadRegionTotal(wrapperId, singleInputId, totalLabelId);
+        }
+
+        function updateLeadRegionTotal(wrapperId, singleInputId, totalLabelId) {
+            let total = 0;
+            document.querySelectorAll(`#${wrapperId} .lead-region-input`).forEach(inp => total += parseFloat(inp.value) || 0);
+            document.getElementById(singleInputId).value = total;
+            document.getElementById(totalLabelId).innerText = 'Total Lead: ' + total;
+        }
+
+        // Return object {region: angka} kalau input per-region sedang aktif, else null (CS single-region, pakai input tunggal biasa)
+        function getLeadPerRegionPayload(wrapperId) {
+            let wrapper = document.getElementById(wrapperId);
+            if (!wrapper || wrapper.dataset.active !== 'true') return null;
+            let obj = {};
+            wrapper.querySelectorAll('.lead-region-input').forEach(inp => { obj[inp.dataset.region] = parseFloat(inp.value) || 0; });
+            return obj;
+        }
+
         // Satu ID_CS cuma boleh punya satu laporan per tanggal: tiap kali Tanggal Laporan (atau CS terpilih, khusus SPV)
         // berubah, cek ke backend apakah kombinasi ini sudah pernah lapor. Kalau sudah, form dimuat ulang dengan data
         // yang tersimpan (mode edit, submit ulang = update laporan itu). Kalau belum, form dikosongkan (submit baru).
@@ -1450,6 +1588,8 @@
             let tgl = document.getElementById('inputTgl').value;
             let idCsTarget = currentUser.role === 'SPV' ? document.getElementById('inputCsSelect').value : currentUser.id;
             if (!tgl || !idCsTarget) { tanggalLaporanValid = false; updateTombolKirimLaporan(); return; }
+
+            let regions = getCabangListForId(idCsTarget); // CS Multi-Region: tentukan mode input Lead (tunggal / per-region)
 
             tanggalLaporanValid = false; // diblokir sampai pengecekan ini selesai (dan, kalau sudah ada laporan, dikonfirmasi)
             showLoading('Memeriksa laporan tanggal ini...');
@@ -1464,7 +1604,11 @@
                         if (mauEdit) {
                             modeEditLaporan = true;
                             tanggalLaporanValid = true;
-                            document.getElementById('inputLead').value = json.total_lead;
+                            // Fallback kalau laporan lama tidak punya breakdown per-region tersimpan (lihat catatan serupa di openRevisiModal)
+                            let prefillLead = json.lead_per_region;
+                            if (!prefillLead && regions.length > 1) { prefillLead = {}; prefillLead[regions[0]] = json.total_lead; }
+                            renderLeadRegionInputs(regions, prefillLead, 'inputLeadPerRegionWrapper', 'inputLead', 'inputLeadPerRegionTotal');
+                            if (regions.length <= 1) document.getElementById('inputLead').value = json.total_lead;
                             scannedInvoices = json.invoices.map(inv => ({
                                 no_invoice: inv.no_invoice, nama_cust: inv.nama_cust, cabang: inv.cabang,
                                 qty: parseFloat(inv.qty) || 0, revenue: parseFloat(inv.revenue) || 0,
@@ -1474,6 +1618,7 @@
                         } else {
                             modeEditLaporan = false;
                             tanggalLaporanValid = false; // tetap diblokir sampai user ganti tanggal atau konfirmasi ulang
+                            renderLeadRegionInputs(regions, null, 'inputLeadPerRegionWrapper', 'inputLead', 'inputLeadPerRegionTotal');
                             document.getElementById('inputLead').value = '';
                             scannedInvoices = [];
                             showToast("Dibatalkan. Pilih tanggal lain, atau pilih tanggal yang sama lagi untuk mengedit laporan itu.", "error");
@@ -1481,6 +1626,7 @@
                     } else {
                         modeEditLaporan = false;
                         tanggalLaporanValid = true;
+                        renderLeadRegionInputs(regions, null, 'inputLeadPerRegionWrapper', 'inputLead', 'inputLeadPerRegionTotal');
                         document.getElementById('inputLead').value = '';
                         scannedInvoices = [];
                     }
@@ -1720,6 +1866,8 @@
             formData.append('tanggal', tgl);
             formData.append('total_lead', totalLead);
             formData.append('invoices', JSON.stringify(scannedInvoices));
+            let leadPerRegion = getLeadPerRegionPayload('inputLeadPerRegionWrapper');
+            if (leadPerRegion) formData.append('lead_per_region', JSON.stringify(leadPerRegion));
 
             try {
                 let res = await fetch(API_URL, { method: 'POST', body: formData });
@@ -1731,6 +1879,7 @@
                     tanggalLaporanValid = false; // paksa cek ulang sebelum submit berikutnya, cegah submit kosong menimpa laporan barusan
                     scannedInvoices = [];
                     renderPreviewTable();
+                    renderLeadRegionInputs([], null, 'inputLeadPerRegionWrapper', 'inputLead', 'inputLeadPerRegionTotal');
                     document.getElementById('inputLead').value = '';
                     if (currentUser.role === 'SPV') document.getElementById('inputCsSelect').value = '';
                     loadDashboardData(); // Refresh dashboard
@@ -2066,7 +2215,8 @@
                 let res = await fetch(`${API_URL}?action=getProfilCs&id_cs=${encodeURIComponent(currentUser.id)}`);
                 let json = await res.json();
                 if (json.status === 'success') {
-                    document.getElementById('profilSubtitle').innerText = `${json.data.nama} - Cabang ${json.data.cabang}`;
+                    let cabangDisplay = String(json.data.cabang || '').split(',').map(s => s.trim()).filter(Boolean).join(', ');
+                    document.getElementById('profilSubtitle').innerText = `${json.data.nama} - Cabang ${cabangDisplay}`;
 
                     let b = json.data.breakdown;
                     if (b) {
@@ -2085,6 +2235,8 @@
                         document.getElementById('profilRcAktual').innerText = b.rc + '%';
                         document.getElementById('profilRcBar').style.width = (b.ambang_rc > 0 ? Math.min(100, b.rc / b.ambang_rc * 100) : 0) + '%';
                         document.getElementById('profilRcTarget').innerText = 'Ambang Batas: ' + b.ambang_rc + '%';
+
+                        renderProfilRegionBreakdown(b.region_breakdown);
                     }
 
                     renderProfilTrenChart(json.data.tren || []);
@@ -2093,6 +2245,25 @@
                 }
             } catch (err) { showToast('Koneksi gagal saat memuat profil.', 'error'); }
             hideLoading();
+        }
+
+        // CS Multi-Region: tampilkan breakdown Lead/Closing/RC per region (null/kosong utk CS single-region -> disembunyikan)
+        function renderProfilRegionBreakdown(regionBreakdown) {
+            let wrapper = document.getElementById('profilRegionBreakdownWrapper');
+            if (!regionBreakdown || regionBreakdown.length === 0) {
+                wrapper.classList.add('hidden');
+                return;
+            }
+            wrapper.classList.remove('hidden');
+            document.getElementById('profilRegionBreakdownBody').innerHTML = regionBreakdown.map(r => `
+                    <tr>
+                        <td class="px-5 py-3 text-sm font-bold">${r.region}</td>
+                        <td class="px-5 py-3 text-sm text-center">${r.leads}</td>
+                        <td class="px-5 py-3 text-sm text-center">${r.closing}</td>
+                        <td class="px-5 py-3 text-sm text-center">${r.rc}%</td>
+                        <td class="px-5 py-3 text-sm text-center">${r.ambang_rc}%</td>
+                    </tr>
+                `).join('');
         }
 
         function renderProfilTrenChart(tren) {
@@ -2395,6 +2566,14 @@
             document.getElementById('revisi-tanggal-laporan').value = item.tanggal_laporan;
             document.getElementById('revisi-total-lead').value = item.total_lead_hari_itu;
 
+            // CS Multi-Region: prefill breakdown per-region. Kalau laporan lama tidak punya breakdown tersimpan
+            // (sebelum fitur ini ada), taruh sementara seluruh Total Lead-nya ke region pertama sebagai fallback,
+            // supaya total tidak keliru jadi 0 waktu di-render ulang di bawah.
+            let regions = getCabangListForId(item.id_cs);
+            let prefillLead = item.lead_per_region;
+            if (!prefillLead && regions.length > 1) { prefillLead = {}; prefillLead[regions[0]] = item.total_lead_hari_itu; }
+            renderLeadRegionInputs(regions, prefillLead, 'revisiLeadPerRegionWrapper', 'revisi-total-lead', 'revisiLeadPerRegionTotal');
+
             document.getElementById('revisiInvoiceFields').classList.toggle('hidden', !!item.is_lead_only);
             if (!item.is_lead_only) {
                 document.getElementById('revisi-no-invoice').value = item.no_invoice;
@@ -2425,6 +2604,8 @@
             formData.append('tanggal_lama', revisiTarget.tanggal_laporan);
             formData.append('tanggal_baru', document.getElementById('revisi-tanggal-laporan').value);
             formData.append('total_lead', document.getElementById('revisi-total-lead').value);
+            let leadPerRegion = getLeadPerRegionPayload('revisiLeadPerRegionWrapper');
+            if (leadPerRegion) formData.append('lead_per_region', JSON.stringify(leadPerRegion));
             if (!revisiTarget.is_lead_only) {
                 formData.append('raw_timestamp', revisiTarget.raw_timestamp);
                 formData.append('no_invoice_lama', revisiTarget.no_invoice);
@@ -2692,7 +2873,7 @@
             }
         });
 
-        function loadReferensiData() {
+        async function loadReferensiData() {
             loadUserManageTable();
             if (!document.getElementById('targetBulan').value) {
                 const now = new Date();
@@ -2703,8 +2884,9 @@
                 document.getElementById('exportBulan').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
             }
             loadTargetData();
-            loadAmbangRCTable();
+            await loadAmbangRCTable(); // isi allRegions dulu sebelum render tabel mapping Dapur->Region di bawahnya
             loadBobotConfig();
+            loadDapurRegionTable();
         }
 
         // ---- D. Bobot Skor Komposit ----
@@ -2819,16 +3001,18 @@
                     let toggleTarget = u.status === 'Aktif' ? 'Nonaktif' : 'Aktif';
                     let toggleTitle = u.status === 'Aktif' ? 'Nonaktifkan' : 'Aktifkan';
                     let namaSafe = String(u.nama).replace(/'/g, "\\'");
+                    let cabangDisplay = String(u.cabang || '').split(',').map(s => s.trim()).filter(Boolean).join(', ') || '-';
 
                     tbody.innerHTML += `
                             <tr>
                                 <td class="px-5 py-4"><p class="font-bold text-sm">${u.id}</p><p class="text-xs text-gray-500">${u.nama}</p></td>
                                 <td class="px-5 py-4 text-sm">${u.role}</td>
-                                <td class="px-5 py-4 text-sm">${u.cabang}</td>
+                                <td class="px-5 py-4 text-sm">${cabangDisplay}</td>
                                 <td class="px-5 py-4 text-center">${pinBadge}</td>
                                 <td class="px-5 py-4 text-center">${statusBadge}</td>
                                 <td class="px-5 py-4 text-center">
                                     <div class="flex gap-2 justify-center">
+                                        <button onclick="openEditCabangModal('${u.id}', '${namaSafe}', '${u.cabang || ''}')" class="bg-blue-500 text-white px-2.5 py-1.5 rounded-md text-xs hover:bg-blue-600" title="Edit Cabang/Region"><i class="fas fa-pencil"></i></button>
                                         <button onclick="generateKodeAksesForUser('${u.id}', '${namaSafe}', '${u.no_hp}')" class="bg-orange-500 text-white px-2.5 py-1.5 rounded-md text-xs hover:bg-orange-600" title="Generate Kode Akses Baru"><i class="fas fa-key"></i></button>
                                         <button onclick="toggleUserStatus('${u.id}', '${toggleTarget}')" class="bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-2.5 py-1.5 rounded-md text-xs hover:bg-gray-300 dark:hover:bg-gray-500" title="${toggleTitle}"><i class="fas fa-power-off"></i></button>
                                     </div>
@@ -2849,9 +3033,10 @@
             const noHp = document.getElementById('ref-add-nohp').value.trim();
             const email = document.getElementById('ref-add-email').value.trim();
             const role = document.getElementById('ref-add-role').value;
-            const cabang = document.getElementById('ref-add-cabang').value;
+            const cabang = Array.from(document.querySelectorAll('#ref-add-cabang-group input:checked')).map(c => c.value).join(',');
 
             if (!id || !nama) { showToast("ID dan Nama wajib diisi!", "error"); return; }
+            if (!cabang) { showToast("Pilih minimal satu Cabang/Region!", "error"); return; }
 
             const btn = document.getElementById('btnAddUser');
             btn.disabled = true;
@@ -2876,6 +3061,7 @@
                     document.getElementById('ref-add-nama').value = '';
                     document.getElementById('ref-add-nohp').value = '';
                     document.getElementById('ref-add-email').value = '';
+                    document.querySelectorAll('#ref-add-cabang-group input:checked').forEach(c => c.checked = false);
                     openKodeAksesModal(id, nama, noHp, json.kode_akses);
                     loadUserManageTable();
                     fetchUsers();
@@ -3049,6 +3235,8 @@
                             </tr>
                         `;
                 });
+                allRegions = json.data.map(r => r.region);
+                renderCabangCheckboxes();
             } catch (err) {
                 tbody.innerHTML = '<tr><td colspan="3" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
                 showToast("Gagal memuat ambang batas RC.", "error");
@@ -3079,6 +3267,122 @@
                 showToast(json.message, json.status === "success" ? "success" : "error");
                 if (json.status === "success") loadAmbangRCTable();
             } catch (err) { showToast("Koneksi gagal saat simpan ambang batas.", "error"); }
+            btn.disabled = false;
+            btn.innerHTML = btnOriginal;
+            hideLoading();
+        }
+
+        // ---- CS Multi-Region: Checkbox Cabang (form Tambah ID Baru & modal Edit Cabang) ----
+        function renderCabangCheckboxes() {
+            let group = document.getElementById('ref-add-cabang-group');
+            if (group) {
+                group.innerHTML = allRegions.map(r => `
+                        <label class="flex items-center gap-1.5 text-sm cursor-pointer">
+                            <input type="checkbox" value="${r}" class="rounded"> ${r}
+                        </label>
+                    `).join('');
+            }
+        }
+
+        function openEditCabangModal(id, nama, cabangCsv) {
+            let cabangList = String(cabangCsv || '').split(',').map(s => s.trim()).filter(Boolean);
+            document.getElementById('editCabangIdCs').value = id;
+            document.getElementById('editCabangTitle').innerText = `Edit Cabang/Region - ${nama} (${id})`;
+            document.getElementById('editCabangGroup').innerHTML = allRegions.map(r => `
+                    <label class="flex items-center gap-1.5 text-sm cursor-pointer">
+                        <input type="checkbox" value="${r}" class="rounded" ${cabangList.includes(r) ? 'checked' : ''}> ${r}
+                    </label>
+                `).join('');
+            document.getElementById('modalEditCabang').classList.remove('hidden');
+        }
+
+        function closeEditCabangModal() {
+            document.getElementById('modalEditCabang').classList.add('hidden');
+        }
+
+        async function submitEditCabang() {
+            let idCs = document.getElementById('editCabangIdCs').value;
+            let cabang = Array.from(document.querySelectorAll('#editCabangGroup input:checked')).map(c => c.value).join(',');
+            if (!cabang) { showToast("Pilih minimal satu Cabang/Region!", "error"); return; }
+
+            let formData = new URLSearchParams();
+            formData.append('action', 'updateUserCabang');
+            formData.append('id_cs', idCs);
+            formData.append('cabang', cabang);
+
+            showLoading('Menyimpan Cabang/Region...');
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                showToast(json.message, json.status === "success" ? "success" : "error");
+                if (json.status === "success") {
+                    closeEditCabangModal();
+                    loadUserManageTable();
+                    fetchUsers();
+                }
+            } catch (err) { showToast("Koneksi gagal saat menyimpan Cabang/Region.", "error"); }
+            hideLoading();
+        }
+
+        // ---- CS Multi-Region: Mapping Dapur (nama cabang di invoice) -> Region ----
+        async function loadDapurRegionTable() {
+            let tbody = document.getElementById('dapurRegionTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '<tr><td colspan="3" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
+            showLoading('Memuat mapping Dapur...');
+            try {
+                let res = await fetch(API_URL + "?action=getDapurRegionList");
+                let json = await res.json();
+                tbody.innerHTML = '';
+                if (!json.data || json.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" class="px-5 py-8 text-center text-gray-500 italic">Belum ada Dapur yang tercatat dari transaksi.</td></tr>';
+                    hideLoading();
+                    return;
+                }
+                json.data.forEach(d => {
+                    let options = '<option value="">-- Belum dipetakan --</option>' + allRegions.map(r => `<option value="${r}" ${d.region === r ? 'selected' : ''}>${r}</option>`).join('');
+                    let statusBadge = d.region
+                        ? '<span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold">TERPETAKAN</span>'
+                        : '<span class="bg-orange-50 text-orange-600 px-2 py-1 rounded text-[10px] font-bold">BELUM DIPETAKAN</span>';
+                    tbody.innerHTML += `
+                            <tr data-dapur="${d.dapur}">
+                                <td class="px-5 py-4 text-sm font-bold">${d.dapur}</td>
+                                <td class="px-5 py-3"><select class="dapur-region-value w-40 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">${options}</select></td>
+                                <td class="px-5 py-4 text-center">${statusBadge}</td>
+                            </tr>
+                        `;
+                });
+            } catch (err) {
+                tbody.innerHTML = '<tr><td colspan="3" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
+                showToast("Gagal memuat mapping Dapur.", "error");
+            }
+            hideLoading();
+        }
+
+        async function saveAllDapurRegion() {
+            let rows = [];
+            document.querySelectorAll('#dapurRegionTableBody tr[data-dapur]').forEach(row => {
+                let region = row.querySelector('.dapur-region-value').value;
+                if (region) rows.push({ dapur: row.dataset.dapur, region: region });
+            });
+            if (rows.length === 0) { showToast("Belum ada mapping Region yang dipilih.", "error"); return; }
+
+            const btn = document.getElementById('btnSaveAllDapurRegion');
+            const btnOriginal = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            showLoading('Menyimpan mapping Dapur...');
+
+            let formData = new URLSearchParams();
+            formData.append('action', 'saveDapurRegionBatch');
+            formData.append('data', JSON.stringify(rows));
+
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                showToast(json.message, json.status === "success" ? "success" : "error");
+                if (json.status === "success") loadDapurRegionTable();
+            } catch (err) { showToast("Koneksi gagal saat simpan mapping Dapur.", "error"); }
             btn.disabled = false;
             btn.innerHTML = btnOriginal;
             hideLoading();
