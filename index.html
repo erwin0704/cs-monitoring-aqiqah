@@ -2342,7 +2342,7 @@
                     let { items: approvalGrouped, spans: leadSpans } = groupForLeadDisplay(json.data);
                     approvalGrouped.forEach((item, idx) => {
                         // Kolom Lead digabung (rowspan) per laporan (ID_CS+Tanggal), bukan diulang tiap invoice
-                        let leadCell = leadSpans[idx] === 0 ? '' : `<td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300 align-middle" rowspan="${leadSpans[idx]}">${item.total_lead_hari_itu}</td>`;
+                        let leadCell = leadSpans[idx] === 0 ? '' : `<td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300 align-middle" rowspan="${leadSpans[idx]}">${formatLeadCellContent(item)}</td>`;
 
                         // Laporan lead-only (tanpa invoice sama sekali): tidak ada checkbox batch, Aksi langsung Approve/Reject laporan
                         let checkCell = item.is_lead_only ? `<td class="px-5 py-4"></td>` : `<td class="px-5 py-4"><input type="checkbox" class="approval-check" data-no-invoice="${item.no_invoice}" data-timestamp="${item.raw_timestamp}" onchange="updateApproveSelectedCount()"></td>`;
@@ -2509,6 +2509,16 @@
             return { items: grouped, spans: spans };
         }
 
+        // CS Multi-Region: isi sel Lead (dipakai Riwayat Input & Approval Admin, keduanya rowspan per laporan).
+        // Kalau laporan itu punya breakdown per-region tersimpan, tampilkan rincian tiap region + total di bawahnya;
+        // laporan single-region/tanpa breakdown tetap tampil sebagai satu angka saja seperti sebelumnya.
+        function formatLeadCellContent(item) {
+            let regions = item.lead_per_region ? Object.keys(item.lead_per_region).sort() : [];
+            if (regions.length === 0) return `${item.total_lead_hari_itu}`;
+            let rincian = regions.map(r => `<div class="text-[10px] font-normal text-gray-400">${r}: ${item.lead_per_region[r]}</div>`).join('');
+            return `${rincian}<div class="mt-1 pt-1 border-t border-gray-200 dark:border-gray-600">${item.total_lead_hari_itu}</div>`;
+        }
+
         async function loadRiwayatInput() {
             let isSpv = currentUser.role === 'SPV';
             document.getElementById('riwayatCsTh').classList.toggle('hidden', !isSpv);
@@ -2544,7 +2554,7 @@
                     let rejectNote = item.status === 'Rejected' ? `<p class="text-[10px] text-red-500 mt-1"><i class="fas fa-exclamation-circle mr-1"></i>${item.alasan_reject || '-'}</p>` : '';
                     let csCell = isSpv ? `<td class="px-5 py-4 text-sm font-bold text-aeGreen">${getNamaCsById(item.id_cs)}</td>` : '';
                     // Kolom Lead digabung (rowspan) per laporan (ID_CS+Tanggal), bukan diulang tiap invoice
-                    let leadCell = leadSpans[idx] === 0 ? '' : `<td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300 align-middle" rowspan="${leadSpans[idx]}">${item.total_lead_hari_itu}</td>`;
+                    let leadCell = leadSpans[idx] === 0 ? '' : `<td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300 align-middle" rowspan="${leadSpans[idx]}">${formatLeadCellContent(item)}</td>`;
                     // Laporan lead-only (tanpa invoice sama sekali): kosongkan kolom Invoice & Nama, dan Detail
                     let invoiceCell = item.is_lead_only
                         ? `<td class="px-5 py-4 text-sm text-gray-400 italic">— (laporan lead saja)</td>`
