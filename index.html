@@ -371,11 +371,18 @@
                                     id="dashBulan">Bulan Ini</span></h2>
                             <p class="text-sm text-gray-500">Live Database Sync</p>
                         </div>
-                        <div class="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
-                            <button type="button" id="dashModeBulanBtn" onclick="setDashboardMode('bulan')"
-                                class="px-3 py-1.5 rounded-md text-sm font-medium transition">Bulanan</button>
-                            <button type="button" id="dashModeTahunBtn" onclick="setDashboardMode('tahun')"
-                                class="px-3 py-1.5 rounded-md text-sm font-medium transition">Tahunan</button>
+                        <div class="flex items-center gap-2">
+                            <input type="month" id="dashBulanPicker" onchange="onDashboardPeriodChange()"
+                                class="p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            <input type="number" id="dashTahunPicker" onchange="onDashboardPeriodChange()"
+                                class="hidden p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none w-24"
+                                placeholder="2026">
+                            <div class="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                                <button type="button" id="dashModeBulanBtn" onclick="setDashboardMode('bulan')"
+                                    class="px-3 py-1.5 rounded-md text-sm font-medium transition">Bulanan</button>
+                                <button type="button" id="dashModeTahunBtn" onclick="setDashboardMode('tahun')"
+                                    class="px-3 py-1.5 rounded-md text-sm font-medium transition">Tahunan</button>
+                            </div>
                         </div>
                     </div>
 
@@ -644,6 +651,7 @@
                                         <th class="px-5 py-4 w-10"><input type="checkbox" id="checkAllApproval"
                                                 onchange="toggleAllApprovalCheckbox(this)"></th>
                                         <th class="px-5 py-4">Tgl Input</th>
+                                        <th class="px-5 py-4">Tanggal Laporan</th>
                                         <th class="px-5 py-4">CS</th>
                                         <th class="px-5 py-4">Invoice & Nama</th>
                                         <th class="px-5 py-4 text-center">Lead</th>
@@ -653,7 +661,7 @@
                                 </thead>
                                 <tbody id="approvalTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
                                     <tr>
-                                        <td colspan="7" class="px-5 py-8 text-center text-gray-500"><i
+                                        <td colspan="8" class="px-5 py-8 text-center text-gray-500"><i
                                                 class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
                                     </tr>
                                 </tbody>
@@ -883,6 +891,7 @@
                                     class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
                                     <tr>
                                         <th class="px-5 py-4">Tgl Input</th>
+                                        <th class="px-5 py-4">Tanggal Laporan</th>
                                         <th id="riwayatCsTh" class="hidden px-5 py-4">CS</th>
                                         <th class="px-5 py-4">Invoice & Nama</th>
                                         <th class="px-5 py-4">Detail</th>
@@ -1247,6 +1256,8 @@
         let sudahIngatkanLaporHariIni = false;
         let sudahIngatkanKategoriKurang = false;
         let dashboardMode = 'bulan'; // toggle Dashboard: 'bulan' (default) atau 'tahun'
+        let dashboardBulanTahun = null; // "yyyy-MM" yang dipilih manual di picker Bulanan, null = pakai bulan berjalan
+        let dashboardTahun = null; // "yyyy" yang dipilih manual di picker Tahunan, null = pakai tahun berjalan
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
         // Fungsi Menampilkan Toast
@@ -1903,7 +1914,7 @@
         document.getElementById('btnKirimLaporan').addEventListener('click', async () => {
             let totalLead = document.getElementById('inputLead').value;
             let tgl = document.getElementById('inputTgl').value;
-            if (!totalLead) return alert("Harap isi Total Lead!");
+            if (!totalLead) { showToast("Harap isi Total Lead!", "error"); return; }
 
             let idCsTarget = currentUser.id;
             if (currentUser.role === 'SPV') {
@@ -1972,7 +1983,8 @@
             return 'text-red-500';
         }
 
-        // Toggle Bulanan/Tahunan di Dashboard (kartu ringkasan, leaderboard, insight semuanya ikut ganti scope)
+        // Toggle Bulanan/Tahunan di Dashboard (kartu ringkasan, leaderboard, insight semuanya ikut ganti scope).
+        // Picker bulan/tahun di sebelahnya ikut ganti tampilan sesuai mode yang aktif.
         function setDashboardMode(mode) {
             if (dashboardMode === mode) return;
             dashboardMode = mode;
@@ -1986,17 +1998,41 @@
             let inactive = 'text-gray-500 dark:text-gray-400';
             btnBulan.className = 'px-3 py-1.5 rounded-md text-sm font-medium transition ' + (dashboardMode === 'bulan' ? active : inactive);
             btnTahun.className = 'px-3 py-1.5 rounded-md text-sm font-medium transition ' + (dashboardMode === 'tahun' ? active : inactive);
+            document.getElementById('dashBulanPicker').classList.toggle('hidden', dashboardMode !== 'bulan');
+            document.getElementById('dashTahunPicker').classList.toggle('hidden', dashboardMode !== 'tahun');
+        }
+
+        // Dipanggil saat user pilih bulan/tahun manual dari picker (bukan cuma toggle mode)
+        function onDashboardPeriodChange() {
+            if (dashboardMode === 'bulan') {
+                let val = document.getElementById('dashBulanPicker').value;
+                if (val) dashboardBulanTahun = val;
+            } else {
+                let val = parseInt(document.getElementById('dashTahunPicker').value, 10);
+                if (val) dashboardTahun = String(val);
+            }
+            loadDashboardData();
         }
 
         const NAMA_BULAN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         async function loadDashboardData() {
+            const now = new Date();
+            if (!dashboardBulanTahun) dashboardBulanTahun = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            if (!dashboardTahun) dashboardTahun = `${now.getFullYear()}`;
+            document.getElementById('dashBulanPicker').value = dashboardBulanTahun;
+            document.getElementById('dashTahunPicker').value = dashboardTahun;
+
             renderDashboardModeToggle();
-            document.getElementById('dashBulan').innerText = dashboardMode === 'tahun'
-                ? `${new Date().getFullYear()}`
-                : `${NAMA_BULAN[new Date().getMonth()]} ${new Date().getFullYear()}`;
+            if (dashboardMode === 'tahun') {
+                document.getElementById('dashBulan').innerText = dashboardTahun;
+            } else {
+                let parts = dashboardBulanTahun.split('-');
+                document.getElementById('dashBulan').innerText = `${NAMA_BULAN[parseInt(parts[1], 10) - 1]} ${parts[0]}`;
+            }
             showLoading('Memuat dashboard...');
             try {
-                let res = await fetch(`${API_URL}?action=getDashboard&id_cs=${currentUser.id}&role=${currentUser.role}&mode=${dashboardMode}`);
+                let periodParam = dashboardMode === 'tahun' ? `&tahun=${dashboardTahun}` : `&bulan_tahun=${dashboardBulanTahun}`;
+                let res = await fetch(`${API_URL}?action=getDashboard&id_cs=${currentUser.id}&role=${currentUser.role}&mode=${dashboardMode}${periodParam}`);
                 let json = await res.json();
                 if (json.status === "success") {
                     document.getElementById('dashRev').innerText = "Rp " + json.data.revenue.toLocaleString('id-ID');
@@ -2392,7 +2428,7 @@
         // 7. API FETCH: ADMIN APPROVAL TABLE
         async function loadPendingApprovals() {
             let tbody = document.getElementById('approvalTableBody');
-            tbody.innerHTML = '<tr><td colspan="7" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
             document.getElementById('checkAllApproval').checked = false;
             document.getElementById('btnApproveSelected').classList.add('hidden');
             showLoading('Memuat antrean approval...');
@@ -2401,12 +2437,13 @@
                 let json = await res.json();
                 tbody.innerHTML = '';
                 if (json.data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="7" class="px-5 py-8 text-center text-gray-500 italic">Tidak ada antrean pending.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="8" class="px-5 py-8 text-center text-gray-500 italic">Tidak ada antrean pending.</td></tr>';
                 } else {
                     let { items: approvalGrouped, spans: leadSpans } = groupForLeadDisplay(json.data);
                     approvalGrouped.forEach((item, idx) => {
-                        // Kolom Lead digabung (rowspan) per laporan (ID_CS+Tanggal), bukan diulang tiap invoice
+                        // Kolom Lead & Tanggal Laporan digabung (rowspan) per laporan (ID_CS+Tanggal), bukan diulang tiap invoice
                         let leadCell = leadSpans[idx] === 0 ? '' : `<td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300 align-middle" rowspan="${leadSpans[idx]}">${formatLeadCellContent(item)}</td>`;
+                        let tglLaporanCell = leadSpans[idx] === 0 ? '' : `<td class="px-5 py-4 text-sm align-middle" rowspan="${leadSpans[idx]}">${formatTanggalDisplay(item.tanggal_laporan)}</td>`;
 
                         // Laporan lead-only (tanpa invoice sama sekali): tidak ada checkbox batch, Aksi langsung Approve/Reject laporan
                         let checkCell = item.is_lead_only ? `<td class="px-5 py-4"></td>` : `<td class="px-5 py-4"><input type="checkbox" class="approval-check" data-no-invoice="${item.no_invoice}" data-timestamp="${item.raw_timestamp}" onchange="updateApproveSelectedCount()"></td>`;
@@ -2429,6 +2466,7 @@
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors border-b dark:border-gray-700">
                                     ${checkCell}
                                     <td class="px-5 py-4 text-sm">${item.timestamp}</td>
+                                    ${tglLaporanCell}
                                     <td class="px-5 py-4 font-bold text-aeGreen">${getNamaCsById(item.id_cs)}</td>
                                     ${invoiceCell}
                                     ${leadCell}
@@ -2439,7 +2477,7 @@
                     });
                 }
             } catch (err) {
-                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
                 showToast("Gagal memuat antrean pending.", "error");
             }
             hideLoading();
@@ -2461,7 +2499,8 @@
         async function approveSelected() {
             let checked = document.querySelectorAll('.approval-check:checked');
             if (checked.length === 0) return;
-            if (!confirm(`Approve ${checked.length} invoice terpilih sekaligus?`)) return;
+            let ok = await showConfirmGeneric('Approve Terpilih', `Approve ${checked.length} invoice terpilih sekaligus?`, 'Ya, Approve', 'bg-green-500 hover:bg-green-600');
+            if (!ok) return;
 
             let items = Array.from(checked).map(cb => ({ no_invoice: cb.dataset.noInvoice, timestamp: cb.dataset.timestamp }));
 
@@ -2491,7 +2530,10 @@
 
         // 8. FUNGSI TOMBOL APPROVE / REJECT
         async function actionApproval(noInvoice, rawTimestamp, statusBaru, alasanReject) {
-            if (statusBaru === 'Approved' && !confirm(`Anda yakin ingin menyetujui invoice ini?`)) return;
+            if (statusBaru === 'Approved') {
+                let ok = await showConfirmGeneric('Approve Invoice', 'Anda yakin ingin menyetujui invoice ini?', 'Ya, Approve', 'bg-green-500 hover:bg-green-600');
+                if (!ok) return;
+            }
             let formData = new URLSearchParams();
             formData.append('action', 'actionApproval');
             formData.append('no_invoice', noInvoice);
@@ -2583,18 +2625,26 @@
             return `${rincian}<div class="mt-1 pt-1 border-t border-gray-200 dark:border-gray-600">${item.total_lead_hari_itu}</div>`;
         }
 
+        // Format "yyyy-MM-dd" (item.tanggal_laporan) jadi "18 Jul 2026", senada dengan format Tgl Input dari backend
+        function formatTanggalDisplay(tglStr) {
+            if (!tglStr) return '-';
+            let d = new Date(tglStr + 'T00:00:00');
+            if (isNaN(d)) return tglStr;
+            return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+        }
+
         async function loadRiwayatInput() {
             let isSpv = currentUser.role === 'SPV';
             document.getElementById('riwayatCsTh').classList.toggle('hidden', !isSpv);
             let tbody = document.getElementById('riwayatTableBody');
-            tbody.innerHTML = `<tr><td colspan="${isSpv ? 7 : 6}" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="${isSpv ? 8 : 7}" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>`;
             showLoading('Memuat riwayat input...');
             try {
                 let res = await fetch(`${API_URL}?action=getRiwayatInput&id_cs=${encodeURIComponent(currentUser.id)}&role=${encodeURIComponent(currentUser.role)}`);
                 let json = await res.json();
                 tbody.innerHTML = '';
                 if (!json.data || json.data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="${isSpv ? 7 : 6}" class="px-5 py-8 text-center text-gray-500 italic">Belum ada riwayat input.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="${isSpv ? 8 : 7}" class="px-5 py-8 text-center text-gray-500 italic">Belum ada riwayat input.</td></tr>`;
                     hideLoading();
                     return;
                 }
@@ -2617,8 +2667,9 @@
                     }
                     let rejectNote = item.status === 'Rejected' ? `<p class="text-[10px] text-red-500 mt-1"><i class="fas fa-exclamation-circle mr-1"></i>${item.alasan_reject || '-'}</p>` : '';
                     let csCell = isSpv ? `<td class="px-5 py-4 text-sm font-bold text-aeGreen">${getNamaCsById(item.id_cs)}</td>` : '';
-                    // Kolom Lead digabung (rowspan) per laporan (ID_CS+Tanggal), bukan diulang tiap invoice
+                    // Kolom Lead & Tanggal Laporan digabung (rowspan) per laporan (ID_CS+Tanggal), bukan diulang tiap invoice
                     let leadCell = leadSpans[idx] === 0 ? '' : `<td class="px-5 py-4 text-center font-bold text-gray-600 dark:text-gray-300 align-middle" rowspan="${leadSpans[idx]}">${formatLeadCellContent(item)}</td>`;
+                    let tglLaporanCell = leadSpans[idx] === 0 ? '' : `<td class="px-5 py-4 text-sm align-middle" rowspan="${leadSpans[idx]}">${formatTanggalDisplay(item.tanggal_laporan)}</td>`;
                     // Laporan lead-only (tanpa invoice sama sekali): kosongkan kolom Invoice & Nama, dan Detail
                     let invoiceCell = item.is_lead_only
                         ? `<td class="px-5 py-4 text-sm text-gray-400 italic">— (laporan lead saja)</td>`
@@ -2630,6 +2681,7 @@
                     tbody.innerHTML += `
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
                                 <td class="px-5 py-4 text-sm">${item.timestamp}</td>
+                                ${tglLaporanCell}
                                 ${csCell}
                                 ${invoiceCell}
                                 ${detailCell}
@@ -2640,7 +2692,7 @@
                         `;
                 });
             } catch (err) {
-                tbody.innerHTML = `<tr><td colspan="${isSpv ? 7 : 6}" class="text-center text-red-500 py-8">Koneksi Error</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="${isSpv ? 8 : 7}" class="text-center text-red-500 py-8">Koneksi Error</td></tr>`;
                 showToast("Gagal memuat riwayat input.", "error");
             }
             hideLoading();
@@ -3165,7 +3217,8 @@
         }
 
         async function generateKodeAksesForUser(id, nama, noHp) {
-            if (!confirm(`Buat Kode Akses baru untuk ${id} - ${nama}? Kode Akses lama (jika ada) akan tidak berlaku.`)) return;
+            let ok = await showConfirmGeneric('Generate Kode Akses Baru', `Buat Kode Akses baru untuk ${id} - ${nama}? Kode Akses lama (jika ada) akan tidak berlaku.`, 'Ya, Buat', 'bg-orange-500 hover:bg-orange-600');
+            if (!ok) return;
             let formData = new URLSearchParams();
             formData.append('action', 'generateKodeAksesForUser');
             formData.append('id_cs', id);
@@ -3184,7 +3237,8 @@
         }
 
         async function toggleUserStatus(id, statusBaru) {
-            if (!confirm(`Ubah status ${id} menjadi ${statusBaru}?`)) return;
+            let ok = await showConfirmGeneric('Ubah Status Akun', `Ubah status ${id} menjadi ${statusBaru}?`, 'Ya, Ubah', 'bg-aeGreen hover:bg-[#0a2e22]');
+            if (!ok) return;
             let formData = new URLSearchParams();
             formData.append('action', 'toggleUserStatus');
             formData.append('id_cs', id);
