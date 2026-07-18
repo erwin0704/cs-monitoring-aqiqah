@@ -2351,7 +2351,7 @@
                             : `<td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>`;
                         let detailCell = item.is_lead_only
                             ? `<td class="px-5 py-4 text-sm text-gray-400">-</td>`
-                            : `<td class="px-5 py-4 text-sm font-bold">Rp ${parseInt(item.revenue).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span></td>`;
+                            : `<td class="px-5 py-4 text-sm font-bold">Rp ${parseInt(item.revenue).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span> <span class="font-bold text-[10px] ${detectRegionFromInvoice(item.no_invoice) ? 'text-aeGreen' : 'text-gray-400 italic'}">${detectRegionFromInvoice(item.no_invoice) || 'Region?'}</span></td>`;
                         let aksiCell = item.is_lead_only
                             ? `<td class="px-5 py-4 text-center flex gap-2 justify-center">
                                 <button onclick="actionApprovalLead('${item.id_cs}', '${item.tanggal_laporan}', 'Approved')" class="bg-green-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-green-600 transition" title="Approve"><i class="fas fa-check"></i></button>
@@ -2561,7 +2561,7 @@
                         : `<td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>`;
                     let detailCell = item.is_lead_only
                         ? `<td class="px-5 py-4 text-sm text-gray-400">-</td>`
-                        : `<td class="px-5 py-4 text-sm font-bold">Rp ${(parseInt(item.revenue) || 0).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span>${rejectNote}</td>`;
+                        : `<td class="px-5 py-4 text-sm font-bold">Rp ${(parseInt(item.revenue) || 0).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span> <span class="font-bold text-[10px] ${detectRegionFromInvoice(item.no_invoice) ? 'text-aeGreen' : 'text-gray-400 italic'}">${detectRegionFromInvoice(item.no_invoice) || 'Region?'}</span>${rejectNote}</td>`;
 
                     tbody.innerHTML += `
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
