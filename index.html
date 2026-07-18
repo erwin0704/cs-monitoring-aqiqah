@@ -371,6 +371,12 @@
                                     id="dashBulan">Bulan Ini</span></h2>
                             <p class="text-sm text-gray-500">Live Database Sync</p>
                         </div>
+                        <div class="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                            <button type="button" id="dashModeBulanBtn" onclick="setDashboardMode('bulan')"
+                                class="px-3 py-1.5 rounded-md text-sm font-medium transition">Bulanan</button>
+                            <button type="button" id="dashModeTahunBtn" onclick="setDashboardMode('tahun')"
+                                class="px-3 py-1.5 rounded-md text-sm font-medium transition">Tahunan</button>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -1240,6 +1246,7 @@
         let bandingkanSelected = [];
         let sudahIngatkanLaporHariIni = false;
         let sudahIngatkanKategoriKurang = false;
+        let dashboardMode = 'bulan'; // toggle Dashboard: 'bulan' (default) atau 'tahun'
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
         // Fungsi Menampilkan Toast
@@ -1965,12 +1972,31 @@
             return 'text-red-500';
         }
 
+        // Toggle Bulanan/Tahunan di Dashboard (kartu ringkasan, leaderboard, insight semuanya ikut ganti scope)
+        function setDashboardMode(mode) {
+            if (dashboardMode === mode) return;
+            dashboardMode = mode;
+            renderDashboardModeToggle();
+            loadDashboardData();
+        }
+        function renderDashboardModeToggle() {
+            let btnBulan = document.getElementById('dashModeBulanBtn');
+            let btnTahun = document.getElementById('dashModeTahunBtn');
+            let active = 'bg-white dark:bg-gray-800 text-aeGreen shadow-sm';
+            let inactive = 'text-gray-500 dark:text-gray-400';
+            btnBulan.className = 'px-3 py-1.5 rounded-md text-sm font-medium transition ' + (dashboardMode === 'bulan' ? active : inactive);
+            btnTahun.className = 'px-3 py-1.5 rounded-md text-sm font-medium transition ' + (dashboardMode === 'tahun' ? active : inactive);
+        }
+
+        const NAMA_BULAN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         async function loadDashboardData() {
-            const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            document.getElementById('dashBulan').innerText = `${bulan[new Date().getMonth()]} ${new Date().getFullYear()}`;
+            renderDashboardModeToggle();
+            document.getElementById('dashBulan').innerText = dashboardMode === 'tahun'
+                ? `${new Date().getFullYear()}`
+                : `${NAMA_BULAN[new Date().getMonth()]} ${new Date().getFullYear()}`;
             showLoading('Memuat dashboard...');
             try {
-                let res = await fetch(`${API_URL}?action=getDashboard&id_cs=${currentUser.id}&role=${currentUser.role}`);
+                let res = await fetch(`${API_URL}?action=getDashboard&id_cs=${currentUser.id}&role=${currentUser.role}&mode=${dashboardMode}`);
                 let json = await res.json();
                 if (json.status === "success") {
                     document.getElementById('dashRev').innerText = "Rp " + json.data.revenue.toLocaleString('id-ID');
@@ -1981,7 +2007,7 @@
                     if (json.data.own) {
                         document.getElementById('dashCapaian').innerText = json.data.own.capaian_target + '%';
                         document.getElementById('dashCapaianBar').style.width = Math.min(100, json.data.own.capaian_target) + '%';
-                        document.getElementById('dashCapaianNote').innerText = 'Revenue bulan ini vs Target';
+                        document.getElementById('dashCapaianNote').innerText = dashboardMode === 'tahun' ? 'Revenue tahun ini vs Target' : 'Revenue bulan ini vs Target';
                         document.getElementById('dashSkor').innerText = json.data.own.nilai_akhir + '%';
                         document.getElementById('dashKategori').innerText = json.data.own.kategori;
                         document.getElementById('dashKategori').className = 'text-[10px] mt-2 font-bold ' + kategoriTextColor(json.data.own.warna);
