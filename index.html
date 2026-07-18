@@ -595,6 +595,7 @@
                             class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col min-h-[400px]">
                             <h3 class="text-lg font-bold mb-4 border-b pb-2">Preview Ekstraksi (<span
                                     id="totalScanCount" class="text-aeOrange">0</span>)</h3>
+                            <div id="previewRegionSummary" class="space-y-1 text-xs mb-4"></div>
                             <div class="flex-1 overflow-y-auto">
                                 <table class="w-full text-left text-sm">
                                     <tbody id="previewTableBody"></tbody>
@@ -781,40 +782,6 @@
                                     </tr>
                                 </thead>
                                 <tbody id="ambangRcTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
-                                    <tr>
-                                        <td colspan="3" class="px-5 py-8 text-center text-gray-500"><i
-                                                class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- C2. Mapping Dapur -> Region (CS Multi-Region) -->
-                    <div
-                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-6 overflow-hidden">
-                        <div
-                            class="p-5 border-b border-gray-100 dark:border-gray-700 flex flex-wrap justify-between items-center gap-3">
-                            <div>
-                                <h3 class="text-lg font-bold">Mapping Dapur ke Region</h3>
-                                <p class="text-xs text-gray-500 mt-1">Dapur diambil otomatis dari nama Cabang di invoice.
-                                    Dipakai untuk breakdown Closing per-Region CS yang melayani &gt;1 region sekaligus.</p>
-                            </div>
-                            <button id="btnSaveAllDapurRegion" onclick="saveAllDapurRegion()"
-                                class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i
-                                    class="fas fa-save mr-1"></i> Simpan Semua</button>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left">
-                                <thead
-                                    class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
-                                    <tr>
-                                        <th class="px-5 py-3">Dapur</th>
-                                        <th class="px-5 py-3">Region</th>
-                                        <th class="px-5 py-3 text-center">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dapurRegionTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
                                     <tr>
                                         <td colspan="3" class="px-5 py-8 text-center text-gray-500"><i
                                                 class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
@@ -1766,6 +1733,7 @@
                                     <input type="text" class="text-[10px] text-gray-500 bg-transparent border-b border-dashed border-gray-300 dark:border-gray-600 focus:outline-none w-28" value="${inv.no_invoice}" onchange="updateInvoice(${index}, 'no_invoice', this.value)" placeholder="No Invoice">
                                     <span class="text-[10px] text-gray-500">Cab:</span>
                                     <input type="text" class="text-[10px] text-gray-500 bg-transparent border-b border-dashed border-gray-300 dark:border-gray-600 focus:outline-none w-16" value="${inv.cabang}" onchange="updateInvoice(${index}, 'cabang', this.value)" placeholder="Cabang">
+                                    <span class="text-[10px] font-bold ${detectRegionFromInvoice(inv.no_invoice) ? 'text-aeGreen' : 'text-gray-400 italic'}">${detectRegionFromInvoice(inv.no_invoice) || 'Region?'}</span>
                                 </div>
                                 ${(inv.status_lama === 'Approved' || inv.status_lama === 'Rejected') ? `<p class="text-[10px] text-orange-500 mt-1"><i class="fas fa-triangle-exclamation"></i> Sudah ${inv.status_lama === 'Approved' ? 'Disetujui' : 'Ditolak'}, kalau diubah akan kembali jadi Pending & perlu di-review ulang SPV.</p>` : ''}
                             </td>
@@ -1788,12 +1756,59 @@
             });
 
             document.getElementById('totalScanCount').innerText = scannedInvoices.length;
+            renderPreviewRegionSummary();
+        }
+
+        // Deteksi Region dari prefix No. Invoice (format sistem selalu konsisten per region, lihat Bagian 16 PRD).
+        // Dihitung on-the-fly di sini (bukan disimpan di objek invoice) supaya selalu akurat begitu No. Invoice diedit.
+        function detectRegionFromInvoice(noInvoice) {
+            let s = String(noInvoice || '').trim().toUpperCase();
+            if (s.indexOf('INV/AQIQAH-EXPRESS-SURABAYA') === 0) return 'Jatim';
+            if (s.indexOf('INV/AQIQAH-EXPRESS-YOGYA') === 0) return 'Jogja';
+            if (s.indexOf('INV/EXPRESS-JAWA-BARAT') === 0) return 'Jabar';
+            if (s.indexOf('INV/AQIQAH-EXPRESS/') === 0) return 'Pusat';
+            return '';
+        }
+
+        // Ringkasan perolehan per Region + total global di panel Preview Ekstraksi, dihitung dari daftar invoice
+        // yang sedang di-scan/diinput (belum tentu tersimpan), supaya CS/SPV bisa cek sebelum kirim laporan.
+        function renderPreviewRegionSummary() {
+            let el = document.getElementById('previewRegionSummary');
+            if (!el) return;
+            if (scannedInvoices.length === 0) { el.innerHTML = ''; return; }
+
+            let byRegion = {};
+            let totalRevenue = 0;
+            scannedInvoices.forEach(inv => {
+                let r = detectRegionFromInvoice(inv.no_invoice) || 'Belum Terdeteksi';
+                byRegion[r] = byRegion[r] || { count: 0, revenue: 0 };
+                byRegion[r].count += 1;
+                byRegion[r].revenue += parseFloat(inv.revenue) || 0;
+                totalRevenue += parseFloat(inv.revenue) || 0;
+            });
+
+            let rows = Object.keys(byRegion).sort().map(r => `
+                    <div class="flex justify-between items-center px-2.5 py-1.5 bg-gray-50 dark:bg-gray-700/40 rounded-md">
+                        <span class="font-medium ${r === 'Belum Terdeteksi' ? 'text-gray-400 italic' : 'text-gray-700 dark:text-gray-200'}">${r}</span>
+                        <span class="text-gray-500 dark:text-gray-400">${byRegion[r].count} invoice &middot; Rp ${byRegion[r].revenue.toLocaleString('id-ID')}</span>
+                    </div>
+                `).join('');
+
+            el.innerHTML = `
+                    <p class="font-bold text-gray-400 uppercase text-[10px] mb-1 tracking-wider">Perolehan per Region</p>
+                    ${rows}
+                    <div class="flex justify-between items-center px-2.5 py-1.5 mt-1 border-t border-gray-200 dark:border-gray-600 font-bold text-gray-800 dark:text-white">
+                        <span>Total Global</span>
+                        <span>${scannedInvoices.length} invoice &middot; Rp ${totalRevenue.toLocaleString('id-ID')}</span>
+                    </div>
+                `;
         }
 
         window.updateInvoice = function (index, field, value) {
             if (field === 'revenue') value = parseRibuan(value);
             else if (field === 'qty') value = parseFloat(value) || 0;
             scannedInvoices[index][field] = value;
+            if (field === 'no_invoice' || field === 'revenue') renderPreviewTable(); // refresh badge Region & ringkasan
         };
 
         window.removeInvoice = function (index) {
@@ -2884,9 +2899,8 @@
                 document.getElementById('exportBulan').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
             }
             loadTargetData();
-            await loadAmbangRCTable(); // isi allRegions dulu sebelum render tabel mapping Dapur->Region di bawahnya
+            await loadAmbangRCTable(); // isi allRegions dulu sebelum render checkbox Cabang/Region di form Tambah ID Baru
             loadBobotConfig();
-            loadDapurRegionTable();
         }
 
         // ---- D. Bobot Skor Komposit ----
@@ -3321,70 +3335,6 @@
                     fetchUsers();
                 }
             } catch (err) { showToast("Koneksi gagal saat menyimpan Cabang/Region.", "error"); }
-            hideLoading();
-        }
-
-        // ---- CS Multi-Region: Mapping Dapur (nama cabang di invoice) -> Region ----
-        async function loadDapurRegionTable() {
-            let tbody = document.getElementById('dapurRegionTableBody');
-            if (!tbody) return;
-            tbody.innerHTML = '<tr><td colspan="3" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
-            showLoading('Memuat mapping Dapur...');
-            try {
-                let res = await fetch(API_URL + "?action=getDapurRegionList");
-                let json = await res.json();
-                tbody.innerHTML = '';
-                if (!json.data || json.data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="3" class="px-5 py-8 text-center text-gray-500 italic">Belum ada Dapur yang tercatat dari transaksi.</td></tr>';
-                    hideLoading();
-                    return;
-                }
-                json.data.forEach(d => {
-                    let options = '<option value="">-- Belum dipetakan --</option>' + allRegions.map(r => `<option value="${r}" ${d.region === r ? 'selected' : ''}>${r}</option>`).join('');
-                    let statusBadge = d.region
-                        ? '<span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold">TERPETAKAN</span>'
-                        : '<span class="bg-orange-50 text-orange-600 px-2 py-1 rounded text-[10px] font-bold">BELUM DIPETAKAN</span>';
-                    tbody.innerHTML += `
-                            <tr data-dapur="${d.dapur}">
-                                <td class="px-5 py-4 text-sm font-bold">${d.dapur}</td>
-                                <td class="px-5 py-3"><select class="dapur-region-value w-40 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">${options}</select></td>
-                                <td class="px-5 py-4 text-center">${statusBadge}</td>
-                            </tr>
-                        `;
-                });
-            } catch (err) {
-                tbody.innerHTML = '<tr><td colspan="3" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
-                showToast("Gagal memuat mapping Dapur.", "error");
-            }
-            hideLoading();
-        }
-
-        async function saveAllDapurRegion() {
-            let rows = [];
-            document.querySelectorAll('#dapurRegionTableBody tr[data-dapur]').forEach(row => {
-                let region = row.querySelector('.dapur-region-value').value;
-                if (region) rows.push({ dapur: row.dataset.dapur, region: region });
-            });
-            if (rows.length === 0) { showToast("Belum ada mapping Region yang dipilih.", "error"); return; }
-
-            const btn = document.getElementById('btnSaveAllDapurRegion');
-            const btnOriginal = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
-            showLoading('Menyimpan mapping Dapur...');
-
-            let formData = new URLSearchParams();
-            formData.append('action', 'saveDapurRegionBatch');
-            formData.append('data', JSON.stringify(rows));
-
-            try {
-                let res = await fetch(API_URL, { method: 'POST', body: formData });
-                let json = await res.json();
-                showToast(json.message, json.status === "success" ? "success" : "error");
-                if (json.status === "success") loadDapurRegionTable();
-            } catch (err) { showToast("Koneksi gagal saat simpan mapping Dapur.", "error"); }
-            btn.disabled = false;
-            btn.innerHTML = btnOriginal;
             hideLoading();
         }
 
