@@ -172,6 +172,31 @@
         </div>
     </div>
 
+    <!-- Modal Ganti Foto Profil -->
+    <div id="modalGantiFoto" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-sm shadow-2xl">
+            <h3 class="text-lg font-bold mb-4">Ganti Foto Profil</h3>
+            <div class="flex flex-col items-center gap-3 mb-4">
+                <label for="fotoFileInput" class="cursor-pointer">
+                    <div
+                        class="w-24 h-24 rounded-full bg-aeGreen text-white flex items-center justify-center text-3xl overflow-hidden border-4 border-gray-100 dark:border-gray-700 hover:opacity-80 transition">
+                        <img id="fotoPreviewImg" class="w-full h-full object-cover hidden" src="">
+                        <i id="fotoPreviewIcon" class="fas fa-user"></i>
+                    </div>
+                </label>
+                <input type="file" id="fotoFileInput" accept="image/*" class="hidden" onchange="handleFotoFileSelect(this)">
+                <label for="fotoFileInput" class="text-xs text-aeGreen hover:underline cursor-pointer font-medium"><i
+                        class="fas fa-camera mr-1"></i>Pilih Foto</label>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeGantiFotoModal()"
+                    class="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal</button>
+                <button type="button" id="btnSubmitGantiFoto" onclick="submitGantiFoto()" disabled
+                    class="px-4 py-2 text-sm bg-aeGreen text-white rounded-lg hover:bg-[#0a2e22] disabled:opacity-50 disabled:cursor-not-allowed">Upload</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Reset PIN (Lupa PIN) -->
     <div id="modalResetPin"
         class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4">
@@ -302,8 +327,8 @@
                 <div class="relative">
                     <button id="avatarBtn" onclick="toggleUserDropdown()"
                         class="w-full flex items-center gap-3 px-2 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition text-left">
-                        <div
-                            class="w-9 h-9 rounded-full bg-aeGreen text-white flex items-center justify-center font-bold flex-shrink-0">
+                        <div id="userAvatarWrap"
+                            class="w-9 h-9 rounded-full bg-aeGreen text-white flex items-center justify-center font-bold flex-shrink-0 overflow-hidden">
                             <i class="fas fa-user"></i></div>
                         <div class="menu-label overflow-hidden leading-tight">
                             <p id="userNameDisplay" class="text-sm font-bold text-gray-800 dark:text-white truncate">
@@ -314,6 +339,9 @@
                     <!-- Dropdown Profil (buka ke atas karena posisinya di bawah sidebar) -->
                     <div id="userDropdown"
                         class="absolute left-0 bottom-full mb-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 hidden flex-col z-50 overflow-hidden">
+                        <button onclick="openGantiFotoModal()"
+                            class="w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700"><i
+                                class="fas fa-camera mr-2"></i> Ganti Foto Profil</button>
                         <button onclick="openChangePinModal()"
                             class="w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700"><i
                                 class="fas fa-key mr-2"></i> Ganti PIN</button>
@@ -354,6 +382,9 @@
                 <button onclick="switchTab('referensi')" id="nav-referensi-mobile"
                     class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
                         class="fas fa-sliders-h w-5"></i> Data Referensi</button>
+                <button onclick="openGantiFotoModal()"
+                    class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
+                        class="fas fa-camera w-5"></i> Ganti Foto Profil</button>
                 <button onclick="openChangePinModal()"
                     class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
                         class="fas fa-key w-5"></i> Ganti PIN</button>
@@ -1467,6 +1498,7 @@
             document.getElementById('app-container').classList.remove('hidden');
             document.getElementById('userNameDisplay').innerText = currentUser.nama;
             document.getElementById('userRoleDisplay').innerText = currentUser.role;
+            renderUserAvatar();
             if (currentUser.role === 'SPV') {
                 document.getElementById('nav-admin').classList.remove('hidden');
                 document.getElementById('nav-admin-mobile').classList.remove('hidden');
@@ -2878,6 +2910,90 @@
                 showToast("Koneksi gagal saat ganti PIN", "error");
             }
             btn.innerHTML = 'Simpan'; btn.disabled = false;
+            hideLoading();
+        }
+
+        // GANTI FOTO PROFIL: foto dikompres di browser (canvas, max 400px sisi terpanjang, JPEG kualitas 0.8)
+        // sebelum diupload sebagai base64 ke backend -- backend yang simpan filenya ke Google Drive.
+        let pendingFotoBase64 = null;
+        function renderUserAvatar() {
+            const wrap = document.getElementById('userAvatarWrap');
+            if (!wrap || !currentUser) return;
+            if (currentUser.foto_url) {
+                wrap.innerHTML = `<img src="${currentUser.foto_url}" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-user\\'></i>'">`;
+            } else {
+                wrap.innerHTML = '<i class="fas fa-user"></i>';
+            }
+        }
+        function openGantiFotoModal() {
+            pendingFotoBase64 = null;
+            const img = document.getElementById('fotoPreviewImg');
+            const icon = document.getElementById('fotoPreviewIcon');
+            if (currentUser.foto_url) {
+                img.src = currentUser.foto_url; img.classList.remove('hidden'); icon.classList.add('hidden');
+            } else {
+                img.src = ''; img.classList.add('hidden'); icon.classList.remove('hidden');
+            }
+            document.getElementById('btnSubmitGantiFoto').disabled = true;
+            document.getElementById('modalGantiFoto').classList.remove('hidden');
+        }
+        function closeGantiFotoModal() {
+            document.getElementById('modalGantiFoto').classList.add('hidden');
+            document.getElementById('fotoFileInput').value = '';
+            pendingFotoBase64 = null;
+        }
+        function handleFotoFileSelect(input) {
+            const file = input.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) { showToast('File harus berupa gambar!', 'error'); return; }
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = new Image();
+                img.onload = function () {
+                    const maxSize = 400;
+                    let w = img.width, h = img.height;
+                    if (w > h && w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize; }
+                    else if (h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize; }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    pendingFotoBase64 = canvas.toDataURL('image/jpeg', 0.8);
+                    const preview = document.getElementById('fotoPreviewImg');
+                    preview.src = pendingFotoBase64; preview.classList.remove('hidden');
+                    document.getElementById('fotoPreviewIcon').classList.add('hidden');
+                    document.getElementById('btnSubmitGantiFoto').disabled = false;
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        async function submitGantiFoto() {
+            if (!pendingFotoBase64) return;
+            const btn = document.getElementById('btnSubmitGantiFoto');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
+            showLoading('Mengupload foto...');
+
+            let formData = new URLSearchParams();
+            formData.append('action', 'uploadProfilePhoto');
+            formData.append('id_cs', currentUser.id);
+            formData.append('foto_base64', pendingFotoBase64);
+
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                if (json.status === "success") {
+                    currentUser.foto_url = json.foto_url;
+                    localStorage.setItem('aeSession', JSON.stringify({ user: currentUser, time: new Date().getTime() }));
+                    renderUserAvatar();
+                    showToast(json.message, "success");
+                    closeGantiFotoModal();
+                } else {
+                    showToast(json.message, "error");
+                }
+            } catch (err) {
+                showToast("Koneksi gagal saat upload foto.", "error");
+            }
+            btn.innerHTML = 'Upload'; btn.disabled = false;
             hideLoading();
         }
 
