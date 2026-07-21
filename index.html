@@ -457,39 +457,65 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div id="dashSummaryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div
                             class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-aeGreen relative">
-                            <div class="flex justify-between items-start mb-2">
+                            <div class="flex justify-between items-start mb-3">
                                 <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">TOTAL REVENUE <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-gray-300 hover:text-gray-400 text-[11px]"></i><div id="tipTotalRevenue" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-60 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
                                 <div class="w-9 h-9 rounded-full bg-green-50 dark:bg-green-900/30 text-aeGreen flex items-center justify-center flex-shrink-0"><i class="fas fa-money-bill-wave text-sm"></i></div>
                             </div>
-                            <p class="text-2xl font-bold text-aeGreen" id="dashRev">Rp 0</p>
-                            <p class="text-[11px] text-gray-500 mt-2 font-medium">Revenue Berjalan: <span id="dashRevBerjalan" class="font-bold text-gray-700 dark:text-gray-300">Rp 0</span></p>
+                            <div class="flex items-stretch gap-3">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-[10px] text-gray-400 uppercase font-semibold tracking-wide">Pengiriman</p>
+                                    <p class="text-lg font-bold text-aeGreen mt-0.5 break-words" id="dashRev">Rp 0</p>
+                                </div>
+                                <div class="w-px bg-gray-100 dark:bg-gray-700 flex-shrink-0"></div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-[10px] text-gray-400 uppercase font-semibold tracking-wide">Berjalan</p>
+                                    <p class="text-lg font-bold text-gray-700 dark:text-gray-300 mt-0.5 break-words" id="dashRevBerjalan">Rp 0</p>
+                                </div>
+                            </div>
                         </div>
                         <div
                             class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-blue-400 relative">
-                            <div class="flex justify-between items-start mb-2">
+                            <div class="flex justify-between items-start mb-3">
                                 <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">CAPAIAN TARGET <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-gray-300 hover:text-gray-400 text-[11px]"></i><div id="tipCapaianTarget" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-60 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
                                 <div class="w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center flex-shrink-0"><i class="fas fa-bullseye text-sm"></i></div>
                             </div>
-                            <p class="text-2xl font-bold text-gray-800 dark:text-white" id="dashCapaian">-</p>
-                            <div class="w-full bg-gray-200 rounded-full h-1.5 mt-3">
-                                <div id="dashCapaianBar" class="bg-orange-400 h-1.5 rounded-full" style="width: 0%">
+                            <div class="flex items-stretch gap-3">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-lg font-bold text-gray-800 dark:text-white" id="dashCapaian">-</p>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-2">
+                                        <div id="dashCapaianBar" class="bg-orange-400 h-1.5 rounded-full" style="width: 0%">
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] text-gray-500 mt-1 font-medium" id="dashCapaianNote">Berdasarkan
+                                        target revenue bulan ini</p>
+                                </div>
+                                <div id="dashCapaianSekunderWrap" class="hidden flex-1 min-w-0 border-l border-gray-100 dark:border-gray-700 pl-3">
+                                    <p class="text-[10px] text-gray-400 uppercase font-semibold tracking-wide">Revenue Berjalan</p>
+                                    <p class="text-lg font-bold mt-0.5" id="dashCapaianSekunder"></p>
+                                    <p class="text-[10px] text-gray-500 mt-1 font-medium">vs periode lalu</p>
                                 </div>
                             </div>
-                            <p class="text-[10px] text-gray-500 mt-1 font-medium" id="dashCapaianNote">Berdasarkan
-                                target revenue bulan ini</p>
-                            <p class="text-[10px] text-gray-500 mt-1 font-medium hidden" id="dashCapaianSekunder"></p>
                         </div>
                         <div
                             class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-aeOrange relative">
-                            <div class="flex justify-between items-start mb-2">
+                            <div class="flex justify-between items-start mb-3">
                                 <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">TOTAL CLOSING <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-gray-300 hover:text-gray-400 text-[11px]"></i><div id="tipTotalClosing" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-60 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
                                 <div class="w-9 h-9 rounded-full bg-orange-50 dark:bg-orange-900/30 text-aeOrange flex items-center justify-center flex-shrink-0"><i class="fas fa-chart-line text-sm"></i></div>
                             </div>
-                            <p class="text-2xl font-bold text-gray-800 dark:text-white" id="dashTrx">0</p>
-                            <p class="text-[11px] text-gray-500 mt-2 font-medium">Total Nomor: <span id="dashTotalNomor" class="font-bold text-gray-700 dark:text-gray-300">0</span></p>
+                            <div class="flex items-stretch gap-3">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-[10px] text-gray-400 uppercase font-semibold tracking-wide">Total Closing</p>
+                                    <p class="text-lg font-bold text-gray-800 dark:text-white mt-0.5" id="dashTrx">0</p>
+                                </div>
+                                <div class="w-px bg-gray-100 dark:bg-gray-700 flex-shrink-0"></div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-[10px] text-gray-400 uppercase font-semibold tracking-wide">Total Nomor</p>
+                                    <p class="text-lg font-bold text-gray-700 dark:text-gray-300 mt-0.5" id="dashTotalNomor">0</p>
+                                </div>
+                            </div>
                         </div>
                         <div id="dashSkorCard"
                             class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-gray-300 relative">
@@ -2380,6 +2406,7 @@
                     document.getElementById('dashTotalNomor').innerText = json.data.total_nomor.toLocaleString('id-ID');
 
                     let isSpv = currentUser.role === 'SPV';
+                    let capaianSekunderWrap = document.getElementById('dashCapaianSekunderWrap');
                     let capaianSekunderEl = document.getElementById('dashCapaianSekunder');
 
                     // Isi tooltip 4 card ringkasan -- selalu dibangun ulang dari data & periode REAL yang baru
@@ -2404,36 +2431,42 @@
                         document.getElementById('dashCapaianBar').style.width = Math.min(100, c.capaian_a) + '%';
                         document.getElementById('dashCapaianNote').innerText = 'Revenue Pengiriman vs Target Perusahaan';
                         if (c.capaian_b === null) {
-                            capaianSekunderEl.classList.add('hidden');
+                            capaianSekunderWrap.classList.add('hidden');
                         } else {
-                            capaianSekunderEl.classList.remove('hidden');
-                            let panah = c.capaian_b >= 0 ? '<i class="fas fa-arrow-trend-up text-green-500"></i>' : '<i class="fas fa-arrow-trend-down text-red-500"></i>';
-                            capaianSekunderEl.innerHTML = `${panah} Revenue Berjalan ${c.capaian_b >= 0 ? '+' : ''}${c.capaian_b}% vs periode lalu`;
+                            capaianSekunderWrap.classList.remove('hidden');
+                            let naik = c.capaian_b >= 0;
+                            let panah = naik ? '<i class="fas fa-arrow-trend-up"></i>' : '<i class="fas fa-arrow-trend-down"></i>';
+                            capaianSekunderEl.className = 'text-lg font-bold mt-0.5 ' + (naik ? 'text-green-600' : 'text-red-500');
+                            capaianSekunderEl.innerHTML = `${panah} ${naik ? '+' : ''}${c.capaian_b}%`;
                         }
                     } else if (!isSpv && json.data.own) {
                         document.getElementById('dashCapaian').innerText = json.data.own.capaian_target + '%';
                         document.getElementById('dashCapaianBar').style.width = Math.min(100, json.data.own.capaian_target) + '%';
                         document.getElementById('dashCapaianNote').innerText = 'Revenue Pengiriman vs Target sendiri';
-                        capaianSekunderEl.classList.add('hidden');
+                        capaianSekunderWrap.classList.add('hidden');
                     } else {
                         document.getElementById('dashCapaian').innerText = '-';
                         document.getElementById('dashCapaianNote').innerText = 'Belum ada data.';
-                        capaianSekunderEl.classList.add('hidden');
+                        capaianSekunderWrap.classList.add('hidden');
                     }
 
-                    // Kartu Skor Akhir KPI (khusus CS, SPV tidak punya skor individual)
+                    // Kartu Skor Akhir KPI: cuma relevan utk CS (SPV tidak punya skor individual) -- daripada
+                    // tampilkan "-" yang membingungkan, card ini disembunyikan total utk role SPV & grid ringkasan
+                    // menyesuaikan jadi 3 kolom (dari 4) supaya 3 card yang tersisa tetap proporsional lebar-nya.
                     if (!isSpv && json.data.own) {
                         document.getElementById('dashSkor').innerText = json.data.own.nilai_akhir + '%';
                         document.getElementById('dashKategori').innerText = json.data.own.kategori;
                         document.getElementById('dashKategori').className = 'text-[10px] mt-2 font-bold ' + kategoriTextColor(json.data.own.warna);
-                        document.getElementById('dashSkorCard').className = 'bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 ' + kategoriBorderColor(json.data.own.warna);
+                        document.getElementById('dashSkorCard').className = 'bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 relative ' + kategoriBorderColor(json.data.own.warna);
                         document.getElementById('dashSkorBadge').className = 'w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ' + kategoriIconBadgeColor(json.data.own.warna);
-                    } else {
+                    } else if (!isSpv) {
                         document.getElementById('dashSkor').innerText = '-';
-                        document.getElementById('dashKategori').innerText = 'Lihat peringkat di bawah';
-                        document.getElementById('dashSkorCard').className = 'bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-gray-300';
+                        document.getElementById('dashKategori').innerText = 'Belum ada data.';
+                        document.getElementById('dashSkorCard').className = 'bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-gray-300 relative';
                         document.getElementById('dashSkorBadge').className = 'w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-400 flex items-center justify-center flex-shrink-0';
                     }
+                    document.getElementById('dashSkorCard').classList.toggle('hidden', isSpv);
+                    document.getElementById('dashSummaryGrid').className = 'grid grid-cols-1 md:grid-cols-2 ' + (isSpv ? 'lg:grid-cols-3' : 'lg:grid-cols-4') + ' gap-4 mb-6';
 
                     lastLeaderboard = json.data.leaderboard || [];
 
