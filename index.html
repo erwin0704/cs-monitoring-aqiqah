@@ -479,12 +479,13 @@
                         <div
                             class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-blue-400 relative">
                             <div class="flex justify-between items-start mb-3">
-                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">CAPAIAN TARGET <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-gray-300 hover:text-gray-400 text-[11px]"></i><div id="tipCapaianTarget" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-60 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">PENCAPAIAN & PERTUMBUHAN <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-gray-300 hover:text-gray-400 text-[11px]"></i><div id="tipCapaianTarget" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-60 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
                                 <div class="w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center flex-shrink-0"><i class="fas fa-bullseye text-sm"></i></div>
                             </div>
                             <div class="flex items-stretch gap-3">
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-lg font-bold text-gray-800 dark:text-white" id="dashCapaian">-</p>
+                                    <p class="text-[10px] text-gray-400 uppercase font-semibold tracking-wide">Pengiriman</p>
+                                    <p class="text-lg font-bold text-gray-800 dark:text-white mt-0.5" id="dashCapaian">-</p>
                                     <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-2">
                                         <div id="dashCapaianBar" class="bg-orange-400 h-1.5 rounded-full" style="width: 0%">
                                         </div>
@@ -493,7 +494,7 @@
                                         target revenue bulan ini</p>
                                 </div>
                                 <div id="dashCapaianSekunderWrap" class="hidden flex-1 min-w-0 border-l border-gray-100 dark:border-gray-700 pl-3">
-                                    <p class="text-[10px] text-gray-400 uppercase font-semibold tracking-wide">Revenue Berjalan</p>
+                                    <p class="text-[10px] text-gray-400 uppercase font-semibold tracking-wide">Berjalan</p>
                                     <p class="text-lg font-bold mt-0.5" id="dashCapaianSekunder"></p>
                                     <p class="text-[10px] text-gray-500 mt-1 font-medium">vs periode lalu</p>
                                 </div>
@@ -502,7 +503,7 @@
                         <div
                             class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-aeOrange relative">
                             <div class="flex justify-between items-start mb-3">
-                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">TOTAL CLOSING <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-gray-300 hover:text-gray-400 text-[11px]"></i><div id="tipTotalClosing" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-60 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">TOTAL CLOSING & NOMOR <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-gray-300 hover:text-gray-400 text-[11px]"></i><div id="tipTotalClosing" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-60 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
                                 <div class="w-9 h-9 rounded-full bg-orange-50 dark:bg-orange-900/30 text-aeOrange flex items-center justify-center flex-shrink-0"><i class="fas fa-chart-line text-sm"></i></div>
                             </div>
                             <div class="flex items-stretch gap-3">
@@ -544,10 +545,10 @@
                     <!-- Insight Otomatis (khusus SPV) -->
                     <div id="insightSection" class="hidden grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                         <div
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3"><i
-                                    class="fas fa-trophy text-yellow-500 mr-1"></i> CS Terbaik <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-gray-300 hover:text-gray-400 text-[11px]"></i><div id="tipCsTerbaik" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-60 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
-                            <div id="insightTerbaik" class="text-sm text-gray-400 italic">Belum ada data.</div>
+                            class="bg-gradient-to-br from-amber-50 to-white dark:from-amber-900/10 dark:to-gray-800 p-5 rounded-xl shadow-sm border border-amber-100 dark:border-amber-800/40 relative">
+                            <h3 class="text-xs font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-3"><i
+                                    class="fas fa-trophy text-amber-500 mr-1"></i> CS Terbaik <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-amber-300 hover:text-amber-400 text-[11px]"></i><div id="tipCsTerbaik" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-60 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
+                            <div id="insightTerbaik" class="space-y-2 text-sm text-gray-400 italic">Belum ada data.</div>
                         </div>
                         <div
                             class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative">
@@ -599,6 +600,9 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div id="leaderboardShowMoreWrapper" class="hidden px-5 py-3 text-center border-t border-gray-100 dark:border-gray-700">
+                            <button type="button" onclick="toggleLeaderboardShowAll()" class="text-xs text-aeGreen hover:underline font-medium">Tampilkan semua (<span id="leaderboardSisaCount">0</span> CS lainnya)</button>
                         </div>
                     </div>
                 </div>
@@ -1542,6 +1546,7 @@
         let allUsers = [];
         let allRegions = []; // CS Multi-Region: daftar Region yang ada (dari Data_AmbangRC), dipakai isi checkbox Cabang & dropdown mapping Dapur
         let lastLeaderboard = [];
+        let leaderboardShowAll = false; // false = tampil 10 teratas saja, true = tampil semua (toggle "Tampilkan semua")
         let bandingkanSelected = [];
         let sudahIngatkanLaporHariIni = false;
         let sudahIngatkanKategoriKurang = false;
@@ -2387,6 +2392,7 @@
             let periodeLabelLalu = formatRentangLabelJs(geserBulanJs(periodeMulai, -nBulanPeriode), geserBulanJs(periodeSelesai, -nBulanPeriode));
             let regionSuffix = dashboardRegion ? ` · Region: ${dashboardRegion}` : '';
             document.getElementById('dashBulan').innerText = periodeLabel + (dashboardRegion ? ` — ${dashboardRegion}` : '');
+            leaderboardShowAll = false; // reset ke 10 teratas tiap kali filter/periode berganti
             showLoading('Memuat dashboard...');
             try {
                 let periodParam = dashboardMode === 'tahun' ? `&tahun=${dashboardTahun}`
@@ -2485,70 +2491,84 @@
                     }
 
                     document.getElementById('leaderboardAksiTh').classList.toggle('hidden', !isSpv);
-
-                    let tbody = document.getElementById('leaderboardBody');
-                    if (tbody) {
-                        tbody.innerHTML = '';
-                        if (lastLeaderboard.length === 0) {
-                            let colspanKosong = 9 + (isSpv ? 1 : 0);
-                            tbody.innerHTML = `<tr><td colspan="${colspanKosong}" class="px-5 py-8 text-center text-gray-500 italic">Belum ada CS Sales aktif.</td></tr>`;
-                        } else {
-                            lastLeaderboard.forEach(cs => {
-                                let posClass = 'bg-gray-200 text-gray-500 font-medium';
-                                if (cs.posisi === 1) posClass = 'bg-[#985F24] text-white shadow-md';
-                                else if (cs.posisi === 2) posClass = 'bg-[#114232] text-white shadow-md';
-
-                                let badgeColor = kategoriBadgeColor(cs.warna);
-
-                                let nameText = cs.id_cs === currentUser.id
-                                    ? `<span class="font-bold text-gray-900 dark:text-white">${cs.nama}</span> <br><span class="text-[10px] text-gray-500">(Anda)</span>`
-                                    : `<span class="font-medium text-gray-700 dark:text-gray-200">${cs.nama}</span>`;
-
-                                let initials = cs.nama.substring(0, 2).toUpperCase();
-                                let namaSafe = String(cs.nama).replace(/'/g, "\\'");
-                                let aksiCell = isSpv
-                                    ? `<td class="px-5 py-4 text-center"><button onclick="openBeriSaranModal('${cs.id_cs}', '${namaSafe}')" class="bg-aeGreen text-white px-2.5 py-1.5 rounded-md text-xs hover:bg-[#0a2e22]" title="Beri Saran"><i class="fas fa-comment-dots"></i></button></td>`
-                                    : '';
-
-                                tbody.innerHTML += `
-                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
-                                            <td class="px-5 py-4 text-center">
-                                                <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm mx-auto ${posClass}">${cs.posisi}</div>
-                                            </td>
-                                            <td class="px-5 py-4">
-                                                <div class="flex items-center gap-3">
-                                                    <div class="w-9 h-9 rounded-full bg-[#E8F0FE] text-[#1967D2] flex items-center justify-center font-bold text-xs flex-shrink-0">${initials}</div>
-                                                    <div class="leading-tight">
-                                                        ${nameText}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-5 py-4 text-right">
-                                                <p class="font-bold text-sm text-gray-800 dark:text-gray-200">Rp ${cs.revenue.toLocaleString('id-ID')}</p>
-                                            </td>
-                                            <td class="px-5 py-4 text-right">
-                                                <p class="font-bold text-sm text-gray-800 dark:text-gray-200">Rp ${cs.revenue_berjalan.toLocaleString('id-ID')}</p>
-                                            </td>
-                                            <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.leads.toLocaleString('id-ID')}</td>
-                                            <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.closing.toLocaleString('id-ID')}</td>
-                                            <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.rc}%</td>
-                                            <td class="px-5 py-4 text-center">
-                                                <span class="bg-orange-50 text-orange-600 px-2.5 py-1 rounded text-xs font-bold">${cs.nilai_akhir}%</span>
-                                            </td>
-                                            <td class="px-5 py-4 text-center">
-                                                <span class="${badgeColor} px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">${cs.kategori}</span>
-                                            </td>
-                                            ${aksiCell}
-                                        </tr>
-                                    `;
-                            });
-                        }
-                    }
+                    renderLeaderboardTable();
                 } else {
                     showToast(json.message, "error");
                 }
             } catch (err) { showToast("Koneksi gagal saat memuat dashboard.", "error"); }
             hideLoading();
+        }
+
+        // Render tabel "Peringkat CS Sales" dari lastLeaderboard -- default cuma 10 teratas, sisanya baru dirender
+        // kalau leaderboardShowAll di-set true lewat tombol "Tampilkan semua" di bawah tabel (toggleLeaderboardShowAll).
+        function renderLeaderboardTable() {
+            let isSpv = currentUser.role === 'SPV';
+            let tbody = document.getElementById('leaderboardBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            if (lastLeaderboard.length === 0) {
+                let colspanKosong = 9 + (isSpv ? 1 : 0);
+                tbody.innerHTML = `<tr><td colspan="${colspanKosong}" class="px-5 py-8 text-center text-gray-500 italic">Belum ada CS Sales aktif.</td></tr>`;
+            } else {
+                let rowsToRender = leaderboardShowAll ? lastLeaderboard : lastLeaderboard.slice(0, 10);
+                rowsToRender.forEach(cs => {
+                    let posClass = 'bg-gray-200 text-gray-500 font-medium';
+                    if (cs.posisi === 1) posClass = 'bg-[#985F24] text-white shadow-md';
+                    else if (cs.posisi === 2) posClass = 'bg-[#114232] text-white shadow-md';
+
+                    let badgeColor = kategoriBadgeColor(cs.warna);
+
+                    let nameText = cs.id_cs === currentUser.id
+                        ? `<span class="font-bold text-gray-900 dark:text-white">${cs.nama}</span> <br><span class="text-[10px] text-gray-500">(Anda)</span>`
+                        : `<span class="font-medium text-gray-700 dark:text-gray-200">${cs.nama}</span>`;
+
+                    let initials = cs.nama.substring(0, 2).toUpperCase();
+                    let namaSafe = String(cs.nama).replace(/'/g, "\\'");
+                    let aksiCell = isSpv
+                        ? `<td class="px-5 py-4 text-center"><button onclick="openBeriSaranModal('${cs.id_cs}', '${namaSafe}')" class="bg-aeGreen text-white px-2.5 py-1.5 rounded-md text-xs hover:bg-[#0a2e22]" title="Beri Saran"><i class="fas fa-comment-dots"></i></button></td>`
+                        : '';
+
+                    tbody.innerHTML += `
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                                <td class="px-5 py-4 text-center">
+                                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm mx-auto ${posClass}">${cs.posisi}</div>
+                                </td>
+                                <td class="px-5 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-9 h-9 rounded-full bg-[#E8F0FE] text-[#1967D2] flex items-center justify-center font-bold text-xs flex-shrink-0">${initials}</div>
+                                        <div class="leading-tight">
+                                            ${nameText}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-5 py-4 text-right">
+                                    <p class="font-bold text-sm text-gray-800 dark:text-gray-200">Rp ${cs.revenue.toLocaleString('id-ID')}</p>
+                                </td>
+                                <td class="px-5 py-4 text-right">
+                                    <p class="font-bold text-sm text-gray-800 dark:text-gray-200">Rp ${cs.revenue_berjalan.toLocaleString('id-ID')}</p>
+                                </td>
+                                <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.leads.toLocaleString('id-ID')}</td>
+                                <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.closing.toLocaleString('id-ID')}</td>
+                                <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.rc}%</td>
+                                <td class="px-5 py-4 text-center">
+                                    <span class="bg-orange-50 text-orange-600 px-2.5 py-1 rounded text-xs font-bold">${cs.nilai_akhir}%</span>
+                                </td>
+                                <td class="px-5 py-4 text-center">
+                                    <span class="${badgeColor} px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">${cs.kategori}</span>
+                                </td>
+                                ${aksiCell}
+                            </tr>
+                        `;
+                });
+            }
+            let sisa = lastLeaderboard.length - 10;
+            document.getElementById('leaderboardShowMoreWrapper').classList.toggle('hidden', sisa <= 0 || leaderboardShowAll);
+            document.getElementById('leaderboardSisaCount').innerText = Math.max(0, sisa);
+        }
+
+        function toggleLeaderboardShowAll() {
+            leaderboardShowAll = true;
+            renderLeaderboardTable();
         }
 
         // ===================================================
@@ -2569,16 +2589,22 @@
             if (!insights) return;
             regionSuffix = regionSuffix || '';
 
-            document.getElementById('tipCsTerbaik').innerText = `CS dengan Skor Akhir KPI tertinggi periode ${periodeLabel}${regionSuffix}.`;
-            document.getElementById('tipPerluDievaluasi').innerText = `CS dengan kategori "Kurang" (Skor Akhir KPI di bawah 50%) periode ${periodeLabel}${regionSuffix}, diurutkan dari skor terendah.`;
+            document.getElementById('tipCsTerbaik').innerText = `3 CS dengan Skor Akhir KPI tertinggi periode ${periodeLabel}${regionSuffix}.`;
+            document.getElementById('tipPerluDievaluasi').innerText = `CS dengan kategori "Kurang" (Skor Akhir KPI di bawah 50%) periode ${periodeLabel}${regionSuffix}, diurutkan dari skor terendah. Hanya CS yang punya data Performa CS pada periode & region ini yang dihitung.`;
             document.getElementById('tipCsBerprogress').innerText = `CS yang Skor Akhir KPI-nya naik dibanding periode sebelumnya (${periodeLabelLalu}), diurutkan dari kenaikan terbesar. Periode saat ini: ${periodeLabel}${regionSuffix}.`;
 
             const terbaikEl = document.getElementById('insightTerbaik');
-            if (insights.terbaik) {
-                terbaikEl.innerHTML = `
-                        <p class="text-xl font-bold text-gray-800 dark:text-white">${insights.terbaik.nama}</p>
-                        <p class="text-xs text-gray-500 mt-1">Skor Akhir: <span class="font-bold text-aeGreen">${insights.terbaik.nilai_akhir}%</span></p>
-                    `;
+            if (insights.terbaik && insights.terbaik.length > 0) {
+                const medalClass = ['bg-amber-400 text-white', 'bg-gray-300 text-white', 'bg-orange-300 text-white'];
+                terbaikEl.innerHTML = insights.terbaik.map((cs, idx) => `
+                        <div class="flex items-center justify-between gap-2 bg-amber-100/60 dark:bg-amber-900/30 rounded-lg px-3 py-2">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <div class="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold flex-shrink-0 ${medalClass[idx] || 'bg-amber-100 text-amber-700'}">${idx + 1}</div>
+                                <span class="font-bold text-gray-800 dark:text-white text-sm truncate">${cs.nama}</span>
+                            </div>
+                            <span class="text-amber-600 dark:text-amber-400 font-bold text-xs flex-shrink-0">${cs.nilai_akhir}%</span>
+                        </div>
+                    `).join('');
             } else {
                 terbaikEl.innerHTML = '<p class="text-sm text-gray-400 italic">Belum ada data.</p>';
             }
