@@ -2574,6 +2574,21 @@
         // ===================================================
         // FASE 4: INSIGHT OTOMATIS, CARD SARAN SPV, BANDINGKAN CS
         // ===================================================
+        // Cari aspek (Revenue/Leads/Closing/Rating Closing) dengan capaian-vs-target/ambang PALING RENDAH untuk 1 CS --
+        // dipakai card Perlu Dievaluasi supaya keterangan di bawah skor benar-benar menjelaskan penyebab utama nilai
+        // akhirnya rendah, bukan menampilkan angka Ambang RC lepas konteks yang tidak nyambung ke Skor Akhir KPI.
+        // Aspek yang target/ambangnya belum diset (0) dilewati karena capaiannya otomatis 0 bukan karena performa.
+        function aspekTerlemahInsight(cs) {
+            let aspects = [];
+            if (cs.target_revenue > 0) aspects.push({ label: 'Revenue', capaian: Math.round(Math.min(100, cs.revenue / cs.target_revenue * 100) * 10) / 10 });
+            if (cs.target_leads > 0) aspects.push({ label: 'Leads', capaian: Math.round(Math.min(100, cs.leads / cs.target_leads * 100) * 10) / 10 });
+            if (cs.target_closing > 0) aspects.push({ label: 'Closing', capaian: Math.round(Math.min(100, cs.closing / cs.target_closing * 100) * 10) / 10 });
+            if (cs.ambang_rc > 0) aspects.push({ label: 'Rating Closing', capaian: Math.round(Math.min(100, cs.rc / cs.ambang_rc * 100) * 10) / 10 });
+            if (aspects.length === 0) return null;
+            aspects.sort((a, b) => a.capaian - b.capaian);
+            return aspects[0];
+        }
+
         // Baris "+N CS lainnya" dengan daftar nama sisa CS muncul saat di-hover (dipakai card Perlu Dievaluasi & Berprogress)
         function renderSisaCsHoverRow(sisa, formatBarisFn) {
             let daftarHtml = sisa.map(formatBarisFn).join('<br>');
@@ -2590,7 +2605,7 @@
             regionSuffix = regionSuffix || '';
 
             document.getElementById('tipCsTerbaik').innerText = `3 CS dengan Skor Akhir KPI tertinggi periode ${periodeLabel}${regionSuffix}.`;
-            document.getElementById('tipPerluDievaluasi').innerText = `CS dengan kategori "Kurang" (Skor Akhir KPI di bawah 50%) periode ${periodeLabel}${regionSuffix}, diurutkan dari skor terendah. Hanya CS yang punya data Performa CS pada periode & region ini yang dihitung.`;
+            document.getElementById('tipPerluDievaluasi').innerText = `CS dengan kategori "Kurang" (Skor Akhir KPI di bawah 50%) periode ${periodeLabel}${regionSuffix}, diurutkan dari skor terendah. Keterangan kecil di bawah skor menunjukkan aspek (Revenue/Leads/Closing/Rating Closing) dengan capaian-vs-target paling rendah, penyebab utama skornya kurang. Hanya CS yang punya data Performa CS pada periode & region ini yang dihitung.`;
             document.getElementById('tipCsBerprogress').innerText = `CS yang Skor Akhir KPI-nya naik dibanding periode sebelumnya (${periodeLabelLalu}), diurutkan dari kenaikan terbesar. Periode saat ini: ${periodeLabel}${regionSuffix}.`;
 
             const terbaikEl = document.getElementById('insightTerbaik');
@@ -2611,15 +2626,19 @@
 
             const evalEl = document.getElementById('insightPerluEvaluasi');
             if (insights.perlu_evaluasi && insights.perlu_evaluasi.length > 0) {
-                evalEl.innerHTML = insights.perlu_evaluasi.slice(0, 3).map(cs => `
+                evalEl.innerHTML = insights.perlu_evaluasi.slice(0, 3).map(cs => {
+                    let lemah = aspekTerlemahInsight(cs);
+                    let lemahText = lemah ? `${lemah.label} baru ${lemah.capaian}% dari target` : 'Belum ada target diset';
+                    return `
                         <div class="flex justify-between items-center bg-red-50 dark:bg-red-900/20 rounded-lg px-3 py-2">
                             <span class="font-medium text-gray-700 dark:text-gray-200 text-sm">${cs.nama}</span>
                             <span class="text-right">
                                 <span class="text-red-600 font-bold text-xs block">${cs.nilai_akhir}%</span>
-                                <span class="text-[10px] text-gray-400">Ambang RC: ${cs.ambang_rc}%</span>
+                                <span class="text-[10px] text-gray-400">${lemahText}</span>
                             </span>
                         </div>
-                    `).join('');
+                    `;
+                }).join('');
                 if (insights.perlu_evaluasi.length > 3) {
                     evalEl.innerHTML += renderSisaCsHoverRow(insights.perlu_evaluasi.slice(3), cs => `${cs.nama} — ${cs.nilai_akhir}%`);
                 }
