@@ -2496,7 +2496,7 @@
 
             const evalEl = document.getElementById('insightPerluEvaluasi');
             if (insights.perlu_evaluasi && insights.perlu_evaluasi.length > 0) {
-                evalEl.innerHTML = insights.perlu_evaluasi.map(cs => `
+                evalEl.innerHTML = insights.perlu_evaluasi.slice(0, 5).map(cs => `
                         <div class="flex justify-between items-center bg-red-50 dark:bg-red-900/20 rounded-lg px-3 py-2">
                             <span class="font-medium text-gray-700 dark:text-gray-200 text-sm">${cs.nama}</span>
                             <span class="text-right">
@@ -2505,6 +2505,9 @@
                             </span>
                         </div>
                     `).join('');
+                if (insights.perlu_evaluasi.length > 5) {
+                    evalEl.innerHTML += `<p class="text-[10px] text-gray-400 text-center pt-1">+${insights.perlu_evaluasi.length - 5} CS lainnya</p>`;
+                }
             } else {
                 evalEl.innerHTML = '<p class="text-sm text-gray-400 italic">Tidak ada CS kategori Kurang. 🎉</p>';
             }
