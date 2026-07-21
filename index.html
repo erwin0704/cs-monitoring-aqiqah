@@ -1088,7 +1088,7 @@
                     class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
                     <i class="fas fa-times text-red-500"></i></div>
                 <div>
-                    <h3 class="text-base font-bold text-gray-800 dark:text-white">Tolak Invoice</h3>
+                    <h3 class="text-base font-bold text-gray-800 dark:text-white" id="alasanRejectModalTitle">Tolak Invoice</h3>
                     <p class="text-[11px] text-gray-500" id="alasanRejectInvoiceLabel">No. Invoice</p>
                 </div>
             </div>
@@ -2500,17 +2500,18 @@
         }
 
         // Approve/Reject laporan lead-only (tanpa invoice) langsung dari baris di tabel Antrean Pending yang sama
-        async function actionApprovalLead(idCs, tanggal, statusBaru) {
-            let ok = statusBaru === 'Approved'
-                ? await showConfirmGeneric('Approve Laporan Lead', `Approve laporan Lead ${getNamaCsById(idCs)} tanggal ${tanggal}?`, 'Ya, Approve', 'bg-green-500 hover:bg-green-600')
-                : await showConfirmGeneric('Tolak Laporan Lead', `Tolak laporan Lead ${getNamaCsById(idCs)} tanggal ${tanggal}? CS perlu melapor ulang tanggal itu.`, 'Ya, Tolak', 'bg-red-500 hover:bg-red-600');
-            if (!ok) return;
+        async function actionApprovalLead(idCs, tanggal, statusBaru, alasanReject) {
+            if (statusBaru === 'Approved') {
+                let ok = await showConfirmGeneric('Approve Laporan Lead', `Approve laporan Lead ${getNamaCsById(idCs)} tanggal ${tanggal}?`, 'Ya, Approve', 'bg-green-500 hover:bg-green-600');
+                if (!ok) return;
+            }
 
             let formData = new URLSearchParams();
             formData.append('action', 'actionApprovalLead');
             formData.append('id_cs', idCs);
             formData.append('tanggal', tanggal);
             formData.append('status_baru', statusBaru);
+            if (alasanReject) formData.append('alasan_reject', alasanReject);
 
             showLoading('Memproses approval lead...');
             try {
@@ -2556,7 +2557,7 @@
                         let aksiCell = item.is_lead_only
                             ? `<td class="px-5 py-4 text-center flex gap-2 justify-center">
                                 <button onclick="actionApprovalLead('${item.id_cs}', '${item.tanggal_laporan}', 'Approved')" class="bg-green-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-green-600 transition" title="Approve"><i class="fas fa-check"></i></button>
-                                <button onclick="actionApprovalLead('${item.id_cs}', '${item.tanggal_laporan}', 'Rejected')" class="bg-red-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-red-600 transition" title="Reject"><i class="fas fa-times"></i></button>
+                                <button onclick="openAlasanRejectModalLead('${item.id_cs}', '${item.tanggal_laporan}')" class="bg-red-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-red-600 transition" title="Reject"><i class="fas fa-times"></i></button>
                                </td>`
                             : `<td class="px-5 py-4 text-center flex gap-2 justify-center">
                                 <button onclick="openAlasanRejectModal('${item.no_invoice}', '${item.raw_timestamp}')" class="bg-red-500 text-white px-3 py-1.5 rounded-md shadow-sm text-xs hover:bg-red-600 transition" title="Reject"><i class="fas fa-times"></i></button>
@@ -2655,11 +2656,19 @@
             hideLoading();
         }
 
-        // ---- Modal Alasan Penolakan ----
+        // ---- Modal Alasan Penolakan (dipakai utk reject invoice maupun reject laporan lead-only) ----
         let rejectTarget = null;
         function openAlasanRejectModal(noInvoice, rawTimestamp) {
-            rejectTarget = { noInvoice, rawTimestamp };
+            rejectTarget = { type: 'invoice', noInvoice, rawTimestamp };
+            document.getElementById('alasanRejectModalTitle').innerText = 'Tolak Invoice';
             document.getElementById('alasanRejectInvoiceLabel').innerText = noInvoice;
+            document.getElementById('alasan-reject-input').value = '';
+            document.getElementById('modalAlasanReject').classList.remove('hidden');
+        }
+        function openAlasanRejectModalLead(idCs, tanggal) {
+            rejectTarget = { type: 'lead', idCs, tanggal };
+            document.getElementById('alasanRejectModalTitle').innerText = 'Tolak Laporan Lead';
+            document.getElementById('alasanRejectInvoiceLabel').innerText = `${getNamaCsById(idCs)} — ${tanggal}`;
             document.getElementById('alasan-reject-input').value = '';
             document.getElementById('modalAlasanReject').classList.remove('hidden');
         }
@@ -2677,7 +2686,11 @@
             const btnOriginal = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            await actionApproval(rejectTarget.noInvoice, rejectTarget.rawTimestamp, 'Rejected', alasan);
+            if (rejectTarget.type === 'lead') {
+                await actionApprovalLead(rejectTarget.idCs, rejectTarget.tanggal, 'Rejected', alasan);
+            } else {
+                await actionApproval(rejectTarget.noInvoice, rejectTarget.rawTimestamp, 'Rejected', alasan);
+            }
             btn.disabled = false;
             btn.innerHTML = btnOriginal;
             closeAlasanRejectModal();
@@ -2775,7 +2788,7 @@
                         ? `<td class="px-5 py-4 text-sm text-gray-400 italic">— (laporan lead saja)</td>`
                         : `<td class="px-5 py-4"><p class="font-bold text-sm">${item.nama}</p><p class="text-[10px] text-gray-500">${item.no_invoice}</p></td>`;
                     let detailCell = item.is_lead_only
-                        ? `<td class="px-5 py-4 text-sm text-gray-400">-</td>`
+                        ? `<td class="px-5 py-4 text-sm text-gray-400">-${rejectNote}</td>`
                         : `<td class="px-5 py-4 text-sm font-bold">Rp ${(parseInt(item.revenue) || 0).toLocaleString('id-ID')}<br><span class="font-normal text-[10px] text-gray-500">Cab: ${item.cabang} | ${item.qty} Ekor</span> <span class="font-bold text-[10px] ${detectRegionFromInvoice(item.no_invoice) ? 'text-aeGreen' : 'text-gray-400 italic'}">${detectRegionFromInvoice(item.no_invoice) || 'Region?'}</span>${rejectNote}</td>`;
 
                     tbody.innerHTML += `
