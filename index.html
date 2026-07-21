@@ -428,6 +428,14 @@
                             <p class="text-sm text-gray-500">Live Database Sync</p>
                         </div>
                         <div class="flex items-center gap-2 flex-wrap justify-end">
+                            <select id="dashRegionPicker" onchange="onDashboardRegionChange()"
+                                class="p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                                <option value="">Semua Region</option>
+                                <option value="Pusat">Pusat</option>
+                                <option value="Jabar">Jabar</option>
+                                <option value="Jatim">Jatim</option>
+                                <option value="Jogja">Jogja</option>
+                            </select>
                             <input type="month" id="dashBulanPicker" onchange="onDashboardPeriodChange()"
                                 class="p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
                             <input type="number" id="dashTahunPicker" onchange="onDashboardPeriodChange()"
@@ -440,31 +448,29 @@
                                 <input type="month" id="dashBulanSelesaiPicker" onchange="onDashboardCustomRangeChange()"
                                     class="p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
                             </div>
-                            <div class="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
-                                <button type="button" id="dashModeBulanBtn" onclick="setDashboardMode('bulan')"
-                                    class="px-3 py-1.5 rounded-md text-sm font-medium transition">Bulanan</button>
-                                <button type="button" id="dashModeTahunBtn" onclick="setDashboardMode('tahun')"
-                                    class="px-3 py-1.5 rounded-md text-sm font-medium transition">Tahunan</button>
-                                <button type="button" id="dashModeCustomBtn" onclick="setDashboardMode('custom')"
-                                    class="px-3 py-1.5 rounded-md text-sm font-medium transition">Rentang Bulan</button>
-                            </div>
+                            <select id="dashModeSelect" onchange="setDashboardMode(this.value)"
+                                class="p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                                <option value="bulan">Bulanan</option>
+                                <option value="tahun">Tahunan</option>
+                                <option value="custom">Rentang Bulan</option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-aeGreen relative overflow-hidden">
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-aeGreen relative">
                             <div class="flex justify-between items-start mb-2">
-                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">TOTAL REVENUE</h3>
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">TOTAL REVENUE <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-gray-300 hover:text-gray-400 text-[11px]"></i><div id="tipTotalRevenue" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-60 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
                                 <div class="w-9 h-9 rounded-full bg-green-50 dark:bg-green-900/30 text-aeGreen flex items-center justify-center flex-shrink-0"><i class="fas fa-money-bill-wave text-sm"></i></div>
                             </div>
                             <p class="text-2xl font-bold text-aeGreen" id="dashRev">Rp 0</p>
                             <p class="text-[11px] text-gray-500 mt-2 font-medium">Revenue Berjalan: <span id="dashRevBerjalan" class="font-bold text-gray-700 dark:text-gray-300">Rp 0</span></p>
                         </div>
                         <div
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-blue-400 relative overflow-hidden">
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-blue-400 relative">
                             <div class="flex justify-between items-start mb-2">
-                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">CAPAIAN TARGET</h3>
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">CAPAIAN TARGET <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-gray-300 hover:text-gray-400 text-[11px]"></i><div id="tipCapaianTarget" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-60 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
                                 <div class="w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center flex-shrink-0"><i class="fas fa-bullseye text-sm"></i></div>
                             </div>
                             <p class="text-2xl font-bold text-gray-800 dark:text-white" id="dashCapaian">-</p>
@@ -477,18 +483,18 @@
                             <p class="text-[10px] text-gray-500 mt-1 font-medium hidden" id="dashCapaianSekunder"></p>
                         </div>
                         <div
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-aeOrange">
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-aeOrange relative">
                             <div class="flex justify-between items-start mb-2">
-                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">TOTAL CLOSING</h3>
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">TOTAL CLOSING <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-gray-300 hover:text-gray-400 text-[11px]"></i><div id="tipTotalClosing" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-60 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
                                 <div class="w-9 h-9 rounded-full bg-orange-50 dark:bg-orange-900/30 text-aeOrange flex items-center justify-center flex-shrink-0"><i class="fas fa-chart-line text-sm"></i></div>
                             </div>
                             <p class="text-2xl font-bold text-gray-800 dark:text-white" id="dashTrx">0</p>
                             <p class="text-[11px] text-gray-500 mt-2 font-medium">Total Nomor: <span id="dashTotalNomor" class="font-bold text-gray-700 dark:text-gray-300">0</span></p>
                         </div>
                         <div id="dashSkorCard"
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-gray-300">
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-gray-300 relative">
                             <div class="flex justify-between items-start mb-2">
-                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">SKOR AKHIR KPI</h3>
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">SKOR AKHIR KPI <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-gray-300 hover:text-gray-400 text-[11px]"></i><div id="tipSkorAkhir" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-64 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
                                 <div id="dashSkorBadge" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-400 flex items-center justify-center flex-shrink-0"><i class="fas fa-award text-sm"></i></div>
                             </div>
                             <p class="text-2xl font-bold text-gray-800 dark:text-white" id="dashSkor">-</p>
@@ -512,23 +518,22 @@
                     <!-- Insight Otomatis (khusus SPV) -->
                     <div id="insightSection" class="hidden grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                         <div
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative">
                             <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3"><i
-                                    class="fas fa-trophy text-yellow-500 mr-1"></i> CS Terbaik</h3>
+                                    class="fas fa-trophy text-yellow-500 mr-1"></i> CS Terbaik <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-gray-300 hover:text-gray-400 text-[11px]"></i><div id="tipCsTerbaik" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-60 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
                             <div id="insightTerbaik" class="text-sm text-gray-400 italic">Belum ada data.</div>
                         </div>
                         <div
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative">
                             <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3"><i
-                                    class="fas fa-triangle-exclamation text-red-500 mr-1"></i> Perlu Dievaluasi</h3>
+                                    class="fas fa-triangle-exclamation text-red-500 mr-1"></i> Perlu Dievaluasi <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-gray-300 hover:text-gray-400 text-[11px]"></i><div id="tipPerluDievaluasi" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-60 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
                             <div id="insightPerluEvaluasi" class="space-y-2 text-sm text-gray-400 italic">Belum ada
                                 data.</div>
                         </div>
                         <div
-                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1"><i
-                                    class="fas fa-arrow-trend-up text-green-500 mr-1"></i> CS Berprogress</h3>
-                            <p class="text-[10px] text-gray-400 mb-3">Kenaikan Skor Akhir KPI dibanding periode sebelumnya (mis. 33.1% &rarr; 47.9% = naik +14.8%)</p>
+                            class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative">
+                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3"><i
+                                    class="fas fa-arrow-trend-up text-green-500 mr-1"></i> CS Berprogress <span class="relative group cursor-help align-middle"><i class="fas fa-circle-info text-gray-300 hover:text-gray-400 text-[11px]"></i><div id="tipCsBerprogress" class="hidden group-hover:block absolute z-30 bottom-full left-0 mb-2 w-60 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] normal-case font-normal leading-snug shadow-lg"></div></span></h3>
                             <div id="insightBerprogress" class="space-y-2 text-sm text-gray-400 italic">Belum ada data.
                             </div>
                         </div>
@@ -874,20 +879,20 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold mb-1 text-gray-500">Total Nomor</label>
-                                <input type="number" id="performa-total-nomor"
-                                    class="w-full p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
+                                <input type="text" inputmode="numeric" id="performa-total-nomor"
+                                    class="money-input w-full p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
                                     placeholder="0" oninput="updatePerformaRatingClosingPreview()">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold mb-1 text-gray-500">Total Closing</label>
-                                <input type="number" id="performa-total-closing"
-                                    class="w-full p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
+                                <input type="text" inputmode="numeric" id="performa-total-closing"
+                                    class="money-input w-full p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
                                     placeholder="0" oninput="updatePerformaRatingClosingPreview()">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold mb-1 text-gray-500">Total Ekoran</label>
-                                <input type="number" id="performa-total-ekoran"
-                                    class="w-full p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
+                                <input type="text" inputmode="numeric" id="performa-total-ekoran"
+                                    class="money-input w-full p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
                                     placeholder="0">
                             </div>
                             <div>
@@ -1519,6 +1524,8 @@
         let dashboardTahun = null; // "yyyy" yang dipilih manual di picker Tahunan, null = pakai tahun berjalan
         let dashboardBulanMulai = null; // "yyyy-MM" utk mode Rentang Bulan, null = default 3 bulan terakhir
         let dashboardBulanSelesai = null; // "yyyy-MM" utk mode Rentang Bulan, null = default bulan berjalan
+        let dashboardRegion = ''; // Filter Region/Manajemen Dashboard: '' = Semua Region, atau 'Pusat'/'Jabar'/'Jatim'/'Jogja'
+        let dashboardBobot = null; // Bobot skor komposit (revenue/lead/closing/rating %), dipakai teks tooltip Skor Akhir KPI
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
         // Fungsi Menampilkan Toast
@@ -2270,19 +2277,18 @@
             loadDashboardData();
         }
         function renderDashboardModeToggle() {
-            let btnBulan = document.getElementById('dashModeBulanBtn');
-            let btnTahun = document.getElementById('dashModeTahunBtn');
-            let btnCustom = document.getElementById('dashModeCustomBtn');
-            let active = 'bg-white dark:bg-gray-800 text-aeGreen shadow-sm';
-            let inactive = 'text-gray-500 dark:text-gray-400';
-            btnBulan.className = 'px-3 py-1.5 rounded-md text-sm font-medium transition ' + (dashboardMode === 'bulan' ? active : inactive);
-            btnTahun.className = 'px-3 py-1.5 rounded-md text-sm font-medium transition ' + (dashboardMode === 'tahun' ? active : inactive);
-            btnCustom.className = 'px-3 py-1.5 rounded-md text-sm font-medium transition ' + (dashboardMode === 'custom' ? active : inactive);
+            document.getElementById('dashModeSelect').value = dashboardMode;
             document.getElementById('dashBulanPicker').classList.toggle('hidden', dashboardMode !== 'bulan');
             document.getElementById('dashTahunPicker').classList.toggle('hidden', dashboardMode !== 'tahun');
             let customWrapper = document.getElementById('dashCustomRangeWrapper');
             customWrapper.classList.toggle('hidden', dashboardMode !== 'custom');
             customWrapper.classList.toggle('flex', dashboardMode === 'custom');
+        }
+
+        // Dipanggil saat user ganti Filter Region/Manajemen di Dashboard
+        function onDashboardRegionChange() {
+            dashboardRegion = document.getElementById('dashRegionPicker').value;
+            loadDashboardData();
         }
 
         // Dipanggil saat user pilih bulan/tahun manual dari picker (bukan cuma toggle mode)
@@ -2319,6 +2325,19 @@
             let d = new Date(parts[0], parts[1] - 1 + n, 1);
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
         }
+        // Helper label periode utk teks judul Dashboard & isi tooltip (dipakai supaya keterangan tooltip selalu
+        // menampilkan rentang waktu data yang REAL sesuai filter aktif, bukan contoh/dummy)
+        function formatBulanLabelJs(bulanTahun) {
+            let p = bulanTahun.split('-');
+            return `${NAMA_BULAN[parseInt(p[1], 10) - 1]} ${p[0]}`;
+        }
+        function formatRentangLabelJs(mulai, selesai) {
+            return mulai === selesai ? formatBulanLabelJs(mulai) : `${formatBulanLabelJs(mulai)} s.d ${formatBulanLabelJs(selesai)}`;
+        }
+        function jumlahBulanAntaraJs(mulai, selesai) {
+            let pm = mulai.split('-').map(Number), ps = selesai.split('-').map(Number);
+            return (ps[0] - pm[0]) * 12 + (ps[1] - pm[1]) + 1;
+        }
 
         async function loadDashboardData() {
             const now = new Date();
@@ -2330,32 +2349,52 @@
             document.getElementById('dashTahunPicker').value = dashboardTahun;
             document.getElementById('dashBulanMulaiPicker').value = dashboardBulanMulai;
             document.getElementById('dashBulanSelesaiPicker').value = dashboardBulanSelesai;
+            document.getElementById('dashRegionPicker').value = dashboardRegion;
 
             renderDashboardModeToggle();
-            if (dashboardMode === 'tahun') {
-                document.getElementById('dashBulan').innerText = dashboardTahun;
-            } else if (dashboardMode === 'custom') {
-                let pMulai = dashboardBulanMulai.split('-'), pSelesai = dashboardBulanSelesai.split('-');
-                document.getElementById('dashBulan').innerText = `${NAMA_BULAN[parseInt(pMulai[1], 10) - 1]} ${pMulai[0]} - ${NAMA_BULAN[parseInt(pSelesai[1], 10) - 1]} ${pSelesai[0]}`;
-            } else {
-                let parts = dashboardBulanTahun.split('-');
-                document.getElementById('dashBulan').innerText = `${NAMA_BULAN[parseInt(parts[1], 10) - 1]} ${parts[0]}`;
-            }
+            let periodeMulai, periodeSelesai;
+            if (dashboardMode === 'tahun') { periodeMulai = dashboardTahun + '-01'; periodeSelesai = dashboardTahun + '-12'; }
+            else if (dashboardMode === 'custom') { periodeMulai = dashboardBulanMulai; periodeSelesai = dashboardBulanSelesai; }
+            else { periodeMulai = periodeSelesai = dashboardBulanTahun; }
+            let periodeLabel = formatRentangLabelJs(periodeMulai, periodeSelesai);
+            let nBulanPeriode = jumlahBulanAntaraJs(periodeMulai, periodeSelesai);
+            let periodeLabelLalu = formatRentangLabelJs(geserBulanJs(periodeMulai, -nBulanPeriode), geserBulanJs(periodeSelesai, -nBulanPeriode));
+            let regionSuffix = dashboardRegion ? ` · Region: ${dashboardRegion}` : '';
+            document.getElementById('dashBulan').innerText = periodeLabel + (dashboardRegion ? ` — ${dashboardRegion}` : '');
             showLoading('Memuat dashboard...');
             try {
                 let periodParam = dashboardMode === 'tahun' ? `&tahun=${dashboardTahun}`
                     : dashboardMode === 'custom' ? `&bulan_mulai=${dashboardBulanMulai}&bulan_selesai=${dashboardBulanSelesai}`
                     : `&bulan_tahun=${dashboardBulanTahun}`;
-                let res = await fetch(`${API_URL}?action=getDashboard&id_cs=${currentUser.id}&role=${currentUser.role}&mode=${dashboardMode}${periodParam}`);
+                let regionParam = dashboardRegion ? `&region=${encodeURIComponent(dashboardRegion)}` : '';
+                let [res, bobotRes] = await Promise.all([
+                    fetch(`${API_URL}?action=getDashboard&id_cs=${currentUser.id}&role=${currentUser.role}&mode=${dashboardMode}${periodParam}${regionParam}`),
+                    fetch(API_URL + "?action=getBobotConfig")
+                ]);
                 let json = await res.json();
+                try { let bobotJson = await bobotRes.json(); if (bobotJson.status === 'success') dashboardBobot = bobotJson.data; } catch (errBobot) { /* tooltip Skor Akhir KPI diamkan kalau gagal, tidak kritikal */ }
                 if (json.status === "success") {
                     document.getElementById('dashRev').innerText = "Rp " + json.data.revenue.toLocaleString('id-ID');
                     document.getElementById('dashRevBerjalan').innerText = "Rp " + json.data.revenue_berjalan.toLocaleString('id-ID');
-                    document.getElementById('dashTrx').innerText = json.data.total_closing;
-                    document.getElementById('dashTotalNomor').innerText = json.data.total_nomor;
+                    document.getElementById('dashTrx').innerText = json.data.total_closing.toLocaleString('id-ID');
+                    document.getElementById('dashTotalNomor').innerText = json.data.total_nomor.toLocaleString('id-ID');
 
                     let isSpv = currentUser.role === 'SPV';
                     let capaianSekunderEl = document.getElementById('dashCapaianSekunder');
+
+                    // Isi tooltip 4 card ringkasan -- selalu dibangun ulang dari data & periode REAL yang baru
+                    // diambil di atas, bukan teks contoh statis
+                    let scopeLabel = isSpv ? 'semua CS aktif' : 'CS ini';
+                    document.getElementById('tipTotalRevenue').innerText = `Revenue Pengiriman = total kolom "Revenue Pengiriman" pada data Performa CS (${scopeLabel}). Revenue Berjalan = total kolom "Revenue Berjalan" pada data yang sama. Periode: ${periodeLabel}${regionSuffix}.`;
+                    document.getElementById('tipTotalClosing').innerText = `Total Closing = total kolom "Total Closing", Total Nomor = total kolom "Total Nomor" pada data Performa CS (${scopeLabel}). Periode: ${periodeLabel}${regionSuffix}.`;
+                    if (isSpv) {
+                        document.getElementById('tipCapaianTarget').innerText = `Baris atas: Revenue Pengiriman seluruh CS dibagi Target Perusahaan (menu Setting Target > Target Perusahaan) periode & region yang sama. Baris bawah: pertumbuhan Revenue Berjalan dibanding periode sebelumnya (${periodeLabelLalu}). Periode: ${periodeLabel}${regionSuffix}.`;
+                    } else {
+                        document.getElementById('tipCapaianTarget').innerText = `Revenue Pengiriman Anda dibagi Target Revenue pribadi (menu Setting Target > Target per CS) untuk periode yang sama. Periode: ${periodeLabel}.`;
+                    }
+                    if (dashboardBobot) {
+                        document.getElementById('tipSkorAkhir').innerText = `Skor Akhir = (Revenue × ${dashboardBobot.revenue}%) + (Leads × ${dashboardBobot.lead}%) + (Closing × ${dashboardBobot.closing}%) + (Rating Closing × ${dashboardBobot.rating}%). Tiap aspek dihitung dari capaian terhadap target (maks 100%). Periode: ${periodeLabel}.`;
+                    }
 
                     // Kartu Capaian Target: SPV = company-wide (Revenue Pengiriman vs Target Perusahaan semua region,
                     // + Revenue Berjalan vs periode sebelumnya). CS = individual (Revenue Pengiriman sendiri vs Target sendiri).
@@ -2402,7 +2441,7 @@
                     // (termasuk Rentang Bulan) karena Nilai Akhir dihitung penuh, tidak seperti mode Custom lama.
                     document.getElementById('insightSection').classList.toggle('hidden', !isSpv);
                     if (isSpv) {
-                        renderInsights(json.data.insights);
+                        renderInsights(json.data.insights, periodeLabel, periodeLabelLalu, regionSuffix);
                         let jumlahKurang = json.data.insights && json.data.insights.perlu_evaluasi ? json.data.insights.perlu_evaluasi.length : 0;
                         if (jumlahKurang > 0 && !sudahIngatkanKategoriKurang) {
                             sudahIngatkanKategoriKurang = true;
@@ -2457,8 +2496,8 @@
                                             <td class="px-5 py-4 text-right">
                                                 <p class="font-bold text-sm text-gray-800 dark:text-gray-200">Rp ${cs.revenue_berjalan.toLocaleString('id-ID')}</p>
                                             </td>
-                                            <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.leads}</td>
-                                            <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.closing}</td>
+                                            <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.leads.toLocaleString('id-ID')}</td>
+                                            <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.closing.toLocaleString('id-ID')}</td>
                                             <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.rc}%</td>
                                             <td class="px-5 py-4 text-center">
                                                 <span class="bg-orange-50 text-orange-600 px-2.5 py-1 rounded text-xs font-bold">${cs.nilai_akhir}%</span>
@@ -2482,8 +2521,24 @@
         // ===================================================
         // FASE 4: INSIGHT OTOMATIS, CARD SARAN SPV, BANDINGKAN CS
         // ===================================================
-        function renderInsights(insights) {
+        // Baris "+N CS lainnya" dengan daftar nama sisa CS muncul saat di-hover (dipakai card Perlu Dievaluasi & Berprogress)
+        function renderSisaCsHoverRow(sisa, formatBarisFn) {
+            let daftarHtml = sisa.map(formatBarisFn).join('<br>');
+            return `
+                    <div class="relative group text-center pt-1 cursor-help">
+                        <p class="text-[10px] text-gray-400 underline decoration-dotted inline-block">+${sisa.length} CS lainnya</p>
+                        <div class="hidden group-hover:block absolute z-30 bottom-full left-1/2 -translate-x-1/2 mb-1 w-52 p-2.5 rounded-lg bg-gray-800 text-white text-[11px] leading-snug shadow-lg text-left">${daftarHtml}</div>
+                    </div>
+                `;
+        }
+
+        function renderInsights(insights, periodeLabel, periodeLabelLalu, regionSuffix) {
             if (!insights) return;
+            regionSuffix = regionSuffix || '';
+
+            document.getElementById('tipCsTerbaik').innerText = `CS dengan Skor Akhir KPI tertinggi periode ${periodeLabel}${regionSuffix}.`;
+            document.getElementById('tipPerluDievaluasi').innerText = `CS dengan kategori "Kurang" (Skor Akhir KPI di bawah 50%) periode ${periodeLabel}${regionSuffix}, diurutkan dari skor terendah.`;
+            document.getElementById('tipCsBerprogress').innerText = `CS yang Skor Akhir KPI-nya naik dibanding periode sebelumnya (${periodeLabelLalu}), diurutkan dari kenaikan terbesar. Periode saat ini: ${periodeLabel}${regionSuffix}.`;
 
             const terbaikEl = document.getElementById('insightTerbaik');
             if (insights.terbaik) {
@@ -2507,7 +2562,7 @@
                         </div>
                     `).join('');
                 if (insights.perlu_evaluasi.length > 3) {
-                    evalEl.innerHTML += `<p class="text-[10px] text-gray-400 text-center pt-1">+${insights.perlu_evaluasi.length - 3} CS lainnya</p>`;
+                    evalEl.innerHTML += renderSisaCsHoverRow(insights.perlu_evaluasi.slice(3), cs => `${cs.nama} — ${cs.nilai_akhir}%`);
                 }
             } else {
                 evalEl.innerHTML = '<p class="text-sm text-gray-400 italic">Tidak ada CS kategori Kurang. 🎉</p>';
@@ -2515,7 +2570,7 @@
 
             const progEl = document.getElementById('insightBerprogress');
             if (insights.berprogress && insights.berprogress.length > 0) {
-                progEl.innerHTML = insights.berprogress.slice(0, 5).map(cs => `
+                progEl.innerHTML = insights.berprogress.slice(0, 3).map(cs => `
                         <div class="flex justify-between items-center bg-green-50 dark:bg-green-900/20 rounded-lg px-3 py-2">
                             <span class="font-medium text-gray-700 dark:text-gray-200 text-sm">${cs.nama}</span>
                             <span class="text-right">
@@ -2524,8 +2579,13 @@
                             </span>
                         </div>
                     `).join('');
+                if (insights.berprogress.length > 3) {
+                    progEl.innerHTML += renderSisaCsHoverRow(insights.berprogress.slice(3), cs => `${cs.nama} — +${cs.delta}%`);
+                }
+            } else if (insights.prev_period_has_data === false) {
+                progEl.innerHTML = `<p class="text-sm text-gray-400 italic">Belum ada data pembanding di periode sebelumnya (${periodeLabelLalu}) -- baru bisa dibandingkan setelah data Performa CS/Target diisi untuk periode itu.</p>`;
             } else {
-                progEl.innerHTML = '<p class="text-sm text-gray-400 italic">Belum ada CS yang naik dibanding bulan lalu.</p>';
+                progEl.innerHTML = '<p class="text-sm text-gray-400 italic">Belum ada CS yang naik dibanding periode sebelumnya.</p>';
             }
         }
 
@@ -2632,8 +2692,8 @@
             const aspects = [
                 { key: 'revenue', label: 'Revenue Pengiriman', fmt: v => 'Rp ' + v.toLocaleString('id-ID'), score: cs => hitungAspekPersen(cs.revenue, cs.target_revenue) },
                 { key: 'revenue_berjalan', label: 'Revenue Berjalan', fmt: v => 'Rp ' + v.toLocaleString('id-ID'), score: () => null },
-                { key: 'leads', label: 'Leads', fmt: v => v, score: cs => hitungAspekPersen(cs.leads, cs.target_leads) },
-                { key: 'closing', label: 'Closing', fmt: v => v, score: cs => hitungAspekPersen(cs.closing, cs.target_closing) },
+                { key: 'leads', label: 'Leads', fmt: v => v.toLocaleString('id-ID'), score: cs => hitungAspekPersen(cs.leads, cs.target_leads) },
+                { key: 'closing', label: 'Closing', fmt: v => v.toLocaleString('id-ID'), score: cs => hitungAspekPersen(cs.closing, cs.target_closing) },
                 { key: 'rc', label: 'Rating Closing (RC)', fmt: v => v + '%', score: cs => hitungAspekPersen(cs.rc, cs.ambang_rc) }
             ];
 
@@ -2710,13 +2770,13 @@
                         document.getElementById('profilRevTarget').innerText = 'Target: Rp ' + b.target_revenue.toLocaleString('id-ID');
                         document.getElementById('profilRevBerjalan').innerText = 'Rp ' + b.revenue_berjalan.toLocaleString('id-ID');
 
-                        document.getElementById('profilLeadAktual').innerText = b.leads;
+                        document.getElementById('profilLeadAktual').innerText = b.leads.toLocaleString('id-ID');
                         document.getElementById('profilLeadBar').style.width = (b.target_leads > 0 ? Math.min(100, b.leads / b.target_leads * 100) : 0) + '%';
-                        document.getElementById('profilLeadTarget').innerText = 'Target: ' + b.target_leads;
+                        document.getElementById('profilLeadTarget').innerText = 'Target: ' + b.target_leads.toLocaleString('id-ID');
 
-                        document.getElementById('profilCloseAktual').innerText = b.closing;
+                        document.getElementById('profilCloseAktual').innerText = b.closing.toLocaleString('id-ID');
                         document.getElementById('profilCloseBar').style.width = (b.target_closing > 0 ? Math.min(100, b.closing / b.target_closing * 100) : 0) + '%';
-                        document.getElementById('profilCloseTarget').innerText = 'Target: ' + b.target_closing;
+                        document.getElementById('profilCloseTarget').innerText = 'Target: ' + b.target_closing.toLocaleString('id-ID');
 
                         document.getElementById('profilRcAktual').innerText = b.rc + '%';
                         let rcCapaian = b.ambang_rc > 0 ? Math.min(100, b.rc / b.ambang_rc * 100) : 0;
@@ -2751,8 +2811,8 @@
                 return `
                     <tr>
                         <td class="px-5 py-3 text-sm font-bold">${r.region}</td>
-                        <td class="px-5 py-3 text-sm text-center">${r.leads}</td>
-                        <td class="px-5 py-3 text-sm text-center">${r.closing}</td>
+                        <td class="px-5 py-3 text-sm text-center">${r.leads.toLocaleString('id-ID')}</td>
+                        <td class="px-5 py-3 text-sm text-center">${r.closing.toLocaleString('id-ID')}</td>
                         <td class="px-5 py-3 text-sm text-center"><span class="${kategoriBadgeColor(warna)} px-2.5 py-1 rounded-full text-xs font-bold">${r.rc}%</span></td>
                         <td class="px-5 py-3 text-sm text-center">${r.ambang_rc}%</td>
                     </tr>
@@ -3616,8 +3676,8 @@
         }
 
         function updatePerformaRatingClosingPreview() {
-            let nomor = parseFloat(document.getElementById('performa-total-nomor').value) || 0;
-            let closing = parseFloat(document.getElementById('performa-total-closing').value) || 0;
+            let nomor = parseRibuan(document.getElementById('performa-total-nomor').value);
+            let closing = parseRibuan(document.getElementById('performa-total-closing').value);
             document.getElementById('performa-rating-closing-preview').value = nomor > 0 ? (Math.round(closing / nomor * 1000) / 10) + '%' : '-';
         }
 
@@ -3644,9 +3704,9 @@
                                 <td class="px-5 py-4 text-sm font-bold">${item.nama}</td>
                                 <td class="px-5 py-4 text-sm">${item.manajemen}</td>
                                 <td class="px-5 py-4 text-sm text-right">Rp ${item.revenue_pengiriman.toLocaleString('id-ID')}</td>
-                                <td class="px-5 py-4 text-sm text-center">${item.total_nomor}</td>
-                                <td class="px-5 py-4 text-sm text-center">${item.total_closing}</td>
-                                <td class="px-5 py-4 text-sm text-center">${item.total_ekoran}</td>
+                                <td class="px-5 py-4 text-sm text-center">${item.total_nomor.toLocaleString('id-ID')}</td>
+                                <td class="px-5 py-4 text-sm text-center">${item.total_closing.toLocaleString('id-ID')}</td>
+                                <td class="px-5 py-4 text-sm text-center">${item.total_ekoran.toLocaleString('id-ID')}</td>
                                 <td class="px-5 py-4 text-sm text-center">${ratingDisplay}</td>
                                 <td class="px-5 py-4 text-sm text-right">Rp ${item.revenue_berjalan.toLocaleString('id-ID')}</td>
                                 <td class="px-5 py-4 text-center">
@@ -3671,9 +3731,9 @@
             document.getElementById('performa-cs').value = item.id_cs;
             document.getElementById('performa-manajemen').value = item.manajemen;
             document.getElementById('performa-revenue-pengiriman').value = formatRibuan(item.revenue_pengiriman);
-            document.getElementById('performa-total-nomor').value = item.total_nomor;
-            document.getElementById('performa-total-closing').value = item.total_closing;
-            document.getElementById('performa-total-ekoran').value = item.total_ekoran;
+            document.getElementById('performa-total-nomor').value = formatRibuan(item.total_nomor);
+            document.getElementById('performa-total-closing').value = formatRibuan(item.total_closing);
+            document.getElementById('performa-total-ekoran').value = formatRibuan(item.total_ekoran);
             document.getElementById('performa-revenue-berjalan').value = formatRibuan(item.revenue_berjalan);
             updatePerformaRatingClosingPreview();
             document.getElementById('btnCancelEditPerforma').classList.remove('hidden');
@@ -3712,9 +3772,9 @@
             formData.append('id_cs', idCs);
             formData.append('manajemen', manajemen);
             formData.append('revenue_pengiriman', parseRibuan(document.getElementById('performa-revenue-pengiriman').value));
-            formData.append('total_nomor', document.getElementById('performa-total-nomor').value || 0);
-            formData.append('total_closing', document.getElementById('performa-total-closing').value || 0);
-            formData.append('total_ekoran', document.getElementById('performa-total-ekoran').value || 0);
+            formData.append('total_nomor', parseRibuan(document.getElementById('performa-total-nomor').value) || 0);
+            formData.append('total_closing', parseRibuan(document.getElementById('performa-total-closing').value) || 0);
+            formData.append('total_ekoran', parseRibuan(document.getElementById('performa-total-ekoran').value) || 0);
             formData.append('revenue_berjalan', parseRibuan(document.getElementById('performa-revenue-berjalan').value));
 
             try {
