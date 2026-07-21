@@ -526,8 +526,9 @@
                         </div>
                         <div
                             class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3"><i
+                            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1"><i
                                     class="fas fa-arrow-trend-up text-green-500 mr-1"></i> CS Berprogress</h3>
+                            <p class="text-[10px] text-gray-400 mb-3">Kenaikan Skor Akhir KPI dibanding periode sebelumnya (mis. 33.1% &rarr; 47.9% = naik +14.8%)</p>
                             <div id="insightBerprogress" class="space-y-2 text-sm text-gray-400 italic">Belum ada data.
                             </div>
                         </div>
@@ -2496,7 +2497,7 @@
 
             const evalEl = document.getElementById('insightPerluEvaluasi');
             if (insights.perlu_evaluasi && insights.perlu_evaluasi.length > 0) {
-                evalEl.innerHTML = insights.perlu_evaluasi.slice(0, 5).map(cs => `
+                evalEl.innerHTML = insights.perlu_evaluasi.slice(0, 3).map(cs => `
                         <div class="flex justify-between items-center bg-red-50 dark:bg-red-900/20 rounded-lg px-3 py-2">
                             <span class="font-medium text-gray-700 dark:text-gray-200 text-sm">${cs.nama}</span>
                             <span class="text-right">
@@ -2505,8 +2506,8 @@
                             </span>
                         </div>
                     `).join('');
-                if (insights.perlu_evaluasi.length > 5) {
-                    evalEl.innerHTML += `<p class="text-[10px] text-gray-400 text-center pt-1">+${insights.perlu_evaluasi.length - 5} CS lainnya</p>`;
+                if (insights.perlu_evaluasi.length > 3) {
+                    evalEl.innerHTML += `<p class="text-[10px] text-gray-400 text-center pt-1">+${insights.perlu_evaluasi.length - 3} CS lainnya</p>`;
                 }
             } else {
                 evalEl.innerHTML = '<p class="text-sm text-gray-400 italic">Tidak ada CS kategori Kurang. 🎉</p>';
