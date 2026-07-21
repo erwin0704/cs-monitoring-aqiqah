@@ -36,7 +36,9 @@
         <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-md border-t-4 border-aeGreen">
             <div class="text-center mb-6">
                 <div class="w-16 h-16 mx-auto mb-3">
-                    <img src="logo-icon.png" alt="Aqiqah Express" class="w-full h-full object-contain"></div>
+                    <img src="logo-light-mode.png" alt="Express Aqiqah" class="dark:hidden w-full h-full object-contain">
+                    <img src="logo-dark-mode.png" alt="Express Aqiqah" class="hidden dark:block w-full h-full object-contain">
+                </div>
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Express Aqiqah</h1>
                 <p class="text-sm mt-1 text-gray-500 dark:text-gray-400">Portal Analisis Performa CS</p>
             </div>
@@ -283,9 +285,10 @@
             <div id="sidebarLogoToggle" onclick="toggleSidebar()"
                 class="h-20 flex items-center justify-between px-6 border-b border-gray-100 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition group">
                 <div class="flex items-center gap-3 overflow-hidden">
-                    <img src="logo-icon.png" alt="Logo" class="w-9 h-9 flex-shrink-0 object-contain">
+                    <img src="logo-light-mode.png" alt="Logo" class="dark:hidden w-9 h-9 flex-shrink-0 object-contain">
+                    <img src="logo-dark-mode.png" alt="Logo" class="hidden dark:block w-9 h-9 flex-shrink-0 object-contain">
                     <div class="menu-label overflow-hidden whitespace-nowrap">
-                        <h1 class="text-xl font-bold text-aeGreen dark:text-aeOrange leading-tight">Express Aqiqah</h1>
+                        <h1 class="text-base font-bold text-aeGreen dark:text-aeOrange leading-tight tracking-tight">Express Aqiqah</h1>
                     </div>
                 </div>
                 <i
@@ -324,8 +327,8 @@
                         CS</span></button>
                 <button onclick="switchTab('target')" id="nav-target"
                     class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i
-                        class="fas fa-bullseye w-5 text-center"></i><span class="menu-label font-medium text-sm">Target
-                        Bulanan</span></button>
+                        class="fas fa-bullseye w-5 text-center"></i><span class="menu-label font-medium text-sm">Setting
+                        Target</span></button>
                 <button onclick="switchTab('referensi')" id="nav-referensi"
                     class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i
                         class="fas fa-sliders-h w-5 text-center"></i><span class="menu-label font-medium text-sm">Data
@@ -370,8 +373,9 @@
                 class="h-16 md:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center gap-3 px-4 z-10">
                 <button id="mobileMenuBtn" class="text-gray-600 dark:text-gray-300 hover:text-aeGreen text-2xl"><i
                         class="fas fa-bars"></i></button>
-                <img src="logo-icon.png" alt="Logo" class="w-8 h-8 object-contain">
-                <h1 class="text-lg font-bold text-aeGreen dark:text-aeOrange">Express Aqiqah</h1>
+                <img src="logo-light-mode.png" alt="Logo" class="dark:hidden w-8 h-8 object-contain">
+                <img src="logo-dark-mode.png" alt="Logo" class="hidden dark:block w-8 h-8 object-contain">
+                <h1 class="text-base font-bold text-aeGreen dark:text-aeOrange">Express Aqiqah</h1>
             </header>
 
             <div id="mobileDropdown"
@@ -399,7 +403,7 @@
                         class="fas fa-chart-column w-5"></i> Performa CS</button>
                 <button onclick="switchTab('target')" id="nav-target-mobile"
                     class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
-                        class="fas fa-bullseye w-5"></i> Target Bulanan</button>
+                        class="fas fa-bullseye w-5"></i> Setting Target</button>
                 <button onclick="switchTab('referensi')" id="nav-referensi-mobile"
                     class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
                         class="fas fa-sliders-h w-5"></i> Data Referensi</button>
@@ -745,8 +749,8 @@
                 <div id="view-referensi" class="hidden">
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold">Data Referensi</h2>
-                        <p class="text-sm text-gray-500">Kelola ID CS/SPV, ambang batas Rating Closing, bobot skor, dan
-                            export data. Target Bulanan sekarang di menu "Target Bulanan" tersendiri.</p>
+                        <p class="text-sm text-gray-500">Kelola ID CS/SPV dan export data. Target per CS/Perusahaan,
+                            Ambang Batas RC, dan Bobot Skor sekarang di menu "Setting Target" tersendiri.</p>
                     </div>
 
                     <!-- A. Kelola ID CS/SPV -->
@@ -798,78 +802,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-
-                    <!-- C. Ambang Batas RC -->
-                    <div
-                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-                        <div
-                            class="p-5 border-b border-gray-100 dark:border-gray-700 flex flex-wrap justify-between items-center gap-3">
-                            <div>
-                                <h3 class="text-lg font-bold">Ambang Batas Rating Closing (RC) per Cabang</h3>
-                                <p class="text-xs text-gray-500 mt-1">RC = Closing ÷ Leads × 100%. Nilai ini jadi acuan
-                                    minimal "bagus" per region.</p>
-                            </div>
-                            <button id="btnSaveAllRC" onclick="saveAllAmbangRC()"
-                                class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i
-                                    class="fas fa-save mr-1"></i> Simpan Semua</button>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left">
-                                <thead
-                                    class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
-                                    <tr>
-                                        <th class="px-5 py-3">Region</th>
-                                        <th class="px-5 py-3">Ambang Batas Minimal (%)</th>
-                                        <th class="px-5 py-3 text-center">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="ambangRcTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
-                                    <tr>
-                                        <td colspan="3" class="px-5 py-8 text-center text-gray-500"><i
-                                                class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- D. Bobot Skor Komposit -->
-                    <div
-                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden mb-6">
-                        <div class="p-5 border-b border-gray-100 dark:border-gray-700">
-                            <h3 class="text-lg font-bold">Bobot Skor Komposit</h3>
-                            <p class="text-xs text-gray-500 mt-1">Atur persentase bobot tiap aspek untuk hitung Nilai Akhir KPI (Dashboard, Profil, Export). Total wajib tepat 100%.</p>
-                        </div>
-                        <div class="p-5 grid grid-cols-1 md:grid-cols-4 gap-3">
-                            <div>
-                                <label class="block text-xs font-semibold mb-1 text-gray-500">Revenue (%)</label>
-                                <input type="number" id="bobot-revenue" min="0" max="100" step="0.1" oninput="hitungTotalBobot()"
-                                    class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold mb-1 text-gray-500">Leads (%)</label>
-                                <input type="number" id="bobot-lead" min="0" max="100" step="0.1" oninput="hitungTotalBobot()"
-                                    class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold mb-1 text-gray-500">Closing (%)</label>
-                                <input type="number" id="bobot-closing" min="0" max="100" step="0.1" oninput="hitungTotalBobot()"
-                                    class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold mb-1 text-gray-500">Rating Closing (%)</label>
-                                <input type="number" id="bobot-rating" min="0" max="100" step="0.1" oninput="hitungTotalBobot()"
-                                    class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
-                            </div>
-                        </div>
-                        <div class="px-5 pb-5 flex flex-wrap items-center justify-between gap-3">
-                            <p class="text-sm">Total: <span id="bobotTotalDisplay" class="font-bold">0</span>%
-                                <span id="bobotTotalWarning" class="hidden text-red-500 text-xs ml-2">(harus tepat 100%)</span></p>
-                            <button id="btnSaveBobot" onclick="submitSaveBobotConfig()"
-                                class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i
-                                    class="fas fa-save mr-1"></i> Simpan Bobot</button>
                         </div>
                     </div>
 
@@ -1016,9 +948,9 @@
 
                 <div id="view-target" class="hidden">
                     <div class="mb-6">
-                        <h2 class="text-2xl font-bold">Target Bulanan</h2>
-                        <p class="text-sm text-gray-500">Target per CS (Revenue Pengiriman) & Target Perusahaan per
-                            Manajemen/Region.</p>
+                        <h2 class="text-2xl font-bold">Setting Target</h2>
+                        <p class="text-sm text-gray-500">Target per CS, Target Perusahaan per Manajemen/Region,
+                            Ambang Batas Rating Closing, dan Bobot Skor Komposit.</p>
                     </div>
 
                     <!-- A. Target per CS (pindahan dari Data Referensi) -->
@@ -1096,6 +1028,78 @@
                             </table>
                         </div>
                     </div>
+
+                    <!-- C. Ambang Batas RC -->
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden mt-6">
+                        <div
+                            class="p-5 border-b border-gray-100 dark:border-gray-700 flex flex-wrap justify-between items-center gap-3">
+                            <div>
+                                <h3 class="text-lg font-bold">Ambang Batas Rating Closing (RC) per Cabang</h3>
+                                <p class="text-xs text-gray-500 mt-1">RC = Closing ÷ Leads × 100%. Nilai ini jadi acuan
+                                    minimal "bagus" per region.</p>
+                            </div>
+                            <button id="btnSaveAllRC" onclick="saveAllAmbangRC()"
+                                class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i
+                                    class="fas fa-save mr-1"></i> Simpan Semua</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead
+                                    class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
+                                    <tr>
+                                        <th class="px-5 py-3">Region</th>
+                                        <th class="px-5 py-3">Ambang Batas Minimal (%)</th>
+                                        <th class="px-5 py-3 text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ambangRcTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
+                                    <tr>
+                                        <td colspan="3" class="px-5 py-8 text-center text-gray-500"><i
+                                                class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- D. Bobot Skor Komposit -->
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden mt-6">
+                        <div class="p-5 border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="text-lg font-bold">Bobot Skor Komposit</h3>
+                            <p class="text-xs text-gray-500 mt-1">Atur persentase bobot tiap aspek untuk hitung Nilai Akhir KPI (Dashboard, Profil, Export). Total wajib tepat 100%.</p>
+                        </div>
+                        <div class="p-5 grid grid-cols-1 md:grid-cols-4 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">Revenue (%)</label>
+                                <input type="number" id="bobot-revenue" min="0" max="100" step="0.1" oninput="hitungTotalBobot()"
+                                    class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">Leads (%)</label>
+                                <input type="number" id="bobot-lead" min="0" max="100" step="0.1" oninput="hitungTotalBobot()"
+                                    class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">Closing (%)</label>
+                                <input type="number" id="bobot-closing" min="0" max="100" step="0.1" oninput="hitungTotalBobot()"
+                                    class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">Rating Closing (%)</label>
+                                <input type="number" id="bobot-rating" min="0" max="100" step="0.1" oninput="hitungTotalBobot()"
+                                    class="w-full p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            </div>
+                        </div>
+                        <div class="px-5 pb-5 flex flex-wrap items-center justify-between gap-3">
+                            <p class="text-sm">Total: <span id="bobotTotalDisplay" class="font-bold">0</span>%
+                                <span id="bobotTotalWarning" class="hidden text-red-500 text-xs ml-2">(harus tepat 100%)</span></p>
+                            <button id="btnSaveBobot" onclick="submitSaveBobotConfig()"
+                                class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i
+                                    class="fas fa-save mr-1"></i> Simpan Bobot</button>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="view-riwayat" class="hidden">
@@ -1141,6 +1145,15 @@
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold">Profil Saya</h2>
                         <p class="text-sm text-gray-500" id="profilSubtitle">Ringkasan performa personal</p>
+                    </div>
+
+                    <!-- Picker CS (khusus SPV) -- SPV bisa lihat profil performa CS mana saja -->
+                    <div id="profilCsPickerWrapper" class="hidden mb-6">
+                        <label class="block text-xs font-semibold mb-1 text-gray-500">Pilih CS</label>
+                        <select id="profilCsPicker" onchange="loadProfilData(this.value)"
+                            class="w-full max-w-xs p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            <option value="">-- Pilih CS --</option>
+                        </select>
                     </div>
 
                     <!-- Target Pribadi: breakdown 4 aspek vs aktual bulan berjalan -->
@@ -1725,8 +1738,6 @@
                 document.getElementById('nav-target-mobile').classList.remove('hidden');
                 document.getElementById('nav-referensi').classList.remove('hidden');
                 document.getElementById('nav-referensi-mobile').classList.remove('hidden');
-                document.getElementById('nav-profil').classList.add('hidden');
-                document.getElementById('nav-profil-mobile').classList.add('hidden');
             } else {
                 document.getElementById('nav-performa').classList.add('hidden');
                 document.getElementById('nav-performa-mobile').classList.add('hidden');
@@ -1734,9 +1745,10 @@
                 document.getElementById('nav-target-mobile').classList.add('hidden');
                 document.getElementById('nav-referensi').classList.add('hidden');
                 document.getElementById('nav-referensi-mobile').classList.add('hidden');
-                document.getElementById('nav-profil').classList.remove('hidden');
-                document.getElementById('nav-profil-mobile').classList.remove('hidden');
             }
+            // Profil Saya sekarang tampil utk kedua role -- SPV dapat picker CS utk lihat profil siapa saja
+            document.getElementById('nav-profil').classList.remove('hidden');
+            document.getElementById('nav-profil-mobile').classList.remove('hidden');
             loadDashboardData();
         }
 
@@ -1937,7 +1949,7 @@
             if (tabId === 'admin' && currentUser.role === 'SPV') loadPendingApprovals();
             if (tabId === 'referensi' && currentUser.role === 'SPV') loadReferensiData();
             if (tabId === 'riwayat') loadRiwayatInput();
-            if (tabId === 'profil') loadProfilData();
+            if (tabId === 'profil') loadProfilCsPage();
             if (tabId === 'performa' && currentUser.role === 'SPV') loadPerformaCsPage();
             if (tabId === 'target' && currentUser.role === 'SPV') loadTargetBulananPage();
         }
@@ -2655,10 +2667,33 @@
         // ===================================================
         // FASE 5: PROFIL CS (Target Pribadi + Grafik Personal)
         // ===================================================
-        async function loadProfilData() {
+        // Khusus SPV: tampilkan picker CS di atas halaman Profil, isi dari allUsers role CS, lalu muat profil CS
+        // yang sedang terpilih (default CS pertama). Utk role CS, picker disembunyikan & langsung muat profil sendiri.
+        function loadProfilCsPage() {
+            let isSpv = currentUser.role === 'SPV';
+            document.getElementById('profilCsPickerWrapper').classList.toggle('hidden', !isSpv);
+            if (!isSpv) { loadProfilData(currentUser.id); return; }
+
+            let select = document.getElementById('profilCsPicker');
+            let currentVal = select.value;
+            select.innerHTML = '<option value="">-- Pilih CS --</option>';
+            allUsers.filter(u => u.role === 'CS').forEach(u => {
+                select.innerHTML += `<option value="${u.id}">${u.nama}</option>`;
+            });
+            if (currentVal && allUsers.some(u => u.id === currentVal)) select.value = currentVal;
+            else {
+                let firstCs = allUsers.find(u => u.role === 'CS');
+                if (firstCs) select.value = firstCs.id;
+            }
+
+            if (select.value) loadProfilData(select.value);
+            else document.getElementById('profilSubtitle').innerText = 'Belum ada CS untuk ditampilkan.';
+        }
+
+        async function loadProfilData(idCs) {
             showLoading('Memuat profil...');
             try {
-                let res = await fetch(`${API_URL}?action=getProfilCs&id_cs=${encodeURIComponent(currentUser.id)}`);
+                let res = await fetch(`${API_URL}?action=getProfilCs&id_cs=${encodeURIComponent(idCs)}`);
                 let json = await res.json();
                 if (json.status === 'success') {
                     let cabangDisplay = String(json.data.cabang || '').split(',').map(s => s.trim()).filter(Boolean).join(', ');
@@ -3477,18 +3512,18 @@
                 document.getElementById('exportBulan').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
             }
             await loadAmbangRCTable(); // isi allRegions dulu sebelum render checkbox Cabang/Region di form Tambah ID Baru
-            loadBobotConfig();
         }
 
-        // ---- Menu Target Bulanan (Target per CS pindahan + Target Perusahaan per Region baru) ----
+        // ---- Menu Setting Target (Target per CS + Target Perusahaan per Region + Ambang Batas RC + Bobot Skor) ----
         async function loadTargetBulananPage() {
             if (!document.getElementById('targetBulan').value) {
                 const now = new Date();
                 document.getElementById('targetBulan').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
             }
-            if (allRegions.length === 0) await loadAmbangRCTable(); // pastikan allRegions terisi walau belum pernah buka Data Referensi
             loadTargetData();
             loadTargetPerusahaanTable();
+            await loadAmbangRCTable();
+            loadBobotConfig();
         }
 
         async function loadTargetPerusahaanTable() {
