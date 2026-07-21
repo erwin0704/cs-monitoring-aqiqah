@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aqiqah Admin - CS Portal</title>
+    <title>Express Aqiqah - CS Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/png" href="logo-icon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -37,7 +37,7 @@
             <div class="text-center mb-6">
                 <div class="w-16 h-16 mx-auto mb-3">
                     <img src="logo-icon.png" alt="Aqiqah Express" class="w-full h-full object-contain"></div>
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Aqiqah Admin</h1>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Express Aqiqah</h1>
                 <p class="text-sm mt-1 text-gray-500 dark:text-gray-400">Portal Analisis Performa CS</p>
             </div>
 
@@ -285,7 +285,7 @@
                 <div class="flex items-center gap-3 overflow-hidden">
                     <img src="logo-icon.png" alt="Logo" class="w-9 h-9 flex-shrink-0 object-contain">
                     <div class="menu-label overflow-hidden whitespace-nowrap">
-                        <h1 class="text-xl font-bold text-aeGreen dark:text-aeOrange leading-tight">Aqiqah Admin</h1>
+                        <h1 class="text-xl font-bold text-aeGreen dark:text-aeOrange leading-tight">Express Aqiqah</h1>
                     </div>
                 </div>
                 <i
@@ -371,7 +371,7 @@
                 <button id="mobileMenuBtn" class="text-gray-600 dark:text-gray-300 hover:text-aeGreen text-2xl"><i
                         class="fas fa-bars"></i></button>
                 <img src="logo-icon.png" alt="Logo" class="w-8 h-8 object-contain">
-                <h1 class="text-lg font-bold text-aeGreen dark:text-aeOrange">Aqiqah Admin</h1>
+                <h1 class="text-lg font-bold text-aeGreen dark:text-aeOrange">Express Aqiqah</h1>
             </header>
 
             <div id="mobileDropdown"
@@ -3962,7 +3962,7 @@
             if (!lastGeneratedKodeAkses) return;
             const { id, nama, noHp, kodeAkses } = lastGeneratedKodeAkses;
             if (!noHp) { showToast("No. HP untuk akun ini belum diisi.", "error"); return; }
-            const pesan = encodeURIComponent(`Halo ${nama}, ini Kode Akses untuk membuat/reset PIN akun Aqiqah Admin Anda (ID: ${id}):\n\n${kodeAkses}\n\nGunakan kode ini di halaman login untuk membuat PIN baru. Kode hanya berlaku sekali pakai.`);
+            const pesan = encodeURIComponent(`Halo ${nama}, ini Kode Akses untuk membuat/reset PIN akun Express Aqiqah Anda (ID: ${id}):\n\n${kodeAkses}\n\nGunakan kode ini di halaman login untuk membuat PIN baru. Kode hanya berlaku sekali pakai.`);
             let phone = noHp.replace(/\D/g, '');
             if (phone.startsWith('0')) phone = '62' + phone.slice(1);
             window.open(`https://wa.me/${phone}?text=${pesan}`, '_blank');
