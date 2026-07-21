@@ -296,23 +296,36 @@
                     class="nav-btn w-full flex items-center gap-3 px-4 py-3 bg-aeGreen text-white rounded-xl shadow-sm transition"><i
                         class="fas fa-border-all w-5 text-center"></i><span
                         class="menu-label font-medium text-sm">Dashboard</span></button>
+                <!-- ARSIP (Rombakan Dashboard Revenue Pengiriman & Revenue Berjalan): kode 3 tombol nav di bawah ini
+                     & view-input/view-riwayat/view-admin sengaja DIBIARKAN utuh (bukan dihapus), cuma disembunyikan
+                     permanen (class hidden, tidak pernah di-unhide lagi dari initApp) -- gampang diaktifkan lagi
+                     kalau alur invoice-scan dibutuhkan lagi nanti. -->
                 <button onclick="switchTab('input')" id="nav-input"
-                    class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i
+                    class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i
                         class="fas fa-plus-circle w-5 text-center"></i><span class="menu-label font-medium text-sm">Scan
                         Penjualan</span></button>
                 <button onclick="switchTab('riwayat')" id="nav-riwayat"
-                    class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition relative"><i
+                    class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition relative"><i
                         class="fas fa-history w-5 text-center"></i><span class="menu-label font-medium text-sm">Riwayat
                         Input</span><span id="riwayatBadge"
                         class="hidden absolute right-3 top-2 w-2.5 h-2.5 bg-red-500 rounded-full"></span></button>
-                <button onclick="switchTab('profil')" id="nav-profil"
-                    class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i
-                        class="fas fa-id-badge w-5 text-center"></i><span class="menu-label font-medium text-sm">Profil
-                        Saya</span></button>
                 <button onclick="switchTab('admin')" id="nav-admin"
                     class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i
                         class="fas fa-shield-alt w-5 text-center"></i><span
                         class="menu-label font-medium text-sm">Approval Admin</span></button>
+                <!-- /ARSIP -->
+                <button onclick="switchTab('profil')" id="nav-profil"
+                    class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i
+                        class="fas fa-id-badge w-5 text-center"></i><span class="menu-label font-medium text-sm">Profil
+                        Saya</span></button>
+                <button onclick="switchTab('performa')" id="nav-performa"
+                    class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i
+                        class="fas fa-chart-column w-5 text-center"></i><span class="menu-label font-medium text-sm">Performa
+                        CS</span></button>
+                <button onclick="switchTab('target')" id="nav-target"
+                    class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i
+                        class="fas fa-bullseye w-5 text-center"></i><span class="menu-label font-medium text-sm">Target
+                        Bulanan</span></button>
                 <button onclick="switchTab('referensi')" id="nav-referensi"
                     class="hidden nav-btn w-full flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"><i
                         class="fas fa-sliders-h w-5 text-center"></i><span class="menu-label font-medium text-sm">Data
@@ -366,19 +379,27 @@
                 <button onclick="switchTab('dashboard')"
                     class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
                         class="fas fa-border-all w-5"></i> Dashboard</button>
-                <button onclick="switchTab('input')"
-                    class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
+                <!-- ARSIP: lihat catatan yang sama di sidebar desktop -->
+                <button onclick="switchTab('input')" id="nav-input-mobile"
+                    class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
                         class="fas fa-plus-circle w-5"></i> Scan Penjualan</button>
-                <button onclick="switchTab('riwayat')"
-                    class="w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3 relative"><i
+                <button onclick="switchTab('riwayat')" id="nav-riwayat-mobile"
+                    class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3 relative"><i
                         class="fas fa-history w-5"></i> Riwayat Input<span id="riwayatBadgeMobile"
                         class="hidden w-2.5 h-2.5 bg-red-500 rounded-full"></span></button>
-                <button onclick="switchTab('profil')" id="nav-profil-mobile"
-                    class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
-                        class="fas fa-id-badge w-5"></i> Profil Saya</button>
                 <button onclick="switchTab('admin')" id="nav-admin-mobile"
                     class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
                         class="fas fa-shield-alt w-5"></i> Approval Admin</button>
+                <!-- /ARSIP -->
+                <button onclick="switchTab('profil')" id="nav-profil-mobile"
+                    class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
+                        class="fas fa-id-badge w-5"></i> Profil Saya</button>
+                <button onclick="switchTab('performa')" id="nav-performa-mobile"
+                    class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
+                        class="fas fa-chart-column w-5"></i> Performa CS</button>
+                <button onclick="switchTab('target')" id="nav-target-mobile"
+                    class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
+                        class="fas fa-bullseye w-5"></i> Target Bulanan</button>
                 <button onclick="switchTab('referensi')" id="nav-referensi-mobile"
                     class="hidden w-full text-left px-6 py-4 border-b dark:border-gray-700 font-medium text-gray-700 dark:text-gray-200 flex items-center gap-3"><i
                         class="fas fa-sliders-h w-5"></i> Data Referensi</button>
@@ -402,17 +423,26 @@
                                     id="dashBulan">Bulan Ini</span></h2>
                             <p class="text-sm text-gray-500">Live Database Sync</p>
                         </div>
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 flex-wrap justify-end">
                             <input type="month" id="dashBulanPicker" onchange="onDashboardPeriodChange()"
                                 class="p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
                             <input type="number" id="dashTahunPicker" onchange="onDashboardPeriodChange()"
                                 class="hidden p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none w-24"
                                 placeholder="2026">
+                            <div id="dashCustomRangeWrapper" class="hidden items-center gap-1.5">
+                                <input type="month" id="dashBulanMulaiPicker" onchange="onDashboardCustomRangeChange()"
+                                    class="p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                                <span class="text-xs text-gray-400">s/d</span>
+                                <input type="month" id="dashBulanSelesaiPicker" onchange="onDashboardCustomRangeChange()"
+                                    class="p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                            </div>
                             <div class="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
                                 <button type="button" id="dashModeBulanBtn" onclick="setDashboardMode('bulan')"
                                     class="px-3 py-1.5 rounded-md text-sm font-medium transition">Bulanan</button>
                                 <button type="button" id="dashModeTahunBtn" onclick="setDashboardMode('tahun')"
                                     class="px-3 py-1.5 rounded-md text-sm font-medium transition">Tahunan</button>
+                                <button type="button" id="dashModeCustomBtn" onclick="setDashboardMode('custom')"
+                                    class="px-3 py-1.5 rounded-md text-sm font-medium transition">Rentang Bulan</button>
                             </div>
                         </div>
                     </div>
@@ -425,8 +455,7 @@
                                 <div class="w-9 h-9 rounded-full bg-green-50 dark:bg-green-900/30 text-aeGreen flex items-center justify-center flex-shrink-0"><i class="fas fa-money-bill-wave text-sm"></i></div>
                             </div>
                             <p class="text-2xl font-bold text-aeGreen" id="dashRev">Rp 0</p>
-                            <p class="text-[10px] text-green-500 mt-2 font-medium"><i class="fas fa-arrow-trend-up"></i>
-                                Data tervalidasi</p>
+                            <p class="text-[11px] text-gray-500 mt-2 font-medium">Revenue Berjalan: <span id="dashRevBerjalan" class="font-bold text-gray-700 dark:text-gray-300">Rp 0</span></p>
                         </div>
                         <div
                             class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-blue-400 relative overflow-hidden">
@@ -441,16 +470,16 @@
                             </div>
                             <p class="text-[10px] text-gray-500 mt-1 font-medium" id="dashCapaianNote">Berdasarkan
                                 target revenue bulan ini</p>
+                            <p class="text-[10px] text-gray-500 mt-1 font-medium hidden" id="dashCapaianSekunder"></p>
                         </div>
                         <div
                             class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-aeOrange">
                             <div class="flex justify-between items-start mb-2">
-                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">JUMLAH TRANSAKSI</h3>
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">TOTAL CLOSING</h3>
                                 <div class="w-9 h-9 rounded-full bg-orange-50 dark:bg-orange-900/30 text-aeOrange flex items-center justify-center flex-shrink-0"><i class="fas fa-chart-line text-sm"></i></div>
                             </div>
                             <p class="text-2xl font-bold text-gray-800 dark:text-white" id="dashTrx">0</p>
-                            <p class="text-[10px] text-green-500 mt-2 font-medium"><i class="far fa-check-circle"></i>
-                                Status Pending: <span id="dashPending" class="font-bold text-orange-500">0</span></p>
+                            <p class="text-[11px] text-gray-500 mt-2 font-medium">Total Nomor: <span id="dashTotalNomor" class="font-bold text-gray-700 dark:text-gray-300">0</span></p>
                         </div>
                         <div id="dashSkorCard"
                             class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-gray-300">
@@ -517,18 +546,19 @@
                                     <tr>
                                         <th class="px-5 py-3 w-16 text-center">Posisi</th>
                                         <th class="px-5 py-3">Nama CS</th>
-                                        <th class="px-5 py-3 text-right">Revenue</th>
+                                        <th class="px-5 py-3 text-right">Revenue Pengiriman</th>
+                                        <th class="px-5 py-3 text-right">Revenue Berjalan</th>
                                         <th class="px-5 py-3 text-center">Lead</th>
                                         <th class="px-5 py-3 text-center">Closing</th>
                                         <th class="px-5 py-3 text-center">Rating Closing</th>
-                                        <th class="px-5 py-3 text-center">Skor Akhir</th>
-                                        <th class="px-5 py-3 text-center">Status</th>
+                                        <th id="leaderboardSkorTh" class="px-5 py-3 text-center">Skor Akhir</th>
+                                        <th id="leaderboardStatusTh" class="px-5 py-3 text-center">Status</th>
                                         <th id="leaderboardAksiTh" class="hidden px-5 py-3 text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="leaderboardBody" class="divide-y divide-gray-100 dark:divide-gray-700">
                                     <tr>
-                                        <td colspan="8" class="px-5 py-8 text-center text-gray-500"><i
+                                        <td colspan="10" class="px-5 py-8 text-center text-gray-500"><i
                                                 class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
                                     </tr>
                                 </tbody>
@@ -715,8 +745,8 @@
                 <div id="view-referensi" class="hidden">
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold">Data Referensi</h2>
-                        <p class="text-sm text-gray-500">Kelola ID CS/SPV, target bulanan, dan ambang batas Rating
-                            Closing.</p>
+                        <p class="text-sm text-gray-500">Kelola ID CS/SPV, ambang batas Rating Closing, bobot skor, dan
+                            export data. Target Bulanan sekarang di menu "Target Bulanan" tersendiri.</p>
                     </div>
 
                     <!-- A. Kelola ID CS/SPV -->
@@ -769,48 +799,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-
-                    <!-- B. Atur Target Bulanan -->
-                    <div
-                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-6 overflow-hidden">
-                        <div
-                            class="p-5 flex flex-wrap gap-3 justify-between items-center border-b border-gray-100 dark:border-gray-700">
-                            <h3 class="text-lg font-bold">Target Bulanan CS</h3>
-                            <div class="flex items-center gap-2">
-                                <input type="month" id="targetBulan" onchange="loadTargetData()"
-                                    class="p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
-                                <button onclick="loadTargetData()"
-                                    class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-3 rounded-lg shadow-sm hover:bg-gray-50 text-sm"><i
-                                        class="fas fa-sync-alt text-aeGreen"></i></button>
-                                <button id="btnSaveAllTarget" onclick="saveAllTargets()"
-                                    class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i
-                                        class="fas fa-save mr-1"></i> Simpan Semua</button>
-                            </div>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left">
-                                <thead
-                                    class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
-                                    <tr>
-                                        <th class="px-5 py-3">Nama CS</th>
-                                        <th class="px-5 py-3">Target Revenue (Rp)</th>
-                                        <th class="px-5 py-3">Target Leads</th>
-                                        <th class="px-5 py-3">Target Closing</th>
-                                        <th class="px-5 py-3 text-center">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="targetTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
-                                    <tr>
-                                        <td colspan="5" class="px-5 py-8 text-center text-gray-500 italic">Pilih bulan
-                                            lalu klik segarkan.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <p class="text-xs text-gray-500 px-5 py-3 border-t border-gray-100 dark:border-gray-700"><i
-                                class="fas fa-info-circle mr-1"></i>Edit semua baris yang perlu, lalu klik <b>Simpan
-                                Semua</b> satu kali di atas.</p>
                     </div>
 
                     <!-- C. Ambang Batas RC -->
@@ -914,6 +902,202 @@
                     </div>
                 </div>
 
+                <div id="view-performa" class="hidden">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold">Performa CS</h2>
+                        <p class="text-sm text-gray-500">Input performa bulanan tiap CS per Manajemen/Region --
+                            Revenue Pengiriman, Total Nomor, Total Closing, Total Ekoran, dan Revenue Berjalan.</p>
+                    </div>
+
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-6 overflow-hidden">
+                        <div
+                            class="p-5 border-b border-gray-100 dark:border-gray-700 flex flex-wrap justify-between items-center gap-3">
+                            <h3 class="text-lg font-bold" id="performaFormTitle">Tambah / Update Data Performa</h3>
+                            <input type="month" id="performaBulan" onchange="loadPerformaCsPage()"
+                                class="p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                        </div>
+                        <div class="p-5 grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">CS</label>
+                                <select id="performa-cs"
+                                    class="w-full p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                                    <option value="">-- Pilih CS --</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">Manajemen/Region</label>
+                                <select id="performa-manajemen"
+                                    class="w-full p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                                    <option value="">-- Pilih Region --</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">Revenue Pengiriman
+                                    (Rp)</label>
+                                <input type="text" inputmode="numeric" id="performa-revenue-pengiriman"
+                                    class="money-input w-full p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
+                                    placeholder="0">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">Total Nomor</label>
+                                <input type="number" id="performa-total-nomor"
+                                    class="w-full p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
+                                    placeholder="0" oninput="updatePerformaRatingClosingPreview()">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">Total Closing</label>
+                                <input type="number" id="performa-total-closing"
+                                    class="w-full p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
+                                    placeholder="0" oninput="updatePerformaRatingClosingPreview()">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">Total Ekoran</label>
+                                <input type="number" id="performa-total-ekoran"
+                                    class="w-full p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
+                                    placeholder="0">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">Rating Closing
+                                    (otomatis)</label>
+                                <input type="text" id="performa-rating-closing-preview"
+                                    class="w-full p-2.5 border rounded-lg text-sm bg-gray-100 dark:bg-gray-600 dark:border-gray-600 outline-none text-gray-500 cursor-not-allowed"
+                                    value="-" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-gray-500">Revenue Berjalan
+                                    (Rp)</label>
+                                <input type="text" inputmode="numeric" id="performa-revenue-berjalan"
+                                    class="money-input w-full p-2.5 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none"
+                                    placeholder="0">
+                            </div>
+                        </div>
+                        <div class="px-5 pb-5 flex justify-end gap-2">
+                            <button type="button" id="btnCancelEditPerforma" onclick="resetPerformaForm()"
+                                class="hidden px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Batal
+                                Edit</button>
+                            <button type="button" id="btnSubmitPerforma" onclick="submitPerformaCs()"
+                                class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i
+                                    class="fas fa-save mr-1"></i> Simpan</button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                        <div class="p-5 border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="text-lg font-bold">Data Performa Bulan Ini</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead
+                                    class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
+                                    <tr>
+                                        <th class="px-5 py-3">Nama CS</th>
+                                        <th class="px-5 py-3">Manajemen</th>
+                                        <th class="px-5 py-3 text-right">Revenue Pengiriman</th>
+                                        <th class="px-5 py-3 text-center">Nomor</th>
+                                        <th class="px-5 py-3 text-center">Closing</th>
+                                        <th class="px-5 py-3 text-center">Ekoran</th>
+                                        <th class="px-5 py-3 text-center">Rating Closing</th>
+                                        <th class="px-5 py-3 text-right">Revenue Berjalan</th>
+                                        <th class="px-5 py-3 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="performaTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
+                                    <tr>
+                                        <td colspan="9" class="px-5 py-8 text-center text-gray-500"><i
+                                                class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view-target" class="hidden">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold">Target Bulanan</h2>
+                        <p class="text-sm text-gray-500">Target per CS (Revenue Pengiriman) & Target Perusahaan per
+                            Manajemen/Region.</p>
+                    </div>
+
+                    <!-- A. Target per CS (pindahan dari Data Referensi) -->
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-6 overflow-hidden">
+                        <div
+                            class="p-5 flex flex-wrap gap-3 justify-between items-center border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="text-lg font-bold">Target per CS</h3>
+                            <div class="flex items-center gap-2">
+                                <input type="month" id="targetBulan" onchange="loadTargetBulananPage()"
+                                    class="p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none">
+                                <button onclick="loadTargetBulananPage()"
+                                    class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-3 rounded-lg shadow-sm hover:bg-gray-50 text-sm"><i
+                                        class="fas fa-sync-alt text-aeGreen"></i></button>
+                                <button id="btnSaveAllTarget" onclick="saveAllTargets()"
+                                    class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i
+                                        class="fas fa-save mr-1"></i> Simpan Semua</button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead
+                                    class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
+                                    <tr>
+                                        <th class="px-5 py-3">Nama CS</th>
+                                        <th class="px-5 py-3">Target Revenue (Rp)</th>
+                                        <th class="px-5 py-3">Target Leads</th>
+                                        <th class="px-5 py-3">Target Closing</th>
+                                        <th class="px-5 py-3 text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="targetTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
+                                    <tr>
+                                        <td colspan="5" class="px-5 py-8 text-center text-gray-500 italic">Pilih bulan
+                                            lalu klik segarkan.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-xs text-gray-500 px-5 py-3 border-t border-gray-100 dark:border-gray-700"><i
+                                class="fas fa-info-circle mr-1"></i>Edit semua baris yang perlu, lalu klik <b>Simpan
+                                Semua</b> satu kali di atas.</p>
+                    </div>
+
+                    <!-- B. Target Perusahaan per Manajemen/Region -->
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                        <div
+                            class="p-5 border-b border-gray-100 dark:border-gray-700 flex flex-wrap justify-between items-center gap-3">
+                            <div>
+                                <h3 class="text-lg font-bold">Target Perusahaan per Manajemen/Region</h3>
+                                <p class="text-xs text-gray-500 mt-1">Dipakai kartu "Capaian Target" di Dashboard
+                                    (Revenue Pengiriman semua CS vs target ini, bulan yang sama dgn di atas).</p>
+                            </div>
+                            <button id="btnSaveAllTargetPerusahaan" onclick="saveAllTargetPerusahaan()"
+                                class="bg-aeGreen text-white font-bold py-2 px-4 rounded-lg shadow-sm hover:bg-[#0a2e22] text-sm"><i
+                                    class="fas fa-save mr-1"></i> Simpan Semua</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead
+                                    class="bg-gray-50 dark:bg-gray-700/50 text-xs text-gray-500 uppercase tracking-wider border-b dark:border-gray-700">
+                                    <tr>
+                                        <th class="px-5 py-3">Manajemen/Region</th>
+                                        <th class="px-5 py-3">Target Revenue (Rp)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="targetPerusahaanTableBody"
+                                    class="divide-y divide-gray-100 dark:divide-gray-700">
+                                    <tr>
+                                        <td colspan="2" class="px-5 py-8 text-center text-gray-500"><i
+                                                class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="view-riwayat" class="hidden">
                     <div class="mb-6 flex justify-between items-end">
                         <div>
@@ -964,7 +1148,7 @@
                         <div
                             class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-aeGreen">
                             <div class="flex justify-between items-start mb-2">
-                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Revenue</h3>
+                                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Revenue Pengiriman</h3>
                                 <div class="w-9 h-9 rounded-full bg-green-50 dark:bg-green-900/30 text-aeGreen flex items-center justify-center flex-shrink-0"><i class="fas fa-money-bill-wave text-sm"></i></div>
                             </div>
                             <p class="text-lg font-bold text-gray-800 dark:text-white" id="profilRevAktual">Rp 0</p>
@@ -972,6 +1156,7 @@
                                 <div id="profilRevBar" class="bg-aeGreen h-1.5 rounded-full" style="width: 0%"></div>
                             </div>
                             <p class="text-[10px] text-gray-500 mt-1" id="profilRevTarget">Target: Rp 0</p>
+                            <p class="text-[10px] text-gray-500 mt-0.5">Revenue Berjalan: <span id="profilRevBerjalan" class="font-semibold text-gray-700 dark:text-gray-300">Rp 0</span></p>
                         </div>
                         <div
                             class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-blue-400">
@@ -1315,9 +1500,11 @@
         let bandingkanSelected = [];
         let sudahIngatkanLaporHariIni = false;
         let sudahIngatkanKategoriKurang = false;
-        let dashboardMode = 'bulan'; // toggle Dashboard: 'bulan' (default) atau 'tahun'
+        let dashboardMode = 'bulan'; // toggle Dashboard: 'bulan' (default), 'tahun', atau 'custom' (rentang bulan bebas)
         let dashboardBulanTahun = null; // "yyyy-MM" yang dipilih manual di picker Bulanan, null = pakai bulan berjalan
         let dashboardTahun = null; // "yyyy" yang dipilih manual di picker Tahunan, null = pakai tahun berjalan
+        let dashboardBulanMulai = null; // "yyyy-MM" utk mode Rentang Bulan, null = default 3 bulan terakhir
+        let dashboardBulanSelesai = null; // "yyyy-MM" utk mode Rentang Bulan, null = default bulan berjalan
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
         // Fungsi Menampilkan Toast
@@ -1528,24 +1715,27 @@
             document.getElementById('userNameDisplay').innerText = currentUser.nama;
             document.getElementById('userRoleDisplay').innerText = currentUser.role;
             renderUserAvatar();
+            // ARSIP: nav-admin, nav-input, nav-riwayat, dan inputCsWrapper (bagian dari alur Scan Penjualan/Approval
+            // lama) SENGAJA tidak pernah di-unhide lagi di sini -- kodenya tetap ada, cuma tidak lagi dijangkau lewat
+            // navigasi. Lihat catatan arsip di HTML sidebar.
             if (currentUser.role === 'SPV') {
-                document.getElementById('nav-admin').classList.remove('hidden');
-                document.getElementById('nav-admin-mobile').classList.remove('hidden');
+                document.getElementById('nav-performa').classList.remove('hidden');
+                document.getElementById('nav-performa-mobile').classList.remove('hidden');
+                document.getElementById('nav-target').classList.remove('hidden');
+                document.getElementById('nav-target-mobile').classList.remove('hidden');
                 document.getElementById('nav-referensi').classList.remove('hidden');
                 document.getElementById('nav-referensi-mobile').classList.remove('hidden');
-                document.getElementById('inputCsWrapper').classList.remove('hidden');
                 document.getElementById('nav-profil').classList.add('hidden');
                 document.getElementById('nav-profil-mobile').classList.add('hidden');
-                populateInputCsDropdown();
             } else {
-                document.getElementById('nav-admin').classList.add('hidden');
-                document.getElementById('nav-admin-mobile').classList.add('hidden');
+                document.getElementById('nav-performa').classList.add('hidden');
+                document.getElementById('nav-performa-mobile').classList.add('hidden');
+                document.getElementById('nav-target').classList.add('hidden');
+                document.getElementById('nav-target-mobile').classList.add('hidden');
                 document.getElementById('nav-referensi').classList.add('hidden');
                 document.getElementById('nav-referensi-mobile').classList.add('hidden');
-                document.getElementById('inputCsWrapper').classList.add('hidden');
                 document.getElementById('nav-profil').classList.remove('hidden');
                 document.getElementById('nav-profil-mobile').classList.remove('hidden');
-                cekDanMuatLaporan(); // CS: tanggal default sudah "hari ini", langsung cek apakah sudah pernah lapor
             }
             loadDashboardData();
         }
@@ -1726,6 +1916,8 @@
             document.getElementById('view-referensi').classList.add('hidden');
             document.getElementById('view-riwayat').classList.add('hidden');
             document.getElementById('view-profil').classList.add('hidden');
+            document.getElementById('view-performa').classList.add('hidden');
+            document.getElementById('view-target').classList.add('hidden');
 
             document.getElementById('view-' + tabId).classList.remove('hidden');
             document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -1746,6 +1938,8 @@
             if (tabId === 'referensi' && currentUser.role === 'SPV') loadReferensiData();
             if (tabId === 'riwayat') loadRiwayatInput();
             if (tabId === 'profil') loadProfilData();
+            if (tabId === 'performa' && currentUser.role === 'SPV') loadPerformaCsPage();
+            if (tabId === 'target' && currentUser.role === 'SPV') loadTargetBulananPage();
         }
 
         // 4. LOGIKA SCANNER (CONTEKAN PERSIS DARI SCRIPT .MD)
@@ -2065,12 +2259,17 @@
         function renderDashboardModeToggle() {
             let btnBulan = document.getElementById('dashModeBulanBtn');
             let btnTahun = document.getElementById('dashModeTahunBtn');
+            let btnCustom = document.getElementById('dashModeCustomBtn');
             let active = 'bg-white dark:bg-gray-800 text-aeGreen shadow-sm';
             let inactive = 'text-gray-500 dark:text-gray-400';
             btnBulan.className = 'px-3 py-1.5 rounded-md text-sm font-medium transition ' + (dashboardMode === 'bulan' ? active : inactive);
             btnTahun.className = 'px-3 py-1.5 rounded-md text-sm font-medium transition ' + (dashboardMode === 'tahun' ? active : inactive);
+            btnCustom.className = 'px-3 py-1.5 rounded-md text-sm font-medium transition ' + (dashboardMode === 'custom' ? active : inactive);
             document.getElementById('dashBulanPicker').classList.toggle('hidden', dashboardMode !== 'bulan');
             document.getElementById('dashTahunPicker').classList.toggle('hidden', dashboardMode !== 'tahun');
+            let customWrapper = document.getElementById('dashCustomRangeWrapper');
+            customWrapper.classList.toggle('hidden', dashboardMode !== 'custom');
+            customWrapper.classList.toggle('flex', dashboardMode === 'custom');
         }
 
         // Dipanggil saat user pilih bulan/tahun manual dari picker (bukan cuma toggle mode)
@@ -2085,69 +2284,112 @@
             loadDashboardData();
         }
 
+        // Dipanggil saat user ganti bulan mulai/selesai di mode Rentang Bulan
+        function onDashboardCustomRangeChange() {
+            let mulai = document.getElementById('dashBulanMulaiPicker').value;
+            let selesai = document.getElementById('dashBulanSelesaiPicker').value;
+            if (!mulai || !selesai) return;
+            if (mulai > selesai) { showToast("Bulan mulai tidak boleh setelah bulan selesai.", "error"); return; }
+            dashboardBulanMulai = mulai;
+            dashboardBulanSelesai = selesai;
+            loadDashboardData();
+        }
+
         const NAMA_BULAN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        // Format Date object jadi "yyyy-MM-dd" versi lokal (bukan UTC, beda dgn toISOString() yang bisa geser tanggal)
+        function formatTanggalYMD(d) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+        // Geser "yyyy-MM" mundur `n` bulan (versi JS dari geserBulan() di backend, dipakai default picker Rentang Bulan)
+        function geserBulanJs(bulanTahun, n) {
+            let parts = bulanTahun.split('-').map(Number);
+            let d = new Date(parts[0], parts[1] - 1 + n, 1);
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        }
+
         async function loadDashboardData() {
             const now = new Date();
             if (!dashboardBulanTahun) dashboardBulanTahun = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
             if (!dashboardTahun) dashboardTahun = `${now.getFullYear()}`;
+            if (!dashboardBulanSelesai) dashboardBulanSelesai = dashboardBulanTahun;
+            if (!dashboardBulanMulai) dashboardBulanMulai = geserBulanJs(dashboardBulanSelesai, -2); // default 3 bulan terakhir
             document.getElementById('dashBulanPicker').value = dashboardBulanTahun;
             document.getElementById('dashTahunPicker').value = dashboardTahun;
+            document.getElementById('dashBulanMulaiPicker').value = dashboardBulanMulai;
+            document.getElementById('dashBulanSelesaiPicker').value = dashboardBulanSelesai;
 
             renderDashboardModeToggle();
             if (dashboardMode === 'tahun') {
                 document.getElementById('dashBulan').innerText = dashboardTahun;
+            } else if (dashboardMode === 'custom') {
+                let pMulai = dashboardBulanMulai.split('-'), pSelesai = dashboardBulanSelesai.split('-');
+                document.getElementById('dashBulan').innerText = `${NAMA_BULAN[parseInt(pMulai[1], 10) - 1]} ${pMulai[0]} - ${NAMA_BULAN[parseInt(pSelesai[1], 10) - 1]} ${pSelesai[0]}`;
             } else {
                 let parts = dashboardBulanTahun.split('-');
                 document.getElementById('dashBulan').innerText = `${NAMA_BULAN[parseInt(parts[1], 10) - 1]} ${parts[0]}`;
             }
             showLoading('Memuat dashboard...');
             try {
-                let periodParam = dashboardMode === 'tahun' ? `&tahun=${dashboardTahun}` : `&bulan_tahun=${dashboardBulanTahun}`;
+                let periodParam = dashboardMode === 'tahun' ? `&tahun=${dashboardTahun}`
+                    : dashboardMode === 'custom' ? `&bulan_mulai=${dashboardBulanMulai}&bulan_selesai=${dashboardBulanSelesai}`
+                    : `&bulan_tahun=${dashboardBulanTahun}`;
                 let res = await fetch(`${API_URL}?action=getDashboard&id_cs=${currentUser.id}&role=${currentUser.role}&mode=${dashboardMode}${periodParam}`);
                 let json = await res.json();
                 if (json.status === "success") {
                     document.getElementById('dashRev').innerText = "Rp " + json.data.revenue.toLocaleString('id-ID');
-                    document.getElementById('dashTrx').innerText = json.data.transaksi;
-                    document.getElementById('dashPending').innerText = json.data.pending;
+                    document.getElementById('dashRevBerjalan').innerText = "Rp " + json.data.revenue_berjalan.toLocaleString('id-ID');
+                    document.getElementById('dashTrx').innerText = json.data.total_closing;
+                    document.getElementById('dashTotalNomor').innerText = json.data.total_nomor;
 
-                    // Kartu Capaian Target & Skor Akhir KPI (khusus CS, SPV tidak punya target pribadi)
-                    if (json.data.own) {
+                    let isSpv = currentUser.role === 'SPV';
+                    let capaianSekunderEl = document.getElementById('dashCapaianSekunder');
+
+                    // Kartu Capaian Target: SPV = company-wide (Revenue Pengiriman vs Target Perusahaan semua region,
+                    // + Revenue Berjalan vs periode sebelumnya). CS = individual (Revenue Pengiriman sendiri vs Target sendiri).
+                    if (isSpv && json.data.company) {
+                        let c = json.data.company;
+                        document.getElementById('dashCapaian').innerText = c.capaian_a + '%';
+                        document.getElementById('dashCapaianBar').style.width = Math.min(100, c.capaian_a) + '%';
+                        document.getElementById('dashCapaianNote').innerText = 'Revenue Pengiriman vs Target Perusahaan';
+                        if (c.capaian_b === null) {
+                            capaianSekunderEl.classList.add('hidden');
+                        } else {
+                            capaianSekunderEl.classList.remove('hidden');
+                            let panah = c.capaian_b >= 0 ? '<i class="fas fa-arrow-trend-up text-green-500"></i>' : '<i class="fas fa-arrow-trend-down text-red-500"></i>';
+                            capaianSekunderEl.innerHTML = `${panah} Revenue Berjalan ${c.capaian_b >= 0 ? '+' : ''}${c.capaian_b}% vs periode lalu`;
+                        }
+                    } else if (!isSpv && json.data.own) {
                         document.getElementById('dashCapaian').innerText = json.data.own.capaian_target + '%';
                         document.getElementById('dashCapaianBar').style.width = Math.min(100, json.data.own.capaian_target) + '%';
-                        document.getElementById('dashCapaianNote').innerText = dashboardMode === 'tahun' ? 'Revenue tahun ini vs Target' : 'Revenue bulan ini vs Target';
+                        document.getElementById('dashCapaianNote').innerText = 'Revenue Pengiriman vs Target sendiri';
+                        capaianSekunderEl.classList.add('hidden');
+                    } else {
+                        document.getElementById('dashCapaian').innerText = '-';
+                        document.getElementById('dashCapaianNote').innerText = 'Belum ada data.';
+                        capaianSekunderEl.classList.add('hidden');
+                    }
+
+                    // Kartu Skor Akhir KPI (khusus CS, SPV tidak punya skor individual)
+                    if (!isSpv && json.data.own) {
                         document.getElementById('dashSkor').innerText = json.data.own.nilai_akhir + '%';
                         document.getElementById('dashKategori').innerText = json.data.own.kategori;
                         document.getElementById('dashKategori').className = 'text-[10px] mt-2 font-bold ' + kategoriTextColor(json.data.own.warna);
                         document.getElementById('dashSkorCard').className = 'bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 ' + kategoriBorderColor(json.data.own.warna);
                         document.getElementById('dashSkorBadge').className = 'w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ' + kategoriIconBadgeColor(json.data.own.warna);
                     } else {
-                        document.getElementById('dashCapaian').innerText = '-';
-                        document.getElementById('dashCapaianNote').innerText = 'Khusus akun CS Sales';
                         document.getElementById('dashSkor').innerText = '-';
                         document.getElementById('dashKategori').innerText = 'Lihat peringkat di bawah';
                         document.getElementById('dashSkorCard').className = 'bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border-x border-b border-gray-100 dark:border-gray-700 border-t-4 border-t-gray-300';
                         document.getElementById('dashSkorBadge').className = 'w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-400 flex items-center justify-center flex-shrink-0';
                     }
 
-                    // Reminder "belum lapor hari ini" (khusus CS, sekali per sesi biar tidak spam)
-                    if (json.data.own && json.data.own.lapor_hari_ini === false && !sudahIngatkanLaporHariIni) {
-                        sudahIngatkanLaporHariIni = true;
-                        showToast("Kamu belum lapor hari ini. Yuk kirim laporan lewat menu Scan Penjualan.", "error");
-                    }
-
-                    // Badge notifikasi transaksi ditolak (perlu direvisi CS)
-                    let hasRejected = (json.data.rejected || 0) > 0;
-                    document.getElementById('riwayatBadge').classList.toggle('hidden', !hasRejected);
-                    document.getElementById('riwayatBadgeMobile').classList.toggle('hidden', !hasRejected);
-
                     lastLeaderboard = json.data.leaderboard || [];
-                    let isSpv = currentUser.role === 'SPV';
 
-                    // Insight Otomatis (khusus SPV) & Card Saran (khusus CS)
+                    // Insight Otomatis (khusus SPV) & Card Saran (khusus CS) -- sekarang tersedia di semua mode
+                    // (termasuk Rentang Bulan) karena Nilai Akhir dihitung penuh, tidak seperti mode Custom lama.
                     document.getElementById('insightSection').classList.toggle('hidden', !isSpv);
                     if (isSpv) {
                         renderInsights(json.data.insights);
-                        // Alert kategori Kurang (sekali per sesi biar tidak spam)
                         let jumlahKurang = json.data.insights && json.data.insights.perlu_evaluasi ? json.data.insights.perlu_evaluasi.length : 0;
                         if (jumlahKurang > 0 && !sudahIngatkanKategoriKurang) {
                             sudahIngatkanKategoriKurang = true;
@@ -2163,7 +2405,8 @@
                     if (tbody) {
                         tbody.innerHTML = '';
                         if (lastLeaderboard.length === 0) {
-                            tbody.innerHTML = `<tr><td colspan="${isSpv ? 9 : 8}" class="px-5 py-8 text-center text-gray-500 italic">Belum ada CS Sales aktif.</td></tr>`;
+                            let colspanKosong = 9 + (isSpv ? 1 : 0);
+                            tbody.innerHTML = `<tr><td colspan="${colspanKosong}" class="px-5 py-8 text-center text-gray-500 italic">Belum ada CS Sales aktif.</td></tr>`;
                         } else {
                             lastLeaderboard.forEach(cs => {
                                 let posClass = 'bg-gray-200 text-gray-500 font-medium';
@@ -2197,6 +2440,9 @@
                                             </td>
                                             <td class="px-5 py-4 text-right">
                                                 <p class="font-bold text-sm text-gray-800 dark:text-gray-200">Rp ${cs.revenue.toLocaleString('id-ID')}</p>
+                                            </td>
+                                            <td class="px-5 py-4 text-right">
+                                                <p class="font-bold text-sm text-gray-800 dark:text-gray-200">Rp ${cs.revenue_berjalan.toLocaleString('id-ID')}</p>
                                             </td>
                                             <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.leads}</td>
                                             <td class="px-5 py-4 text-center text-sm text-gray-700 dark:text-gray-200">${cs.closing}</td>
@@ -2241,7 +2487,10 @@
                 evalEl.innerHTML = insights.perlu_evaluasi.map(cs => `
                         <div class="flex justify-between items-center bg-red-50 dark:bg-red-900/20 rounded-lg px-3 py-2">
                             <span class="font-medium text-gray-700 dark:text-gray-200 text-sm">${cs.nama}</span>
-                            <span class="text-red-600 font-bold text-xs">${cs.nilai_akhir}%</span>
+                            <span class="text-right">
+                                <span class="text-red-600 font-bold text-xs block">${cs.nilai_akhir}%</span>
+                                <span class="text-[10px] text-gray-400">Ambang RC: ${cs.ambang_rc}%</span>
+                            </span>
                         </div>
                     `).join('');
             } else {
@@ -2253,7 +2502,10 @@
                 progEl.innerHTML = insights.berprogress.slice(0, 5).map(cs => `
                         <div class="flex justify-between items-center bg-green-50 dark:bg-green-900/20 rounded-lg px-3 py-2">
                             <span class="font-medium text-gray-700 dark:text-gray-200 text-sm">${cs.nama}</span>
-                            <span class="text-green-600 font-bold text-xs">+${cs.delta}%</span>
+                            <span class="text-right">
+                                <span class="text-green-600 font-bold text-xs block">+${cs.delta}%</span>
+                                <span class="text-[10px] text-gray-400">${cs.nilai_akhir_lalu}% &rarr; ${cs.nilai_akhir}%</span>
+                            </span>
                         </div>
                     `).join('');
             } else {
@@ -2362,7 +2614,8 @@
             }
             const items = bandingkanSelected.map(id => lastLeaderboard.find(cs => cs.id_cs === id)).filter(Boolean);
             const aspects = [
-                { key: 'revenue', label: 'Revenue', fmt: v => 'Rp ' + v.toLocaleString('id-ID'), score: cs => hitungAspekPersen(cs.revenue, cs.target_revenue) },
+                { key: 'revenue', label: 'Revenue Pengiriman', fmt: v => 'Rp ' + v.toLocaleString('id-ID'), score: cs => hitungAspekPersen(cs.revenue, cs.target_revenue) },
+                { key: 'revenue_berjalan', label: 'Revenue Berjalan', fmt: v => 'Rp ' + v.toLocaleString('id-ID'), score: () => null },
                 { key: 'leads', label: 'Leads', fmt: v => v, score: cs => hitungAspekPersen(cs.leads, cs.target_leads) },
                 { key: 'closing', label: 'Closing', fmt: v => v, score: cs => hitungAspekPersen(cs.closing, cs.target_closing) },
                 { key: 'rc', label: 'Rating Closing (RC)', fmt: v => v + '%', score: cs => hitungAspekPersen(cs.rc, cs.ambang_rc) }
@@ -2380,10 +2633,13 @@
             aspects.forEach(asp => {
                 html += `<tr class="border-b border-gray-50 dark:border-gray-700/50">
                         <td class="py-3 pr-4 font-medium text-gray-600 dark:text-gray-300">${asp.label}</td>
-                        ${items.map(cs => `<td class="py-3 px-3 text-center">
+                        ${items.map(cs => {
+                            let skor = asp.score(cs);
+                            return `<td class="py-3 px-3 text-center">
                             <p class="font-bold text-gray-800 dark:text-white">${asp.fmt(cs[asp.key])}</p>
-                            <p class="text-[10px] text-gray-400">${asp.score(cs)}% dari target</p>
-                        </td>`).join('')}
+                            ${skor === null ? '' : `<p class="text-[10px] text-gray-400">${skor}% dari target</p>`}
+                        </td>`;
+                        }).join('')}
                     </tr>`;
             });
 
@@ -2413,6 +2669,7 @@
                         document.getElementById('profilRevAktual').innerText = 'Rp ' + b.revenue.toLocaleString('id-ID');
                         document.getElementById('profilRevBar').style.width = (b.target_revenue > 0 ? Math.min(100, b.revenue / b.target_revenue * 100) : 0) + '%';
                         document.getElementById('profilRevTarget').innerText = 'Target: Rp ' + b.target_revenue.toLocaleString('id-ID');
+                        document.getElementById('profilRevBerjalan').innerText = 'Rp ' + b.revenue_berjalan.toLocaleString('id-ID');
 
                         document.getElementById('profilLeadAktual').innerText = b.leads;
                         document.getElementById('profilLeadBar').style.width = (b.target_leads > 0 ? Math.min(100, b.leads / b.target_leads * 100) : 0) + '%';
@@ -3215,17 +3472,244 @@
 
         async function loadReferensiData() {
             loadUserManageTable();
-            if (!document.getElementById('targetBulan').value) {
-                const now = new Date();
-                document.getElementById('targetBulan').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-            }
             if (!document.getElementById('exportBulan').value) {
                 const now = new Date();
                 document.getElementById('exportBulan').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
             }
-            loadTargetData();
             await loadAmbangRCTable(); // isi allRegions dulu sebelum render checkbox Cabang/Region di form Tambah ID Baru
             loadBobotConfig();
+        }
+
+        // ---- Menu Target Bulanan (Target per CS pindahan + Target Perusahaan per Region baru) ----
+        async function loadTargetBulananPage() {
+            if (!document.getElementById('targetBulan').value) {
+                const now = new Date();
+                document.getElementById('targetBulan').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            }
+            if (allRegions.length === 0) await loadAmbangRCTable(); // pastikan allRegions terisi walau belum pernah buka Data Referensi
+            loadTargetData();
+            loadTargetPerusahaanTable();
+        }
+
+        async function loadTargetPerusahaanTable() {
+            let bulan = document.getElementById('targetBulan').value;
+            if (!bulan) return;
+            let tbody = document.getElementById('targetPerusahaanTableBody');
+            tbody.innerHTML = '<tr><td colspan="2" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
+            try {
+                let res = await fetch(`${API_URL}?action=getTargetPerusahaanList&bulan_tahun=${bulan}`);
+                let json = await res.json();
+                tbody.innerHTML = '';
+                json.data.forEach(r => {
+                    tbody.innerHTML += `
+                            <tr data-region="${r.region}">
+                                <td class="px-5 py-4 text-sm font-bold">${r.region}</td>
+                                <td class="px-5 py-3"><input type="text" inputmode="numeric" class="target-perusahaan-value money-input w-48 p-2 border rounded-lg text-sm dark:bg-gray-700 dark:border-gray-600 outline-none" value="${formatRibuan(r.target_revenue)}"></td>
+                            </tr>
+                        `;
+                });
+            } catch (err) {
+                tbody.innerHTML = '<tr><td colspan="2" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
+                showToast("Gagal memuat Target Perusahaan.", "error");
+            }
+        }
+
+        async function saveAllTargetPerusahaan() {
+            let bulan = document.getElementById('targetBulan').value;
+            if (!bulan) { showToast("Pilih bulan terlebih dahulu!", "error"); return; }
+
+            let rows = [];
+            document.querySelectorAll('#targetPerusahaanTableBody tr[data-region]').forEach(row => {
+                rows.push({ region: row.dataset.region, target_revenue: parseRibuan(row.querySelector('.target-perusahaan-value').value) });
+            });
+            if (rows.length === 0) return;
+
+            const btn = document.getElementById('btnSaveAllTargetPerusahaan');
+            const btnOriginal = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            showLoading('Menyimpan Target Perusahaan...');
+
+            let formData = new URLSearchParams();
+            formData.append('action', 'saveTargetPerusahaanBatch');
+            formData.append('bulan_tahun', bulan);
+            formData.append('data', JSON.stringify(rows));
+
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                showToast(json.message, json.status === "success" ? "success" : "error");
+                if (json.status === "success") loadTargetPerusahaanTable();
+            } catch (err) { showToast("Koneksi gagal saat simpan Target Perusahaan.", "error"); }
+            btn.disabled = false;
+            btn.innerHTML = btnOriginal;
+            hideLoading();
+        }
+
+        // ---- Menu Performa CS ----
+        let performaEditTarget = null; // {bulan_tahun, manajemen, id_cs} kalau lagi mode edit, null kalau tambah baru
+
+        async function loadPerformaCsPage() {
+            if (!document.getElementById('performaBulan').value) {
+                const now = new Date();
+                document.getElementById('performaBulan').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            }
+            if (allRegions.length === 0) await loadAmbangRCTable();
+            populatePerformaDropdowns();
+            resetPerformaForm();
+            loadPerformaTable();
+        }
+
+        function populatePerformaDropdowns() {
+            let selectCs = document.getElementById('performa-cs');
+            let currentCsVal = selectCs.value;
+            selectCs.innerHTML = '<option value="">-- Pilih CS --</option>';
+            allUsers.filter(u => u.role === 'CS').forEach(u => {
+                selectCs.innerHTML += `<option value="${u.id}">${u.nama}</option>`;
+            });
+            selectCs.value = currentCsVal;
+
+            let selectRegion = document.getElementById('performa-manajemen');
+            let currentRegionVal = selectRegion.value;
+            selectRegion.innerHTML = '<option value="">-- Pilih Region --</option>';
+            allRegions.forEach(r => { selectRegion.innerHTML += `<option value="${r}">${r}</option>`; });
+            selectRegion.value = currentRegionVal;
+        }
+
+        function updatePerformaRatingClosingPreview() {
+            let nomor = parseFloat(document.getElementById('performa-total-nomor').value) || 0;
+            let closing = parseFloat(document.getElementById('performa-total-closing').value) || 0;
+            document.getElementById('performa-rating-closing-preview').value = nomor > 0 ? (Math.round(closing / nomor * 1000) / 10) + '%' : '-';
+        }
+
+        async function loadPerformaTable() {
+            let bulan = document.getElementById('performaBulan').value;
+            if (!bulan) return;
+            let tbody = document.getElementById('performaTableBody');
+            tbody.innerHTML = '<tr><td colspan="9" class="px-5 py-8 text-center text-gray-500"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</td></tr>';
+            showLoading('Memuat data Performa CS...');
+            try {
+                let res = await fetch(`${API_URL}?action=getPerformaCsList&bulan_tahun=${bulan}`);
+                let json = await res.json();
+                tbody.innerHTML = '';
+                if (!json.data || json.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9" class="px-5 py-8 text-center text-gray-500 italic">Belum ada data Performa CS bulan ini.</td></tr>';
+                    hideLoading();
+                    return;
+                }
+                json.data.forEach(item => {
+                    let ratingDisplay = item.rating_closing === null ? '-' : item.rating_closing + '%';
+                    let itemJsonSafe = JSON.stringify(item).replace(/'/g, '&#39;');
+                    tbody.innerHTML += `
+                            <tr>
+                                <td class="px-5 py-4 text-sm font-bold">${item.nama}</td>
+                                <td class="px-5 py-4 text-sm">${item.manajemen}</td>
+                                <td class="px-5 py-4 text-sm text-right">Rp ${item.revenue_pengiriman.toLocaleString('id-ID')}</td>
+                                <td class="px-5 py-4 text-sm text-center">${item.total_nomor}</td>
+                                <td class="px-5 py-4 text-sm text-center">${item.total_closing}</td>
+                                <td class="px-5 py-4 text-sm text-center">${item.total_ekoran}</td>
+                                <td class="px-5 py-4 text-sm text-center">${ratingDisplay}</td>
+                                <td class="px-5 py-4 text-sm text-right">Rp ${item.revenue_berjalan.toLocaleString('id-ID')}</td>
+                                <td class="px-5 py-4 text-center">
+                                    <div class="flex gap-2 justify-center">
+                                        <button data-item='${itemJsonSafe}' onclick="editPerformaRow(JSON.parse(this.dataset.item))" class="bg-orange-500 text-white px-2.5 py-1.5 rounded-md text-xs hover:bg-orange-600" title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button onclick="deletePerformaRow('${item.bulan_tahun}', '${item.manajemen}', '${item.id_cs}', '${String(item.nama).replace(/'/g, "\\'")} - ${item.manajemen}')" class="bg-red-500 text-white px-2.5 py-1.5 rounded-md text-xs hover:bg-red-600" title="Hapus"><i class="fas fa-trash-alt"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                });
+            } catch (err) {
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center text-red-500 py-8">Koneksi Error</td></tr>';
+                showToast("Gagal memuat data Performa CS.", "error");
+            }
+            hideLoading();
+        }
+
+        function editPerformaRow(item) {
+            performaEditTarget = { bulan_tahun: item.bulan_tahun, manajemen: item.manajemen, id_cs: item.id_cs };
+            document.getElementById('performaFormTitle').innerText = `Edit: ${item.nama} - ${item.manajemen}`;
+            document.getElementById('performa-cs').value = item.id_cs;
+            document.getElementById('performa-manajemen').value = item.manajemen;
+            document.getElementById('performa-revenue-pengiriman').value = formatRibuan(item.revenue_pengiriman);
+            document.getElementById('performa-total-nomor').value = item.total_nomor;
+            document.getElementById('performa-total-closing').value = item.total_closing;
+            document.getElementById('performa-total-ekoran').value = item.total_ekoran;
+            document.getElementById('performa-revenue-berjalan').value = formatRibuan(item.revenue_berjalan);
+            updatePerformaRatingClosingPreview();
+            document.getElementById('btnCancelEditPerforma').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetPerformaForm() {
+            performaEditTarget = null;
+            document.getElementById('performaFormTitle').innerText = 'Tambah / Update Data Performa';
+            document.getElementById('performa-cs').value = '';
+            document.getElementById('performa-manajemen').value = '';
+            document.getElementById('performa-revenue-pengiriman').value = '';
+            document.getElementById('performa-total-nomor').value = '';
+            document.getElementById('performa-total-closing').value = '';
+            document.getElementById('performa-total-ekoran').value = '';
+            document.getElementById('performa-revenue-berjalan').value = '';
+            document.getElementById('performa-rating-closing-preview').value = '-';
+            document.getElementById('btnCancelEditPerforma').classList.add('hidden');
+        }
+
+        async function submitPerformaCs() {
+            let bulan = document.getElementById('performaBulan').value;
+            let idCs = document.getElementById('performa-cs').value;
+            let manajemen = document.getElementById('performa-manajemen').value;
+            if (!bulan || !idCs || !manajemen) { showToast("Bulan, CS, dan Manajemen wajib dipilih!", "error"); return; }
+
+            const btn = document.getElementById('btnSubmitPerforma');
+            const btnOriginal = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            showLoading('Menyimpan data Performa CS...');
+
+            let formData = new URLSearchParams();
+            formData.append('action', 'savePerformaCs');
+            formData.append('bulan_tahun', bulan);
+            formData.append('id_cs', idCs);
+            formData.append('manajemen', manajemen);
+            formData.append('revenue_pengiriman', parseRibuan(document.getElementById('performa-revenue-pengiriman').value));
+            formData.append('total_nomor', document.getElementById('performa-total-nomor').value || 0);
+            formData.append('total_closing', document.getElementById('performa-total-closing').value || 0);
+            formData.append('total_ekoran', document.getElementById('performa-total-ekoran').value || 0);
+            formData.append('revenue_berjalan', parseRibuan(document.getElementById('performa-revenue-berjalan').value));
+
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                showToast(json.message, json.status === "success" ? "success" : "error");
+                if (json.status === "success") {
+                    resetPerformaForm();
+                    loadPerformaTable();
+                }
+            } catch (err) { showToast("Koneksi gagal saat menyimpan data Performa CS.", "error"); }
+            btn.disabled = false;
+            btn.innerHTML = btnOriginal;
+            hideLoading();
+        }
+
+        async function deletePerformaRow(bulanTahun, manajemen, idCs, label) {
+            let ok = await showConfirmGeneric('Hapus Data Performa', `Yakin ingin menghapus data Performa "${label}" bulan ${bulanTahun}?`, 'Ya, Hapus', 'bg-red-500 hover:bg-red-600');
+            if (!ok) return;
+
+            let formData = new URLSearchParams();
+            formData.append('action', 'deletePerformaCs');
+            formData.append('bulan_tahun', bulanTahun);
+            formData.append('manajemen', manajemen);
+            formData.append('id_cs', idCs);
+
+            showLoading('Menghapus data Performa CS...');
+            try {
+                let res = await fetch(API_URL, { method: 'POST', body: formData });
+                let json = await res.json();
+                showToast(json.message, json.status === "success" ? "success" : "error");
+                if (json.status === "success") loadPerformaTable();
+            } catch (err) { showToast("Koneksi gagal saat menghapus data Performa CS.", "error"); }
+            hideLoading();
         }
 
         // ---- D. Bobot Skor Komposit ----
